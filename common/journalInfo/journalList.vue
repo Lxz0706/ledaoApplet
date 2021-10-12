@@ -1,0 +1,213 @@
+<template>
+	<view class="container">
+			<template>
+			    <!-- <view class="flow-container"> -->
+<!-- 						<view class="top-search">
+							<view class="dept-name">
+									日期
+							</view>
+							<view class="example-body dept-input">
+								<uni-datetime-picker :value="searchData.datetimerange" type="daterange"
+								rangeSeparator="至" />
+							</view>
+						</view> -->
+<!-- 					<view class="top-search">
+						<view class="dept-name">
+							部门
+						</view>
+						<view class="dept-input">
+							<uni-easyinput v-model="deptNameInput" type="text" />
+						</view>
+					</view> -->
+<!-- 					<view class="top-search">
+						<view class="dept-name">
+							用户
+						</view>
+						<view class="dept-input">
+							<uni-easyinput v-model="userNameInput" type="text" />
+						</view>
+					</view> -->
+					
+					<!-- <view class="but"> -->
+<!-- 					    <uni-col :span="18">
+							<view class="search_css">
+								<view class="uni-list-cell-left" style="font-weight: 900;padding-right: 10rpx;">
+									部门选择
+								</view>
+								<view class="uni-list-cell-db">
+									<picker @change="changeBranch" :value="index" :range="branch">
+										<view class="uni-input">{{branch[index].name}}</view>
+									</picker>
+								</view>
+								</view>
+					    </uni-col> -->
+							<!-- <button @click="getJournalList" size="mini" type="primary">搜索</button> -->
+					<!-- </view> -->
+				<!-- </view> -->
+				<uni-list v-for="(item,index) in journalList" :key="index">
+					<uni-swipe-action>
+						<uni-swipe-action-item :right-options="options"  @click="bindClick(item.id)">
+								<uni-list-item link="navigateTo" @click="onClick($event,item)" >
+									<template slot="body">
+										<view class="slot-box slot-text">项目名称：{{item.projectName}}</view>
+										<view class="slot-box slot-text">录入日期：{{item.createTime}}</view>
+										<view class="slot-box slot-text">日志内容：{{item.workDetail}}</view>
+									</template>
+								</uni-list-item>
+						</uni-swipe-action-item>
+					</uni-swipe-action>
+				</uni-list>
+				<view class="unfilled-log" v-if="showTitle">
+					<view class="unfilled-title">未填日志</view>
+				</view>
+			</template>
+	</view>
+</template>
+
+<script>
+	
+	export default {
+	  name: 'info',
+	  data () {
+	    return {
+			journalList: [],
+			index: 0,
+			searchData: {
+				datetimerange: []
+			},
+			branch: [{
+				id: 1,
+				name: ''
+			}],
+			deptNameInput: '',
+			userNameInput: '',
+			createBy: '',
+			options:[{
+						text: '删除',
+						style: {
+								backgroundColor: '#dd524d'
+						}
+				}],
+				showTitle: false
+		}
+		},
+		
+		onLoad(options) {
+			console.log('options',options.date)
+			this.date = options.date
+			this.createBy = options.createBy
+		},
+		
+		mounted() {
+			this.getJournalList()
+		},
+		
+		onShow() {
+			this.getJournalList()
+		},
+
+		methods: {
+			getJournalList() {
+				const beginTime = this.searchData.datetimerange.length > 0 ? this.searchData.datetimerange[0].replace(/-/g,'') : ''
+				const endTime = this.searchData.datetimerange.length > 0 ? this.searchData.datetimerange[1].replace(/-/g,'') : '' 
+				this.$request("/system/journal/list","POST",{
+					createBy: this.createBy,
+					createTimeFormat: this.date
+				},{
+					"content-type": "application/x-www-form-urlencoded",
+					'cookie': uni.getStorageSync("setCookie")
+				}).then(res=> {
+					this.journalList = res.rows
+					if(this.journalList.length > 0) {
+						this.journalList.map(item=> {
+							if(item.createTime == null) {
+								item.createTime = ''
+							}
+							if(item.workDetail == null) {
+								item.workDetail = '无进展'
+							}
+							if(item.projectName == null) {
+								item.projectName = '无项目'
+							}
+						})
+					} else {
+						this.showTitle = true
+					}
+				})
+			},
+			
+			// 删除日志
+			bindClick(id) {
+				console.log('删除')
+				this.$request("/system/journal/remove","POST",{
+					ids: id
+				},{
+					"content-type": "application/x-www-form-urlencoded",
+					'cookie': uni.getStorageSync("setCookie")
+				}).then(resRemove=> {
+					if(resRemove.code == 0) {
+						uni.showToast({
+							title: '删除成功'
+						})
+						this.getJournalList()
+					}
+				})
+			},
+			
+			onClick(e,val) {
+				const objVal = JSON.stringify(val)
+				uni.navigateTo({
+					url: '/common/journalInfo/journal?isChat=1&item=' + objVal
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+.flow-container{
+	padding: 30rpx;
+}
+.search_css{
+	display: flex;
+}
+
+.but {
+	text-align: right;
+	margin: 20rpx 20rpx 0 0;
+}
+
+.example-body {
+	margin-bottom: 20rpx;
+}
+
+.top-search {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20rpx;
+	.dept-input {
+		flex:1
+	}
+	.dept-name {
+		margin-right: 20rpx;
+	}
+}
+
+.unfilled-log {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	background-color: #E5E5E5;
+	.unfilled-title {
+		padding: 180rpx;
+		background: #fff;
+		border-radius: 50rpx;
+	}
+}
+</style>
+<style>
+		@import url("@/css/index.css");
+</style>

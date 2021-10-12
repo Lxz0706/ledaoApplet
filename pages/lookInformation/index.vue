@@ -1,0 +1,177 @@
+<template>
+  <view class="lookContainer">
+		<view class="title flex">
+			<span class="text">基础信息</span>
+			<span class="btn" @click="InClick">入库信息查看</span>
+		</view>
+		<view class="basic-info">
+			<uni-forms ref="form" :modelValue="baseInfo" label-width="100">
+				<uni-forms-item label="公司名称" name="companyName">
+						<uni-easyinput disabled v-model="baseInfo.companyName" type="text" />
+				</uni-forms-item>
+				<uni-forms-item label="项目名称" name="projectName">
+						<uni-easyinput disabled v-model="baseInfo.projectName" type="text" />
+				</uni-forms-item>
+				<uni-forms-item label="实际提交者" name="applyUserName">
+						<uni-easyinput disabled v-model="inInfo.applyUserName" type="text" />
+				</uni-forms-item>
+				<uni-forms-item label="项目所属部门" name="roleType">
+						<uni-easyinput disabled v-model="inInfo.roleType" type="text" />
+				</uni-forms-item>
+				<uni-forms-item label="备注" name="remarks">
+						<uni-easyinput disabled v-model="inInfo.remarks" type="text" />
+				</uni-forms-item>
+			</uni-forms>
+		</view>
+		<view class="file-details">
+			<view class="title">档案明细</view>
+			<view class="detailInfo" @click="fileInfoClick">
+				<view class="list-text">
+					<view>档案名称：{{baseInfo.fileName == undefined ? '-' : baseInfo.fileName}}</view>
+					<view>份数：{{baseInfo.counts == undefined ? '-' : baseInfo.counts}}</view>
+					<view>页数(时长)：{{baseInfo.pages == undefined ? '-' : baseInfo.pages}}</view>
+					<view>档案级别： {{baseInfo.documentLevelLable == undefined ? '-' : baseInfo.documentLevelLable}}</view>
+				</view>
+				<view class="icon"><uni-icons type="arrowright" size="24"></uni-icons></view>
+			</view>
+		</view>
+		<view class="footer"></view>
+  </view>
+</template>
+
+<script>
+/**
+* author        chenjie
+* time          2021-9-9 4:27:42 ?F10: PM?
+* description  
+* 二维码进入查看档案入库出库	基本信息
+*/
+
+
+export default {
+  name: 'lookInformation',
+  data () {
+    return {
+			// 基本信息
+			baseInfo: {},
+			// 出库信息list
+			outInfo: [],
+			// 入库信息
+			inInfo: {},
+			// // 档案信息
+			// documentFiles: []
+    }
+  },
+	
+	onLoad(options) {
+		const documentId = options.documentId
+		// const documentId = 589
+		console.log('二维码进入查看档案入库出库	基本信息---',options)
+		this.getListInOutDetail(documentId)
+	},
+	
+	mounted() {
+		const setCookie = uni.getStorageSync("setCookie")
+		if(setCookie.length == 0) {
+			uni.showToast({
+				title: '请先登录',
+				icon: 'error'
+			})
+		}
+	},
+	
+	methods: {
+		getListInOutDetail(documentId) {
+			uni.showLoading({
+				title: '加载中...'
+			})
+			this.$request('/applyIn/listInOutDetail', 'POST', {
+				documentId: documentId
+			}).then(resList => {
+				this.baseInfo = resList.data.baseInfo
+				this.outInfo = resList.data.outInfo
+				this.inInfo = resList.data.inInfo
+				console.log('resList',resList)
+				setTimeout(()=> {
+					uni.hideLoading()
+				},3000)
+				
+			})
+		},
+		// 出库档案明细
+		fileInfoClick() {
+			const fileOut = JSON.stringify(this.outInfo)
+			uni.navigateTo({
+				url: 'processOut/processOutList?item=' + fileOut
+			})
+		},
+		// 入库信息查看
+		InClick() {
+			const fileIn = JSON.stringify(this.inInfo)
+			uni.navigateTo({
+				url: 'processIn/processIn?item=' + fileIn + '&dailyItem=' + this.baseInfo.dailyDocumentTypeContractLable
+			})
+		}
+	}
+}
+</script>
+
+<style lang="scss" scoped>
+
+.title {
+	font-size: 40rpx;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 30rpx;
+	background-color: #E5E5E5;
+	padding: 16rpx 0;
+}
+
+.flex {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.line {
+	height: 2rpx;
+	background-color: #E5E5E5;
+	margin: 20rpx 0;
+}
+
+.btn {
+	background-color: #12adf7;
+	border-radius: 25px;
+	font-size: 25rpx;
+	padding: 5px;
+}
+
+.text {
+	margin-right: 135rpx;
+	flex: 1;
+	text-align: right;
+}
+
+.basic-info {
+	margin: 0 30rpx;
+}
+
+.detailInfo {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0 30rpx;
+		view {
+			margin: 10rpx 0;
+		}
+}
+
+.footer {
+	height: 100rpx;
+}
+</style>
+
+<style>
+	@import url("@/css/index.css");
+</style>

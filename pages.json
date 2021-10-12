@@ -1,0 +1,176 @@
+{
+	"pages": [
+		{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+		"path": "pages/workFlow/index",
+		"style": {
+			"navigationBarTitleText": "工作流"
+			}
+		},
+		{
+		"path": "pages/mine/index",
+		"style": {
+			"navigationBarTitleText": "个人中心"
+			}
+		},
+		{
+		"path": "pages/login/index",
+		"style": {
+			"navigationBarTitleText": "登录"
+		}
+	},
+	{
+		"path": "common/flowInfo/info",
+		"style": {
+			"navigationBarTitleText": "详细信息"
+		}
+	},
+	{
+		"path": "common/fileInfo/file",
+		"style": {
+			"navigationBarTitleText": "档案信息"
+		}
+	},
+	{
+		"path": "pages/curstomer/index",
+		"style": {
+			"navigationBarTitleText": "客户管理"
+		}
+	},
+	{
+		"path": "pages/qrCode/qrCode",
+		"style": {
+			"navigationBarTitleText": "二维码信息"
+		}
+	},
+	{
+		"path": "pages/lookInformation/index",
+		"style": {
+			"navigationBarTitleText": "出入库基本信息"
+		}
+	},
+	{
+		"path": "pages/lookInformation/processOut/processOut",
+		"style": {
+			"navigationBarTitleText": "出库基本明细"
+		}
+	},
+	{
+		"path": "pages/lookInformation/processIn/processIn",
+		"style": {
+			"navigationBarTitleText": "入库基本明细"
+		}
+	},
+	{
+		"path": "pages/lookInformation/processOut/processOutList",
+		"style": {
+			"navigationBarTitleText": "出库信息列表"
+		}
+	},
+	{
+		"path": "pages/curstomer/addCurstomer/addAndEdit",
+		"style": {
+			"navigationBarTitleText": "客户管理"
+		}
+	},
+	{
+		"path": "pages/curstomer/addCurstomer/addAndList",
+		"style": {
+			"navigationBarTitleText": "客户查看"
+		}
+	},
+	{
+		"path": "pages/curstomer/addCurstomer/curstomerInfoAll",
+		"style": {
+			"navigationBarTitleText": "客户详细信息"
+		}
+	},
+	{
+		"path": "pages/journal/index",
+		"style": {
+			"navigationBarTitleText": "日志管理"
+		}
+	},
+	{
+		"path": "common/journalInfo/journal",
+		"style": {
+			"navigationBarTitleText": "日志填写"
+		}
+	},
+	{
+		"path": "common/journalInfo/journalList",
+		"style": {
+			"navigationBarTitleText": "日志列表"
+		}
+	},
+	{
+		"path": "common/journalInfo/journalDepart",
+		"style": {
+			"navigationBarTitleText": "部门查询"
+		}
+	},
+	{
+		"path": "common/journalInfo/journalPeople",
+		"style": {
+			"navigationBarTitleText": "人员查询"
+		}
+	},
+	{
+		"path": "pages/ocr/index",
+		"style": {
+			"navigationBarTitleText": "名片识别"
+		}
+	},
+	{
+		"path": "pages/setup/index",
+		"style": {
+			"navigationBarTitleText": "我的设置"
+		}
+	},
+	{
+		"path": "common/journalInfo/journalone",
+		"style": {
+			"navigationBarTitleText": "日志填写"
+		}
+	}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"app-plus": {
+			"background": "#efeff4"
+		},
+		"usingComponents": {
+		  "ocrsdk": "/wxcomponents/ocrsdk/pages/index/index"
+		}
+	},
+	"tabBar": {
+	    "color": "#000000",
+	    "selectedColor": "#000000",
+	    "borderStyle": "black",
+	    "backgroundColor": "#ffffff",
+	    "list": [{
+	        "pagePath": "pages/home/index",
+	        "iconPath": "static/icon/home.png",
+	        "selectedIconPath": "static/icon/home.png",
+	        "text": "首页"
+	    },{
+	        "pagePath": "pages/workFlow/index",
+	        "iconPath": "static/icon/workFlow.png",
+	        "selectedIconPath": "static/icon/workFlow.png",
+	        "text": "工作流"
+	    },{
+	        "pagePath": "pages/mine/index",
+	        "iconPath": "static/icon/mine.png",
+	        "selectedIconPath": "static/icon/mine.png",
+	        "text": "我的"
+	    }]
+	}
+}
