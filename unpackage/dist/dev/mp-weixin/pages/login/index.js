@@ -223,7 +223,7 @@ var _default =
         uni.showToast({
           icon: 'none',
           position: 'bottom',
-          title: '密码不正确' });
+          title: '请填写密码' });
 
         return;
       }
@@ -231,14 +231,14 @@ var _default =
       setTimeout(function () {
         _this.isRotate = false;
       }, 2000);
-      uni.showLoading({
-        title: '登录中' });
-
       this.$requestSession("/weChatLoginUp", "POST", {
         username: _this.adminData,
         password: _this.passData,
         rememberMe: true }).
       then(function (res) {
+        uni.showLoading({
+          title: '登录中' });
+
         console.log('rememberMe', res);
         // uni.removeStorageSync('setCookie')
         uni.setStorageSync('setCookie', res.header["Set-Cookie"]);
@@ -283,7 +283,7 @@ var _default =
             icon: 'error',
             position: 'bottom',
             title: '账号或密码错误',
-            duration: 2000 });
+            duration: 3000 });
 
           // uni.hideLoading();
         }

@@ -151,8 +151,8 @@ __webpack_require__.r(__webpack_exports__);
   },
 
   onLoad: function onLoad(options) {
-    this.trainId = options.trainId;
-    console.log('trainId', trainId);
+    this.trainId = decodeURIComponent(options.scene);
+    console.log('trainId', this.trainId);
   },
 
   mounted: function mounted() {
@@ -160,7 +160,8 @@ __webpack_require__.r(__webpack_exports__);
     if (setCookie.length == 0) {
       uni.showToast({
         title: '请先登录',
-        icon: 'error' });
+        icon: 'error',
+        duration: 3000 });
 
     } else {
       this.getTrainId();
@@ -170,14 +171,15 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getTrainId: function getTrainId() {
       this.$request("/system/trainuser/add", "POST", {
-        trainId: this.trainId //测试数据 id=14
-      }, {
+        trainId: this.trainId },
+      {
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (resSuccess) {
         uni.showToast({
           title: resSuccess.msg,
-          icon: 'success' });
+          icon: 'success',
+          duration: 6000 });
 
       });
     } } };exports.default = _default;

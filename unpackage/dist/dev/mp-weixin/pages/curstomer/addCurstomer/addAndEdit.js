@@ -317,15 +317,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /**
 * author        chenjie
@@ -367,25 +358,13 @@ __webpack_require__.r(__webpack_exports__);
             errorMessage: '必填' }] },
 
 
-        weChatNumber: {
-          rules: [{
-            required: true,
-            errorMessage: '必填' }] },
-
-
-        contactNumber: {
-          rules: [{
-            required: true,
-            errorMessage: '必填' }] },
-
-
         customerLable: {
           rules: [{
             required: true,
             errorMessage: '请至少选择一项' }] },
 
 
-        provinceL: {
+        province: {
           rules: [{
             required: true,
             errorMessage: '必填' }] },
@@ -394,17 +373,19 @@ __webpack_require__.r(__webpack_exports__);
         city: {
           rules: [{
             required: true,
-            errorMessage: '必填' }] } } };
+            errorMessage: '必填' }] } },
 
 
 
+      UserNameArray: [],
+      flagPhoneNumber: false };
 
   },
 
   onLoad: function onLoad(options) {var _this = this;
     if (options.ocrData) {
       var ocrList = JSON.parse(options.ocrData);
-      console.log('editOp', ocrList);
+      console.log('editOp----ocr', ocrList);
       // 匹配所属字段，待优化
       ocrList.map(function (item) {
         // const reg = /.+?(省|市|自治区|自治州|县|区|街道)/g
@@ -414,8 +395,14 @@ __webpack_require__.r(__webpack_exports__);
           _this.curstomerForm.duties = item.Value;
         } else if (item.Name == '公司') {
           _this.curstomerForm.customerName = item.Value;
+        } else if (item.Name == '微信') {
+          _this.curstomerForm.weChatNumber = item.Value;
         } else if (item.Name == '手机') {
-          _this.curstomerForm.contactNumber = item.Value;
+          if (item.Value.length > 11) {
+            _this.curstomerForm.contactNumber = item.Value.substring(item.Value.length - 11, item.Value.length);
+          } else {
+            _this.curstomerForm.contactNumber = item.Value;
+          }
           return;
           if (item.Name == '电话') {
             _this.curstomerForm.contactNumber = item.Value;
@@ -469,23 +456,109 @@ __webpack_require__.r(__webpack_exports__);
         _this3.applyUserNameList = res.rows;
       });
     },
+
+    checkboxChange: function checkboxChange(e) {
+      console.log('e', e);
+    },
     // 提交
     submit: function submit() {var _this4 = this;
+      var flagPhone = false;
+      var flagWeChat = false;
       this.$refs.form.validate().then(function (res) {
-        _this4.$request("/system/customer/add", "POST", _objectSpread({},
+        _this4.applyUserNameList.map(function (itemList) {
+          _this4.curstomerForm.shareUserName.map(function (itemName) {
+            if (itemList.userName == itemName) {
+              _this4.UserNameArray.push(itemList.userId);
+              _this4.curstomerForm.shareUserId = _this4.UserNameArray.toString();
+            }
+          });
+        });
+        if (_this4.curstomerForm.contactNumber == '' && _this4.curstomerForm.weChatNumber == '') {
+          uni.showToast({
+            title: "联系电话和微信号必须填写其中一个！",
+            icon: 'none',
+            duration: 3000 });
+
+          return;
+        } else if (_this4.curstomerForm.contactNumber != '') {// 判断手机号是否正确
+          var newArray = _this4.curstomerForm.contactNumber.split('/');
+          for (var i = 0; i < newArray.length; i++) {
+            console.log(newArray[i]);
+            if (!/^1[3|4|5|8|9][0-9]\d{4,8}$/.test(newArray[i])) {
+              uni.showToast({
+                title: "请输入正确的手机号！",
+                icon: 'none',
+                duration: 3000 });
+
+              return true;
+            }
+          }
+        }
+
+        // 手机号码去重
+        _this4.$request("/system/customer/checkPhoneUnique", "POST", _objectSpread({},
         _this4.curstomerForm),
         {
           "content-type": "application/x-www-form-urlencoded",
           'cookie': uni.getStorageSync("setCookie") }).
-        then(function (res) {
-          uni.redirectTo({
-            url: '../index' });
+        then(function (resPhone) {
+          console.log('手机号码去重', resPhone);
+          if (resPhone == '') {
+            flagPhone = true;
+          } else {
+            resPhone = resPhone.slice(0, resPhone.length - 1);
+            uni.showToast({
+              title: '联系电话：' + resPhone + '重复了！',
+              icon: 'none',
+              duration: 3000 });
 
-          console.log('客户接口', res);
+            return;
+          }
         });
-        console.log('表单数据信息：', res);
-      }).catch(function (err) {
-        console.log('表单错误信息：', err);
+
+        // 微信号去重
+        _this4.$request("/system/customer/checkWeChatNumberUnique", "POST", _objectSpread({},
+        _this4.curstomerForm),
+        {
+          "content-type": "application/x-www-form-urlencoded",
+          'cookie': uni.getStorageSync("setCookie") }).
+        then(function (resWeChat) {
+          console.log('微信号去重', resWeChat);
+          if (resWeChat == '') {
+            flagWeChat = true;
+          } else {
+            resWeChat = resWeChat.slice(0, resWeChat.length - 1);
+            uni.showToast({
+              title: '微信号：' + resWeChat + '重复了！',
+              icon: 'none',
+              duration: 3000 });
+
+            return;
+          }
+        });
+
+        // 新增客户信息
+        setTimeout(function () {
+          if (flagPhone && flagWeChat) {
+            uni.showLoading({
+              title: '提交中...' });
+
+            _this4.$request("/system/customer/add", "POST", _objectSpread({},
+            _this4.curstomerForm),
+            {
+              "content-type": "application/x-www-form-urlencoded",
+              'cookie': uni.getStorageSync("setCookie") }).
+            then(function (resCur) {
+              uni.hideLoading();
+              uni.redirectTo({
+                url: '../index' });
+
+              console.log('客户接口', resCur);
+            }).catch(function (err) {
+              console.log('表单错误信息：', err);
+            });
+          }
+        }, 1000);
       });
     },
     // 重置
@@ -515,20 +588,20 @@ __webpack_require__.r(__webpack_exports__);
     },
     // 共享人多选框
     checkChange: function checkChange(e) {
-      this.curstomerForm.shareUserId = e.target.value;
+      this.curstomerForm.shareUserName = e.target.value;
     },
 
-    chooseProShare: function chooseProShare(e) {var _this5 = this;
-      console.log('this.curstomerForm.shareUserId', this.curstomerForm.shareUserId);
-      this.curstomerForm.shareUserId.map(function (item) {
-        console.log('item', item);
-        if (item == e.userId) {
-          _this5.curstomerForm.shareUserName.push(e.userName);
-        }
-      });
+    // chooseProShare(e) {
+    // 	console.log('this.curstomerForm.shareUserId',this.curstomerForm.shareUserId)
+    // 	this.curstomerForm.shareUserId.map(item=>{
+    // 		console.log('item',item)
+    // 		if(item == e.userId) {
+    // 			this.curstomerForm.shareUserName.push(e.userName)
+    // 		}
+    // 	})
 
-      console.log('e', e);
-    },
+    // 	console.log('e',e)
+    // },
 
     closeProDrawer: function closeProDrawer() {
       this.$refs.showProRight.close();
@@ -537,8 +610,6 @@ __webpack_require__.r(__webpack_exports__);
     closeProDrawerShare: function closeProDrawerShare() {
       this.$refs.showSharerProRight.close();
     },
-
-    searchPro: function searchPro() {},
 
     searchProShare: function searchProShare() {
       this.getApplyUserNameList();

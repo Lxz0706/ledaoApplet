@@ -3,44 +3,43 @@
     <view class="bgcolor">客户管理
 			<image class="bgcolor-icon" :src="cusIcon + '.svg'" @click="curstomerIcon"></image>
 		</view>
-		
 				<uni-forms ref="form" class="cur-forms" :modelValue="curstomerForm" :rules="rules" label-width="75">
 					<view>
 					<uni-forms-item required label="姓名" name="contacts">
-							<uni-easyinput v-model="curstomerForm.contacts" type="text" />
+							<uni-easyinput v-model="curstomerForm.contacts" type="text" placeholder="请输入姓名" />
 					</uni-forms-item>
-					<uni-forms-item required label="联系电话" name="contactNumber">
-							<uni-easyinput v-model="curstomerForm.contactNumber" type="number" />
+					<uni-forms-item label="联系电话" name="contactNumber">
+							<uni-easyinput v-model="curstomerForm.contactNumber" type="text" placeholder="请输入联系电话" />
 					</uni-forms-item>
-					<uni-forms-item required label="微信号" name="weChatNumber">
-							<uni-easyinput v-model="curstomerForm.weChatNumber" type="text" />
+					<uni-forms-item label="微信号" name="weChatNumber">
+							<uni-easyinput v-model="curstomerForm.weChatNumber" type="text" placeholder="请输入微信号" />
 					</uni-forms-item>
 					<uni-forms-item label="所属机构" name="customerName">
-							<uni-easyinput v-model="curstomerForm.customerName" type="text" />
+							<uni-easyinput v-model="curstomerForm.customerName" type="text" placeholder="请输入所属机构" />
 					</uni-forms-item>
 					<uni-forms-item label="职务" name="duties">
-							<uni-easyinput v-model="curstomerForm.duties" type="text" />
+							<uni-easyinput v-model="curstomerForm.duties" type="text" placeholder="请输入职务" />
 					</uni-forms-item>
 					<uni-forms-item required name="customerLable" label="客户标签">
 							<uni-data-checkbox :wrap="true" multiple v-model="curstomerForm.customerLable" :localdata="customerLables"/>
 					</uni-forms-item>
 					<uni-forms-item required label="所在省" name="province">
-							<uni-easyinput v-model="curstomerForm.province" type="text" />
+							<uni-easyinput v-model="curstomerForm.province" type="text" placeholder="请输入所在省" />
 					</uni-forms-item>
 					<uni-forms-item required label="所在市" name="city">
-							<uni-easyinput v-model="curstomerForm.city" type="text" />
+							<uni-easyinput v-model="curstomerForm.city" type="text" placeholder="请输入所在市" />
 					</uni-forms-item>
 					<uni-forms-item label="所在区" name="county">
-							<uni-easyinput v-model="curstomerForm.county" type="text" />
+							<uni-easyinput v-model="curstomerForm.county" type="text" placeholder="请输入所在区" />
 					</uni-forms-item>
 					<uni-forms-item label="详细地址" name="contactAddress">
-							<uni-easyinput v-model="curstomerForm.contactAddress" type="text" />
+							<uni-easyinput v-model="curstomerForm.contactAddress" type="text" placeholder="请输入详细地址" />
 					</uni-forms-item>
 					<uni-forms-item label="资源优势" name="resources">
-							<uni-easyinput v-model="curstomerForm.resources" type="text" />
+							<uni-easyinput v-model="curstomerForm.resources" type="text" placeholder="请输入资源优势" />
 					</uni-forms-item>
 					<uni-forms-item label="备注" name="remarks">
-							<uni-easyinput v-model="curstomerForm.remarks" type="text" />
+							<uni-easyinput v-model="curstomerForm.remarks" type="text" placeholder="请输入备注" />
 					</uni-forms-item>
 					<uni-forms-item label="共享人" name="shareUserName">
 							<!-- <uni-easyinput v-model="curstomerForm.sharer" type="text" /> -->
@@ -50,9 +49,6 @@
 								<uni-icons type="forward" size="30"></uni-icons>
 							</view>
 					</uni-forms-item>
-		<!-- 			<uni-forms-item label="所属部门" name="deptName">
-							<uni-easyinput v-model="curstomerForm.deptName" type="text" />
-					</uni-forms-item> -->
 					<uni-forms-item label="实际提交者" name="creator">
 							<view class="choose_css" @click="showProRight()">	
 								<block v-if="curstomerForm.creator == ''">请选择</block>
@@ -67,7 +63,7 @@
 				</uni-forms>
 
 		<!-- 弹框 -->
-		<uni-drawer ref="showProRight" mode="right" :mask-click="false" :width="300">
+		<uni-drawer ref="showProRight" mode="right" :mask-click="true" :width="300">
 			<scroll-view style="height: 100%;" scroll-y="true">
 				<uni-row class="demo-uni-row" style="margin-top: 20rpx; margin-bottom: 20rpx;">
 				    <uni-col :span="8">
@@ -120,13 +116,8 @@
 							<button @click="searchProShare" size="mini" type="primary">搜索</button>
 					</uni-col>
 				</uni-row>
-				<view class="top-search">
-					
-					
-					
-				</view>
 				<checkbox-group @change="checkChange">
-					<uni-row class="demo-uni-row" v-for="(item,index) in applyUserNameList" :key="index" @click.native="chooseProShare(item)">
+					<uni-row class="demo-uni-row" v-for="(item,index) in applyUserNameList" :key="index" >
 						<uni-col :span="2">
 							 <view></view>
 						</uni-col>
@@ -134,7 +125,7 @@
 							 <view class="content">{{item.userName}}</view>
 						</uni-col>
 						<uni-col :span="4">
-							 <checkbox :value="item.userId" :checked="false" color="#FFCC33" style="transform:scale(0.8)" />
+							 <checkbox :value="item.userName" :checked="false" color="#FFCC33" style="transform:scale(0.8)" />
 						</uni-col>
 					</uni-row>
 				</checkbox-group>
@@ -189,25 +180,13 @@ export default {
 						errorMessage: '必填'
 					}]
 				},
-				weChatNumber: {
-					rules:[{
-						required: true,
-						errorMessage: '必填'
-					}]
-				},
-				contactNumber: {
-					rules:[{
-						required: true,
-						errorMessage: '必填'
-					}]
-				},
 				customerLable: {
 					rules:[{
 						required: true,
 						errorMessage: '请至少选择一项'
 					}]
 				},
-				provinceL: {
+				province: {
 					rules:[{
 						required: true,
 						errorMessage: '必填'
@@ -219,14 +198,16 @@ export default {
 						errorMessage: '必填'
 					}]
 				}
-			}
+			},
+			UserNameArray: [],
+			flagPhoneNumber: false
     }
   },
 	
 	onLoad(options) {
 		if(options.ocrData) {
 			const ocrList = JSON.parse(options.ocrData)
-			console.log('editOp',ocrList)
+			console.log('editOp----ocr',ocrList)
 			// 匹配所属字段，待优化
 			ocrList.map(item=> {
 				// const reg = /.+?(省|市|自治区|自治州|县|区|街道)/g
@@ -236,8 +217,14 @@ export default {
 						this.curstomerForm.duties = item.Value
 					} else if(item.Name == '公司') {
 						this.curstomerForm.customerName = item.Value
+					} else if(item.Name == '微信') {
+						this.curstomerForm.weChatNumber = item.Value
 					} else if(item.Name == '手机') {
-						this.curstomerForm.contactNumber = item.Value
+						if(item.Value.length > 11) {
+							this.curstomerForm.contactNumber = item.Value.substring(item.Value.length - 11, item.Value.length);
+						} else {
+							this.curstomerForm.contactNumber = item.Value
+						}
 						return
 						if(item.Name == '电话') {
 							this.curstomerForm.contactNumber = item.Value
@@ -291,23 +278,109 @@ export default {
 				this.applyUserNameList = res.rows
 			})
 		},
+		
+		checkboxChange(e) {
+			console.log('e',e)
+		},
 		// 提交
 		submit() {
+			var flagPhone = false
+			var flagWeChat = false
 			this.$refs.form.validate().then(res=>{
-				this.$request("/system/customer/add", "POST",{
+				this.applyUserNameList.map(itemList => {
+					this.curstomerForm.shareUserName.map(itemName => {
+						if(itemList.userName == itemName) {
+							this.UserNameArray.push(itemList.userId)
+							this.curstomerForm.shareUserId = this.UserNameArray.toString()
+						}
+					})
+				})
+				if(this.curstomerForm.contactNumber == '' && this.curstomerForm.weChatNumber == '') {
+					uni.showToast({
+						title: "联系电话和微信号必须填写其中一个！",
+						icon: 'none',
+						duration: 3000
+					})
+					return;
+				} else if(this.curstomerForm.contactNumber != '') { // 判断手机号是否正确
+					const newArray = this.curstomerForm.contactNumber.split('/')
+					for(var i =0; i < newArray.length; i++) {
+						console.log(newArray[i])
+						if(!/^1[3|4|5|8|9][0-9]\d{4,8}$/.test(newArray[i])) {
+							uni.showToast({
+								title: "请输入正确的手机号！",
+								icon: 'none',
+								duration: 3000
+							})
+							return true;
+						}
+					}
+				}
+				
+				// 手机号码去重
+				this.$request("/system/customer/checkPhoneUnique","POST",{
 					...this.curstomerForm
 				}, {
-					"content-type": "application/x-www-form-urlencoded",
-					'cookie': uni.getStorageSync("setCookie")
-				}).then(res => {
-					uni.redirectTo({
-						url: '../index'
-					})
-					console.log('客户接口',res)
+						"content-type": "application/x-www-form-urlencoded",
+						'cookie': uni.getStorageSync("setCookie")
+				}).then(resPhone=> {
+					console.log('手机号码去重',resPhone)
+					if(resPhone == '') {
+						flagPhone = true
+					} else {
+						resPhone = resPhone.slice(0, resPhone.length - 1);
+						uni.showToast({
+							title: '联系电话：' + resPhone + '重复了！',
+							icon: 'none',
+							duration: 3000
+						})
+						return;
+					}
 				})
-					console.log('表单数据信息：', res);
-			}).catch(err =>{
-					console.log('表单错误信息：', err);
+				
+				// 微信号去重
+				this.$request("/system/customer/checkWeChatNumberUnique","POST",{
+					...this.curstomerForm
+				}, {
+						"content-type": "application/x-www-form-urlencoded",
+						'cookie': uni.getStorageSync("setCookie")
+				}).then(resWeChat=> {
+					console.log('微信号去重',resWeChat)
+					if(resWeChat == '') {
+						flagWeChat = true
+					} else {
+						resWeChat = resWeChat.slice(0, resWeChat.length - 1);
+						uni.showToast({
+							title: '微信号：' + resWeChat + '重复了！',
+							icon: 'none',
+							duration: 3000
+						})
+						return;
+					}
+				})
+
+				// 新增客户信息
+				setTimeout(()=>{
+					if(flagPhone && flagWeChat) {
+						uni.showLoading({
+							title: '提交中...'
+						})
+						this.$request("/system/customer/add","POST",{
+							...this.curstomerForm
+						},{
+							"content-type": "application/x-www-form-urlencoded",
+							'cookie': uni.getStorageSync("setCookie")
+						}).then(resCur => {
+							uni.hideLoading()
+							uni.redirectTo({
+								url: '../index'
+							})
+							console.log('客户接口',resCur)
+						}).catch(err => {
+							console.log('表单错误信息：', err);
+						})
+					}
+				},1000)
 			})
 		},
 		// 重置
@@ -337,20 +410,20 @@ export default {
 		},
 		// 共享人多选框
 		checkChange(e) {
-			this.curstomerForm.shareUserId = e.target.value
+			this.curstomerForm.shareUserName = e.target.value
 		},
 		
-		chooseProShare(e) {
-			console.log('this.curstomerForm.shareUserId',this.curstomerForm.shareUserId)
-			this.curstomerForm.shareUserId.map(item=>{
-				console.log('item',item)
-				if(item == e.userId) {
-					this.curstomerForm.shareUserName.push(e.userName)
-				}
-			})
+		// chooseProShare(e) {
+		// 	console.log('this.curstomerForm.shareUserId',this.curstomerForm.shareUserId)
+		// 	this.curstomerForm.shareUserId.map(item=>{
+		// 		console.log('item',item)
+		// 		if(item == e.userId) {
+		// 			this.curstomerForm.shareUserName.push(e.userName)
+		// 		}
+		// 	})
 			
-			console.log('e',e)
-		},
+		// 	console.log('e',e)
+		// },
 		
 		closeProDrawer() {
 			this.$refs.showProRight.close();
@@ -359,8 +432,6 @@ export default {
 		closeProDrawerShare() {
 			this.$refs.showSharerProRight.close();
 		},
-		
-		searchPro() {},
 		
 		searchProShare() {
 			this.getApplyUserNameList()
@@ -448,6 +519,14 @@ export default {
 	justify-content: space-around;
 	align-items: center;
 	margin: 20rpx 0;
+}
+
+.uni-list-cell {
+	display: flex;
+	align-items: center;
+	.checkbox {
+		
+	}
 }
 </style>
 

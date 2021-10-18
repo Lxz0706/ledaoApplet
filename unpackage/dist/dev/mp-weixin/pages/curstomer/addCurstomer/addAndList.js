@@ -266,8 +266,8 @@ __webpack_require__.r(__webpack_exports__);
         title: '正在加载...' });
 
       this.$request("/system/customer/list", "POST", {
-        "beginTime": beginTime,
-        "endTime": endTime,
+        "params[beginTime]": beginTime,
+        "params[endTime]": endTime,
         "contacts": this.contactsLab },
       {
         "content-type": "application/x-www-form-urlencoded",

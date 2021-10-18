@@ -223,17 +223,14 @@ __webpack_require__.r(__webpack_exports__);
       // 出库信息list
       outInfo: [],
       // 入库信息
-      inInfo: {}
-      // // 档案信息
-      // documentFiles: []
-    };
+      inInfo: {},
+      documentId: '' };
+
   },
 
   onLoad: function onLoad(options) {
-    var documentId = options.documentId;
-    // const documentId = 589
-    console.log('二维码进入查看档案入库出库	基本信息---', options);
-    this.getListInOutDetail(documentId);
+    this.documentId = decodeURIComponent(options.scene);
+    console.log('二维码进入查看档案入库出库	基本信息---', this.documentId);
   },
 
   mounted: function mounted() {
@@ -241,18 +238,24 @@ __webpack_require__.r(__webpack_exports__);
     if (setCookie.length == 0) {
       uni.showToast({
         title: '请先登录',
-        icon: 'error' });
+        icon: 'error',
+        duration: 3000 });
 
+    } else {
+      this.getListInOutDetail();
     }
   },
 
   methods: {
-    getListInOutDetail: function getListInOutDetail(documentId) {var _this = this;
+    getListInOutDetail: function getListInOutDetail() {var _this = this;
       uni.showLoading({
         title: '加载中...' });
 
       this.$request('/applyIn/listInOutDetail', 'POST', {
-        documentId: documentId }).
+        documentId: this.documentId },
+      {
+        "content-type": "application/x-www-form-urlencoded",
+        'cookie': uni.getStorageSync("setCookie") }).
       then(function (resList) {
         _this.baseInfo = resList.data.baseInfo;
         _this.outInfo = resList.data.outInfo;

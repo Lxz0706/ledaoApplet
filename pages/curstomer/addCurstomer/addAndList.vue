@@ -3,12 +3,12 @@
 		<view class="search-bar">
 			<view class="contactTime">
 				<uni-row>
-				 <uni-col :span="5">
+				 <uni-col :span="3">
 					 <view class="contactTitle">
 							日期
 					 </view>
 				 </uni-col>
-					 <uni-col :span="19">
+					 <uni-col :span="21">
 						<view class="contactsLable">
 							<uni-datetime-picker v-model="searchData.datetimerange" type="daterange" :clear-icon="true"
 							rangeSeparator="至" />
@@ -88,8 +88,8 @@ export default {
 				title: '正在加载...'
 			})
 			this.$request("/system/customer/list","POST", {
-				"beginTime": beginTime,
-				"endTime": endTime,
+				"params[beginTime]": beginTime,
+				"params[endTime]": endTime,
 				"contacts": this.contactsLab
 			}, {
 				"content-type": "application/x-www-form-urlencoded",

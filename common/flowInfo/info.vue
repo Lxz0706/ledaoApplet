@@ -286,12 +286,13 @@ export default {
 									}
 									uni.hideLoading()
 								} else if(res.code == 500) {
+									uni.hideLoading()
 									uni.showToast({
 										title: res.msg,
 										icon: 'none',
-										mask: true
+										mask: true,
+										duration: 2000
 									})
-									uni.hideLoading()
 								}
 							})
 						}
