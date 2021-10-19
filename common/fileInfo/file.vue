@@ -173,7 +173,7 @@ export default {
 		if(this.formDataFile.fileType == 2) {
 			this.showFileScan = true
 		} else {
-			this.showFileScan = false
+			this.showFileScan = false 
 		}
 		console.log('this.formDataFile',this.formDataFile)
 	},

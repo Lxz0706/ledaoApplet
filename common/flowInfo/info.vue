@@ -17,7 +17,7 @@
 								</uni-forms-item>
 		            <uni-forms-item label="项目名称" name="projectName" v-if="isShowProjectName">
 		                <uni-easyinput :disabled="basicInfoDis" v-model="formData.projectName" type="text" />
-		            </uni-forms-item>
+		            </uni-forms-item> 
 		            <uni-forms-item label="公司名称" name="companyNameLab">
 		                <uni-easyinput :disabled="basicInfoDis" v-model="formData.companyNameLab" type="text" />
 		            </uni-forms-item>

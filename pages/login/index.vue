@@ -104,7 +104,7 @@
 					password: _this.passData,
 					rememberMe: true
 				}).then(res => {
-					uni.showLoading({
+					uni.showLoading({ 
 						title: '登录中'
 					});
 					// console.log('rememberMe',res)

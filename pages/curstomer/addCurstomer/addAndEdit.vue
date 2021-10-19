@@ -265,7 +265,7 @@ export default {
 				this.customerLables = resDict.data.sysCustomerDicts.map((item,index) => {
 					return {text: item,value:index}
 				})
-			})
+			}) 
 		},
 		// 获取用户列表
 		getApplyUserNameList() {

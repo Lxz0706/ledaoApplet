@@ -149,7 +149,8 @@
 									openId: resOpenid.data.openId
 								}).then(resWeChatLogin => {
 									console.log('登录是否成功', resWeChatLogin.code)
-									if (resWeChatLogin.code === 500) {
+									if (resWeChatLogin.code === 500) { 
+										
 										uni.showToast({
 											title: resWeChatLogin.msg,
 											position: 'bottom',
