@@ -238,6 +238,7 @@ export default {
 				this.chatDetailA = res.data
 				if(this.chatDetailA.length > 0) {
 					this.showChatAll = true
+					
 					this.formData.id=this.chatDetailA.journalId
 				}
 				console.log('获取评论列表的id',res)

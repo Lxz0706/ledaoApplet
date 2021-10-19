@@ -266,6 +266,7 @@ export default {
 					return {text: item,value:index}
 				})
 			}) 
+			
 		},
 		// 获取用户列表
 		getApplyUserNameList() {
