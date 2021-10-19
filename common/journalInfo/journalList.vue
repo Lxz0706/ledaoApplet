@@ -93,7 +93,7 @@
 		},
 		
 		onLoad(options) {
-			console.log('options',options.date)
+			// console.log('options',options.date)
 			this.date = options.date
 			this.createBy = options.createBy
 		},
@@ -138,7 +138,7 @@
 			
 			// 删除日志
 			bindClick(id) {
-				console.log('删除')
+				// console.log('删除')
 				this.$request("/system/journal/remove","POST",{
 					ids: id
 				},{
@@ -155,6 +155,8 @@
 			},
 			
 			onClick(e,val) {
+					// console.log('this.formData1',e)
+					// console.log('this.formData2',val)
 				const objVal = JSON.stringify(val)
 				uni.navigateTo({
 					url: '/common/journalInfo/journal?isChat=1&item=' + objVal

@@ -59,14 +59,14 @@
 					key: 'getOpenids',
 						success: function (res) {
 							_this.openId = res.data
-								console.log("res",res.data);
+								// console.log("res",res.data);
 						}
 				})
 				uni.getStorage({
 					key: 'getUnionId',
 						success: function (res) {
 							_this.unionId = res.data
-								console.log("res",res.data);
+								// console.log("res",res.data);
 						}
 				})
 			},
@@ -107,8 +107,9 @@
 					uni.showLoading({
 						title: '登录中'
 					});
-					console.log('rememberMe',res)
+					// console.log('rememberMe',res)
 					// uni.removeStorageSync('setCookie')
+					console.log(res.header["Set-Cookie"])
 					uni.setStorageSync('setCookie',res.header["Set-Cookie"])
 					this.$request("/saveOpenid","POST",{
 						openId: _this.openId,

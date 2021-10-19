@@ -50,7 +50,8 @@
 					 </picker>
 			 </uni-forms-item>
 			 <uni-forms-item required v-if="showFileScan" label="扫描件类型" name="fileScanTypeLable">
-			     <uni-easyinput v-if="showInfo" type="text" disabled v-model="formDataFile.fileScanTypeLable" />
+				 <!-- <uni-easyinput v-if="showInfo " type="text" disabled v-model="formDataFile.fileScanTypeLable" /> -->
+				 <uni-easyinput v-if="showInfo|| !documentAdmin " type="text" disabled v-model="formDataFile.fileScanTypeLable" />
 					 <picker v-else :value="formDataFile.fileScanType" :range="rangeFileScanType" @change="bindPickerChangeFileScanType">
 					 	<view class="uni-input select-picker">{{formDataFile.fileScanType == '' && formDataFile.fileScanTypeLable == '' ? "请选择" : formDataFile.fileScanTypeLable}}</view>
 					 </picker>
@@ -169,10 +170,10 @@ export default {
 		this.statu = options.statu
 		this.formDataFile.companyName = options.companyName
 		this.formDataFile.projectName = options.projectName
-		if(this.formDataFile.fileType == 0) {
-			this.showFileScan = false
-		} else {
+		if(this.formDataFile.fileType == 2) {
 			this.showFileScan = true
+		} else {
+			this.showFileScan = false
 		}
 		console.log('this.formDataFile',this.formDataFile)
 	},

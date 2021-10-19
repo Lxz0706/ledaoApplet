@@ -207,7 +207,9 @@ export default {
 		if(options.item) {
 			const val = JSON.parse(options.item)
 			this.formData = val
-			this.formData.id = val.id
+			this.formData.id = val.id || ''
+			this.formData.ids = val.proId
+			console.log('this.formData',this.formData)
 		}
 		this.isChat = options.isChat;
 		
@@ -227,7 +229,8 @@ export default {
 		// 获取评论列表
 		getChatDetailList() {
 			this.$request("/system/comment/listCommentDtail","POST",{
-				journalId: this.formData.id
+				journalId: this.formData.id,
+				proId:this.formData.ids,
 			},{
 				"content-type": "application/x-www-form-urlencoded",
 				"cookie": uni.getStorageSync('setCookie')
@@ -235,6 +238,7 @@ export default {
 				this.chatDetailA = res.data
 				if(this.chatDetailA.length > 0) {
 					this.showChatAll = true
+					this.this.formData.id=this.chatDetailA.journalId
 				}
 				console.log('获取评论列表的id',res)
 			})
@@ -242,7 +246,7 @@ export default {
 		// 回复
 		jonClick() {
 			this.$request("/system/comment/add","POST",{
-				"parentId": this.journalCommentId,
+				"parentId":this.formData.id,
 				"chatDetail": this.Reply,
 				"journalId": this.formData.id
 			},{
@@ -253,6 +257,20 @@ export default {
 					this.getChatDetailList()
 				}
 				console.log('获取回复的id',res)
+			})
+			this.$request("/system/comment/listCommentDtail","POST",{
+				journalId: '',
+				proId:this.formData.ids,
+			},{
+				"content-type": "application/x-www-form-urlencoded",
+				"cookie": uni.getStorageSync('setCookie')
+			}).then(res=> {
+				this.chatDetailA = res.data
+				if(this.chatDetailA.length > 0) {
+					this.showChatAll = true
+					this.this.formData.id=this.chatDetailA.journalId
+				}
+			
 			})
 		},
 		
@@ -350,12 +368,14 @@ export default {
 				}).catch(err =>{
 					console.log('err',err)
 				})
+				 
 		},
 		// 评论填写确定按钮  remarks1为0
 		submitIsChat() {
 			this.$refs.form.validate().then(res=>{
 				this.$request("/system/comment/add","POST",{
 					"journalId": this.formData.id,
+					"proId":this.formData.ids,
 					"workDetail": this.formData.chatDetail,
 					"remarks1": 0
 				}, {
@@ -369,22 +389,25 @@ export default {
 						// //获取上一个页面的页面栈
 						// var lastPage = page[page.length - 2];
 						// //调用onload事件
-						// lastPage.onShow();
+						// lastPage.onLoad();
 						// // uni.navigateBack({
 						// //    delta: 1
 						// // })
 					}
-					console.log('IsChat',res)
+					// console.log('IsChat',res)
 				})
 			}).catch(err =>{
 			})
+			 // this.getChatDetailList()
 		},
 		
 		huifuClick(i,id) {
 			this.$refs.popup.open('bottom')
 			this.setFocus = true
 			this.indexV = i
-			this.journalCommentId = id
+			this.formData.id = id
+			console.log('id',id)
+			 
 		},
 		
 		send() {

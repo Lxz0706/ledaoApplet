@@ -306,7 +306,7 @@ export default {
 					const newArray = this.curstomerForm.contactNumber.split('/')
 					for(var i =0; i < newArray.length; i++) {
 						console.log(newArray[i])
-						if(!/^1[3|4|5|8|9][0-9]\d{4,8}$/.test(newArray[i])) {
+						if(!/^1[3|4|5|6|7|8|9][0-9]\d{4,8}$/.test(newArray[i])) {
 							uni.showToast({
 								title: "请输入正确的手机号！",
 								icon: 'none',
