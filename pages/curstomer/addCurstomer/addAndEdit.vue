@@ -1,7 +1,7 @@
 <template>
   <view class="addCurstomer">
     <view class="bgcolor">客户管理
-			<image class="bgcolor-icon" :src="cusIcon + '.svg'" @click="curstomerIcon"></image>
+			<image class="bgcolor-icon" :src="cusIcon + '.svg'" @click="curstomerIcon"><div style="font-size: 12px;" >名片扫描</div></image>
 		</view>
 				<uni-forms ref="form" class="cur-forms" :modelValue="curstomerForm" :rules="rules" label-width="75">
 					<view>
@@ -10,6 +10,8 @@
 					</uni-forms-item>
 					<uni-forms-item label="联系电话" name="contactNumber">
 							<uni-easyinput v-model="curstomerForm.contactNumber" type="text" placeholder="请输入联系电话" />
+							<div style="font-size: 12px;color: #C0C0C0;margin-bottom: -12px;">多个手机号之间用"/"分隔</div>
+					
 					</uni-forms-item>
 					<uni-forms-item label="微信号" name="weChatNumber">
 							<uni-easyinput v-model="curstomerForm.weChatNumber" type="text" placeholder="请输入微信号" />
@@ -297,22 +299,28 @@ export default {
 					})
 				})
 				if(this.curstomerForm.contactNumber == '' && this.curstomerForm.weChatNumber == '') {
-					uni.showToast({
+					wx.showToast({
 						title: "联系电话和微信号必须填写其中一个！",
 						icon: 'none',
-						duration: 3000
+						
 					})
+					setTimeout(() => {
+					     wx.hideToast();
+					   }, 7000)
 					return;
 				} else if(this.curstomerForm.contactNumber != '') { // 判断手机号是否正确
 					const newArray = this.curstomerForm.contactNumber.split('/')
 					for(var i =0; i < newArray.length; i++) {
 						console.log(newArray[i])
 						if(!/^1[3|4|5|6|7|8|9][0-9]\d{4,8}$/.test(newArray[i])) {
-							uni.showToast({
+							wx.showToast({
 								title: "请输入正确的手机号！",
 								icon: 'none',
-								duration: 3000
+								
 							})
+							setTimeout(() => {
+							     wx.hideToast();
+							   }, 7000)
 							return true;
 						}
 					}
@@ -330,11 +338,14 @@ export default {
 						flagPhone = true
 					} else {
 						resPhone = resPhone.slice(0, resPhone.length - 1);
-						uni.showToast({
+						wx.showToast({
 							title: '联系电话：' + resPhone + '重复了！',
 							icon: 'none',
-							duration: 3000
+							
 						})
+						setTimeout(() => {
+						     wx.hideToast();
+						   }, 7000)
 						return;
 					}
 				})
@@ -351,11 +362,14 @@ export default {
 						flagWeChat = true
 					} else {
 						resWeChat = resWeChat.slice(0, resWeChat.length - 1);
-						uni.showToast({
+						wx.showToast({
 							title: '微信号：' + resWeChat + '重复了！',
 							icon: 'none',
-							duration: 3000
+							
 						})
+						setTimeout(() => {
+						     wx.hideToast();
+						   }, 7000)
 						return;
 					}
 				})
@@ -381,7 +395,7 @@ export default {
 							console.log('表单错误信息：', err);
 						})
 					}
-				},1000)
+				},7000)
 			})
 		},
 		// 重置
