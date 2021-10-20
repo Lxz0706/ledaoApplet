@@ -21,7 +21,7 @@
         {
           "name": "pages/lookInformation/index",
           "pathName": "pages/lookInformation/index",
-          "query": "scene=565",
+          "query": "",
           "scene": 1011
         },
         {
@@ -40,7 +40,7 @@
           "name": "pages/qrCode/qrCode",
           "pathName": "pages/qrCode/qrCode",
           "query": "scene=14",
-          "scene": null
+          "scene": 1011
         }
       ]
     }

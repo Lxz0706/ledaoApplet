@@ -94,7 +94,7 @@ var components
 try {
   components = {
     uniSegmentedControl: function() {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control */ "uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control.vue */ 222))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control */ "uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control.vue */ 226))
     }
   }
 } catch (e) {
@@ -151,7 +151,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var flow = function flow() {__webpack_require__.e(/*! require.ensure | pages/workFlow/flow/flow */ "pages/workFlow/flow/flow").then((function () {return resolve(__webpack_require__(/*! ./flow/flow.vue */ 229));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var flow = function flow() {__webpack_require__.e(/*! require.ensure | pages/workFlow/flow/flow */ "pages/workFlow/flow/flow").then((function () {return resolve(__webpack_require__(/*! ./flow/flow.vue */ 233));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 
 

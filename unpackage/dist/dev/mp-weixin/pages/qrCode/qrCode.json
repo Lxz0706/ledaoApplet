@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "二维码信息",
-  "usingComponents": {}
+  "usingComponents": {
+    "uni-popup": "/uni_modules/uni-popup/components/uni-popup/uni-popup"
+  }
 }

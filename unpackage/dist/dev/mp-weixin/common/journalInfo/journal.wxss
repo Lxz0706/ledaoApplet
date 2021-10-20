@@ -62,7 +62,7 @@
 }
 .chatAll.data-v-63a98d17 {
   background-color: #E5E5E5;
-  height: 420rpx;
+  max-height: 420rpx;
   overflow: auto;
   border-radius: 20rpx;
   padding: 30rpx;

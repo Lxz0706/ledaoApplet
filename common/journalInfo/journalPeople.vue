@@ -104,6 +104,7 @@ export default {
 		
 		// 进入日志列表
 		onClick(e,item) {
+			uni.setStorageSync('datePeople', this.date)
 			uni.navigateTo({
 				url: './journalList?date=' + this.date + '&createBy=' + item.loginName
 			})

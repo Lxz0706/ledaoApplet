@@ -292,6 +292,7 @@ __webpack_require__.r(__webpack_exports__);
               then(function (resWeChatLogin) {
                 console.log('登录是否成功', resWeChatLogin.code);
                 if (resWeChatLogin.code === 500) {
+
                   uni.showToast({
                     title: resWeChatLogin.msg,
                     position: 'bottom',

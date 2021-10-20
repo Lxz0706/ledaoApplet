@@ -108,7 +108,7 @@
 						title: '登录中'
 					});
 					// console.log('rememberMe',res)
-					// uni.removeStorageSync('setCookie')
+					uni.removeStorageSync('setCookie')
 					console.log(res.header["Set-Cookie"])
 					uni.setStorageSync('setCookie',res.header["Set-Cookie"])
 					this.$request("/saveOpenid","POST",{
