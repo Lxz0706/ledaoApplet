@@ -109,8 +109,20 @@
 					});
 					// console.log('rememberMe',res)
 					uni.removeStorageSync('setCookie')
+					var cookie =res.header['Set-Cookie']
+					// 字符串分割成数组
+					var cookieArray = cookie.split(/,(?=[^,]*=)/)
+					// 分号拼接数组
+					var newCookie = cookieArray.join(';')
+					// 存储拼接后的cookie
+					try {
+					  uni.setStorageSync('setCookie', newCookie)
+					} catch (error) {
+					  log.error('setStorageSync cookie fail')
+					}
+					// uni.setStorageSync('setCookie',res.header["Set-Cookie"])
 					console.log(res.header["Set-Cookie"])
-					uni.setStorageSync('setCookie',res.header["Set-Cookie"])
+					console.log('cookie',uni.getStorageSync("setCookie"))
 					this.$request("/saveOpenid","POST",{
 						openId: _this.openId,
 						unionId: _this.unionId
