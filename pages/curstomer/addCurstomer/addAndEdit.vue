@@ -11,7 +11,6 @@
 					<uni-forms-item label="联系电话" name="contactNumber">
 							<uni-easyinput v-model="curstomerForm.contactNumber" type="text" placeholder="请输入联系电话" />
 							<div style="font-size: 12px;color: #C0C0C0;margin-bottom: -12px;">多个手机号之间用"/"分隔</div>
-					
 					</uni-forms-item>
 					<uni-forms-item label="微信号" name="weChatNumber">
 							<uni-easyinput v-model="curstomerForm.weChatNumber" type="text" placeholder="请输入微信号" />
@@ -302,11 +301,8 @@ export default {
 					wx.showToast({
 						title: "联系电话和微信号必须填写其中一个！",
 						icon: 'none',
-						
+						duration: 4000
 					})
-					setTimeout(() => {
-					     wx.hideToast();
-					   }, 7000)
 					return;
 				} else if(this.curstomerForm.contactNumber != '') { // 判断手机号是否正确
 					const newArray = this.curstomerForm.contactNumber.split('/')
@@ -316,11 +312,8 @@ export default {
 							wx.showToast({
 								title: "请输入正确的手机号！",
 								icon: 'none',
-								
+								duration: 4000
 							})
-							setTimeout(() => {
-							     wx.hideToast();
-							   }, 7000)
 							return true;
 						}
 					}
@@ -427,18 +420,6 @@ export default {
 		checkChange(e) {
 			this.curstomerForm.shareUserName = e.target.value
 		},
-		
-		// chooseProShare(e) {
-		// 	console.log('this.curstomerForm.shareUserId',this.curstomerForm.shareUserId)
-		// 	this.curstomerForm.shareUserId.map(item=>{
-		// 		console.log('item',item)
-		// 		if(item == e.userId) {
-		// 			this.curstomerForm.shareUserName.push(e.userName)
-		// 		}
-		// 	})
-			
-		// 	console.log('e',e)
-		// },
 		
 		closeProDrawer() {
 			this.$refs.showProRight.close();

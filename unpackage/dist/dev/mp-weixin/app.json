@@ -21,8 +21,7 @@
     "common/journalInfo/journalDepart",
     "common/journalInfo/journalPeople",
     "pages/ocr/index",
-    "pages/setup/index",
-    "common/journalInfo/journalone"
+    "pages/setup/index"
   ],
   "subPackages": [],
   "window": {

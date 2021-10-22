@@ -131,12 +131,6 @@
 		"style": {
 			"navigationBarTitleText": "我的设置"
 		}
-	},
-	{
-		"path": "common/journalInfo/journalone",
-		"style": {
-			"navigationBarTitleText": "日志填写"
-		}
 	}
 	],
 	"globalStyle": {

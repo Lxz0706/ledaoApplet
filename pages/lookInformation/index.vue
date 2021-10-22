@@ -91,14 +91,20 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(resList => {
-				this.baseInfo = resList.data.baseInfo
-				this.outInfo = resList.data.outInfo
-				this.inInfo = resList.data.inInfo
 				console.log('resList',resList)
-				setTimeout(()=> {
-					uni.hideLoading()
-				},3000)
-				
+				if(resList.code != 500) {
+					this.baseInfo = resList.data.baseInfo
+					this.outInfo = resList.data.outInfo
+					this.inInfo = resList.data.inInfo
+					setTimeout(()=> {
+						uni.hideLoading()
+					},3000)
+				} else {
+					uni.showToast({
+						title: '未搜索到相关信息！',
+						icon: 'error'
+					})
+				}
 			})
 		},
 		// 出库档案明细

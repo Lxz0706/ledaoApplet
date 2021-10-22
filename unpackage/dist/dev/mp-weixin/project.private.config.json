@@ -39,7 +39,7 @@
         {
           "name": "pages/qrCode/qrCode",
           "pathName": "pages/qrCode/qrCode",
-          "query": "scene=14",
+          "query": "scene=11",
           "scene": 1011
         }
       ]

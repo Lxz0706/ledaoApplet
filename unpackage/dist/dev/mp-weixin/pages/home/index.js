@@ -175,22 +175,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /**
  * author        chenjie
@@ -230,17 +214,20 @@ __webpack_require__.r(__webpack_exports__);
         modularIcon: '/static/icon/cus-mang' }],
 
 
-      openId: ''
-      // menuImg1: '/static/icon/journal-add',
-      // menuImg2: '/static/icon/journal-look',
-      // menuImg3: '/static/icon/cus-edit',
-      // menuImg4: '/static/icon/journal-look'
-    };
+      openId: '' };
+
   },
 
   onLoad: function onLoad(options) {
     // this.getHomeList()
+    // if(uni.getStorageSync("setCookie")) {
+    // 	debugger
     this.loginCode();
+    // } else {
+    // 	uni.redirectTo({
+    // 		url: "../../pages/login/index"
+    // 	})
+    // }
   },
 
   onShow: function onShow() {
@@ -265,16 +252,6 @@ __webpack_require__.r(__webpack_exports__);
     // 	} else {
     // 		this.loginCode()
     // 	}
-    // },
-    // 快捷入口
-    // getListCollapse() {
-    // 	this.$request("/system/oper/latelyList", "POST", {}, {
-    // 		"content-type": "application/x-www-form-urlencoded",
-    // 		'cookie': uni.getStorageSync("setCookie")
-    // 	}).then(resColl => {
-    // 		this.listCollapse = resColl.rows
-    // 		console.log('resColl', resColl)
-    // 	})
     // },
     // 登录获取code换取openId
     loginCode: function loginCode() {var _this = this;
@@ -338,54 +315,6 @@ __webpack_require__.r(__webpack_exports__);
         } });
 
     },
-
-    // midBtn() {
-    // 	uni.scanCode({
-    // 		onlyFromCamera: true,
-    // 		scanType: 'qrCode',
-    // 		success: function(res) {
-    // 			console.log('签到成功', res)
-    // 			var urlString = res.rawData;
-    // 			if (res.errMsg == "scanCode:ok") {
-    // 				// uni.showToast({
-    // 				// 	title:'签到成功',
-    // 				// 	icon:'success'
-    // 				// })
-    // 				// var sa = JSON.parse(urlString)
-    // 				// console.log('aa--aa',sa)
-    // 				// uni.navigateTo({
-    // 				// 	url:'../../pages/qrCode/qrCode?url='+encodeURIComponent(JSON.stringify(urlString))
-    // 				// })
-    // 				uni.navigateTo({
-    // 					url: '../../pages/qrCode/qrCode?url=' + encodeURIComponent(JSON
-    // 						.stringify(urlString))
-    // 				})
-    // 			} else {
-    // 				uni.showToast({
-    // 					title: '二维码无效',
-    // 					icon: 'none'
-    // 				})
-    // 			}
-    // 		},
-    // 		fail() {
-    // 			uni.showToast({
-    // 				title: '二维码无效',
-    // 				icon: 'none'
-    // 			})
-    // 		}
-    // 	});
-    // },
-
-    // getHomeList() {
-    // 	this.$request("/system/appletmodular/list","POST",{
-    // 	},{
-    // 		"content-type": "application/x-www-form-urlencoded",
-    // 		'cookie': uni.getStorageSync('setCookie')
-    // 	}).then(res => {
-    // 		this.listHome = res.rows
-    // 		console.log('list',res)
-    // 	})
-    // },
 
     homeListClick: function homeListClick(e) {
       console.log(e);

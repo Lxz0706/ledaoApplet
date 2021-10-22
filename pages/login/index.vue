@@ -5,7 +5,7 @@
 			<view class="header">
 				<image :src="logoImage + '.png'"></image>
 			</view>
-			<!-- <view class="icon_title">乐道</view> -->
+
 			<!-- 主体表单 -->
 			<view class="main">
 				<wInput v-model="adminData" type="text" placeholder="请输入账号" :focus="isFocus"></wInput>
@@ -51,7 +51,6 @@
 		},
 
 		methods: {
-			
 			// 获取本地存储openId
 			getOpenId() {
 				const _this = this
@@ -142,11 +141,6 @@
 									uni.setStorageSync('documentAdmin',false)
 								}
 							})
-							// uni.showToast({
-							// 	icon: 'success',
-							// 	position: 'bottom',
-							// 	title: '登录成功'
-							// });
 							uni.hideLoading();
 							setTimeout(function() {
 								uni.switchTab({

@@ -1,21 +1,12 @@
 <template>
 	<view class='container ct-bg'>
 		<view class='home-collapse'>
-			<!-- 快捷入口 -->
-			<!-- 			<uni-collapse v-if="listCollapse !== []">
-				<uni-collapse-item :title="collapseTitle" :open="true"> -->
 			<view class="line"></view>
 			<view class="collapse">
 				<view class="title">{{collapseTitle}}</view>
 				<view class="list">
 					<view class="collapse-list" v-for="(item,index) in listCollapse" :key="index"
 						@click="collapseClick(index)">
-						<!-- <view class="collapse-list-img">
-										<image v-if="item.menuId == 1" class="icon_tu" :src="menuImg1 + '.svg'" mode="widthFix"></image>
-										<image v-else-if="item.menuId == 2" class="icon_tu" :src="menuImg2 + '.svg'" mode="widthFix"></image>
-										<image v-else-if="item.menuId == 3" class="icon_tu" :src="menuImg3 + '.svg'" mode="widthFix"></image>
-										<image v-else-if="item.menuId == 4" class="icon_tu" :src="menuImg4 + '.svg'" mode="widthFix"></image>
-									</view> -->
 						<view class="collapse-list-img">
 							<image class="icon_tu_collapse" :src="item.menuImg + '.svg'" mode="widthFix"></image>
 						</view>
@@ -25,8 +16,6 @@
 					</view>
 				</view>
 			</view>
-			<!-- 				</uni-collapse-item>
-			</uni-collapse> -->
 
 			<view class="line"></view>
 			<!-- home list -->
@@ -39,11 +28,6 @@
 						<view class="icon_title">{{item.modularName}}</view>
 					</view>
 				</view>
-				<!-- <view class="saoma" @click="midBtn">
-					<view class="home-list-img">
-						<image class="icon_tu" src="#" mode="widthFix"></image>
-					</view>
-				</view> -->
 			</view>
 		</view>
 	</view>
@@ -89,16 +73,19 @@
 					}
 				],
 				openId: ''
-				// menuImg1: '/static/icon/journal-add',
-				// menuImg2: '/static/icon/journal-look',
-				// menuImg3: '/static/icon/cus-edit',
-				// menuImg4: '/static/icon/journal-look'
 			}
 		},
 
 		onLoad(options) {
 			// this.getHomeList()
-						this.loginCode()
+			// if(uni.getStorageSync("setCookie")) {
+			// 	debugger
+				this.loginCode()
+			// } else {
+			// 	uni.redirectTo({
+			// 		url: "../../pages/login/index"
+			// 	})
+			// }
 		},
 
 		onShow() {
@@ -123,16 +110,6 @@
 			// 	} else {
 			// 		this.loginCode()
 			// 	}
-			// },
-			// 快捷入口
-			// getListCollapse() {
-			// 	this.$request("/system/oper/latelyList", "POST", {}, {
-			// 		"content-type": "application/x-www-form-urlencoded",
-			// 		'cookie': uni.getStorageSync("setCookie")
-			// 	}).then(resColl => {
-			// 		this.listCollapse = resColl.rows
-			// 		console.log('resColl', resColl)
-			// 	})
 			// },
 			// 登录获取code换取openId
 			loginCode() {
@@ -196,54 +173,6 @@
 					}
 				})
 			},
-
-			// midBtn() {
-			// 	uni.scanCode({
-			// 		onlyFromCamera: true,
-			// 		scanType: 'qrCode',
-			// 		success: function(res) {
-			// 			console.log('签到成功', res)
-			// 			var urlString = res.rawData;
-			// 			if (res.errMsg == "scanCode:ok") {
-			// 				// uni.showToast({
-			// 				// 	title:'签到成功',
-			// 				// 	icon:'success'
-			// 				// })
-			// 				// var sa = JSON.parse(urlString)
-			// 				// console.log('aa--aa',sa)
-			// 				// uni.navigateTo({
-			// 				// 	url:'../../pages/qrCode/qrCode?url='+encodeURIComponent(JSON.stringify(urlString))
-			// 				// })
-			// 				uni.navigateTo({
-			// 					url: '../../pages/qrCode/qrCode?url=' + encodeURIComponent(JSON
-			// 						.stringify(urlString))
-			// 				})
-			// 			} else {
-			// 				uni.showToast({
-			// 					title: '二维码无效',
-			// 					icon: 'none'
-			// 				})
-			// 			}
-			// 		},
-			// 		fail() {
-			// 			uni.showToast({
-			// 				title: '二维码无效',
-			// 				icon: 'none'
-			// 			})
-			// 		}
-			// 	});
-			// },
-
-			// getHomeList() {
-			// 	this.$request("/system/appletmodular/list","POST",{
-			// 	},{
-			// 		"content-type": "application/x-www-form-urlencoded",
-			// 		'cookie': uni.getStorageSync('setCookie')
-			// 	}).then(res => {
-			// 		this.listHome = res.rows
-			// 		console.log('list',res)
-			// 	})
-			// },
 
 			homeListClick(e) {
 				console.log(e)

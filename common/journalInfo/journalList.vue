@@ -1,49 +1,6 @@
 <template>
 	<view class="container">
 			<template>
-			    <!-- <view class="flow-container"> -->
-<!-- 						<view class="top-search">
-							<view class="dept-name">
-									日期
-							</view>
-							<view class="example-body dept-input">
-								<uni-datetime-picker :value="searchData.datetimerange" type="daterange"
-								rangeSeparator="至" />
-							</view>
-						</view> -->
-<!-- 					<view class="top-search">
-						<view class="dept-name">
-							部门
-						</view>
-						<view class="dept-input">
-							<uni-easyinput v-model="deptNameInput" type="text" />
-						</view>
-					</view> -->
-<!-- 					<view class="top-search">
-						<view class="dept-name">
-							用户
-						</view>
-						<view class="dept-input">
-							<uni-easyinput v-model="userNameInput" type="text" />
-						</view>
-					</view> -->
-					
-					<!-- <view class="but"> -->
-<!-- 					    <uni-col :span="18">
-							<view class="search_css">
-								<view class="uni-list-cell-left" style="font-weight: 900;padding-right: 10rpx;">
-									部门选择
-								</view>
-								<view class="uni-list-cell-db">
-									<picker @change="changeBranch" :value="index" :range="branch">
-										<view class="uni-input">{{branch[index].name}}</view>
-									</picker>
-								</view>
-								</view>
-					    </uni-col> -->
-							<!-- <button @click="getJournalList" size="mini" type="primary">搜索</button> -->
-					<!-- </view> -->
-				<!-- </view> -->
 				<uni-list v-for="(item,index) in journalList" :key="index">
 					<uni-swipe-action>
 						<uni-swipe-action-item :right-options="options"  @click="bindClick(item.id)">
@@ -93,7 +50,7 @@
 		},
 		
 		onLoad(options) {
-			// console.log('options',options.date)
+			console.log('options',options)
 			this.date = options.date
 			this.createBy = options.createBy
 		},
@@ -159,7 +116,7 @@
 					// console.log('this.formData2',val)
 				const objVal = JSON.stringify(val)
 				uni.navigateTo({
-					url: '/common/journalInfo/journal?isChat=1&item=' + objVal
+					url: '/common/journalInfo/journal?isChat=1&item=' + objVal + '&createBy=' + this.createBy
 				})
 			}
 		}

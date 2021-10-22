@@ -11,6 +11,19 @@
 					</view>
 				</view>
 			</uni-popup>
+			<!-- 弹框 -->
+			<uni-popup ref="popupTitle" type="center" background-color="#fff">
+				<view class="popup-content">
+					<view class="icon">
+						<uni-icons type="checkmarkempty" size="60"></uni-icons>
+					</view>
+					<view class="message">{{message}}</view>
+				</view>
+			</uni-popup>
+			<!-- 找不到会议内容显示的信息 -->
+			<view class="unfilled-log" v-if="showNullTitle">
+				<view class="unfilled-title">未找到该会议</view>
+			</view>
 		</view>
 </template>
 
@@ -27,7 +40,9 @@ export default {
   data () {
     return {
       trainId: '',
-			meetingInfo: {}
+			meetingInfo: {},
+			message: '',
+			showNullTitle: false
     }
   },
 	
@@ -52,14 +67,18 @@ export default {
 	methods: {
 		// 获取会议内容
 		getMeetingInfo() {
-			this.$refs.popupCode.open()
 			this.$request("/activity/trainadmin/selectById","POST",{
 				trainId: this.trainId
 			},{
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(resMeetingInfo=> {
+				if(resMeetingInfo.data) {
+					this.$refs.popupCode.open()
 					this.meetingInfo = resMeetingInfo.data
+				} else {
+					this.showNullTitle = true
+				}
 			})
 		},
 		
@@ -71,11 +90,8 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(resSuccess=> {
-				uni.showToast({
-					title: resSuccess.msg,
-					icon: 'success',
-					duration: 3000
-				})
+				this.message = resSuccess.msg
+				this.$refs.popupTitle.open()
 			})
 		},
 		
@@ -87,13 +103,13 @@ export default {
 		},
 		
 		confirm() {
-			this.getTrainId()
 			this.$refs.popupCode.close()
+			this.getTrainId()
 			setTimeout(function() {
 				uni.switchTab({
 					url: '../home/index'
 				})
-			},1000 * 3)
+			},1000 * 5)
 		}
 	}
 }
@@ -121,6 +137,26 @@ export default {
 		width: 200rpx;
 		margin: 0;
 	}
+}
+
+.unfilled-log {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	background-color: #E5E5E5;
+	.unfilled-title {
+		padding: 180rpx;
+		background: #fff;
+		border-radius: 50rpx;
+	}
+}
+
+.popup-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 40rpx;
 }
 </style>
 

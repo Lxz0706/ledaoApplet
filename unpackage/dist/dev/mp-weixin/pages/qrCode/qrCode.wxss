@@ -44,6 +44,24 @@
   width: 200rpx;
   margin: 0;
 }
+.unfilled-log.data-v-c10823f4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #E5E5E5;
+}
+.unfilled-log .unfilled-title.data-v-c10823f4 {
+  padding: 180rpx;
+  background: #fff;
+  border-radius: 50rpx;
+}
+.popup-content.data-v-c10823f4 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx;
+}
 
 
 .uni-popup .uni-popup__wrapper {

@@ -150,7 +150,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
-var _this;var wInput = function wInput() {__webpack_require__.e(/*! require.ensure | components/watch-login/watch-input */ "components/watch-login/watch-input").then((function () {return resolve(__webpack_require__(/*! ../../components/watch-login/watch-input.vue */ 242));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var wButton = function wButton() {__webpack_require__.e(/*! require.ensure | components/watch-login/watch-button */ "components/watch-login/watch-button").then((function () {return resolve(__webpack_require__(/*! ../../components/watch-login/watch-button.vue */ 249));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+var _this;var wInput = function wInput() {__webpack_require__.e(/*! require.ensure | components/watch-login/watch-input */ "components/watch-login/watch-input").then((function () {return resolve(__webpack_require__(/*! ../../components/watch-login/watch-input.vue */ 232));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var wButton = function wButton() {__webpack_require__.e(/*! require.ensure | components/watch-login/watch-button */ "components/watch-login/watch-button").then((function () {return resolve(__webpack_require__(/*! ../../components/watch-login/watch-button.vue */ 239));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
 
 //button
 var _default =
@@ -183,7 +183,6 @@ var _default =
   },
 
   methods: {
-
     // 获取本地存储openId
     getOpenId: function getOpenId() {
       var _this = this;
@@ -241,8 +240,20 @@ var _default =
 
         // console.log('rememberMe',res)
         uni.removeStorageSync('setCookie');
+        var cookie = res.header['Set-Cookie'];
+        // 字符串分割成数组
+        var cookieArray = cookie.split(/,(?=[^,]*=)/);
+        // 分号拼接数组
+        var newCookie = cookieArray.join(';');
+        // 存储拼接后的cookie
+        try {
+          uni.setStorageSync('setCookie', newCookie);
+        } catch (error) {
+          log.error('setStorageSync cookie fail');
+        }
+        // uni.setStorageSync('setCookie',res.header["Set-Cookie"])
         console.log(res.header["Set-Cookie"]);
-        uni.setStorageSync('setCookie', res.header["Set-Cookie"]);
+        console.log('cookie', uni.getStorageSync("setCookie"));
         _this2.$request("/saveOpenid", "POST", {
           openId: _this.openId,
           unionId: _this.unionId },
@@ -262,11 +273,6 @@ var _default =
               uni.setStorageSync('documentAdmin', false);
             }
           });
-          // uni.showToast({
-          // 	icon: 'success',
-          // 	position: 'bottom',
-          // 	title: '登录成功'
-          // });
           uni.hideLoading();
           setTimeout(function () {
             uni.switchTab({

@@ -88,46 +88,6 @@
 					</uni-row>
 				</scroll-view>
 			</uni-drawer>
-<!-- 			<uni-drawer ref="showUserRight" mode="right" :mask-click="true" :width="250">
-				<scroll-view style="height: 100%;" scroll-y="true">
-					<uni-row class="demo-uni-row" style="margin-top: 20rpx; margin-bottom: 20rpx;">
-					    <uni-col :span="8">
-							<view class="menu_text" @click="closeUserDrawer"><uni-icons type="back" size="30"></uni-icons></view>
-					    </uni-col>
-					    <uni-col :span="16">
-							<view class="menu_text">选择人员</view>
-					    </uni-col>
-					</uni-row>
-					<uni-row class="demo-uni-row">
-					    <uni-col :span="8">
-					        <view style="padding-left: 30rpx">人员名称</view>
-					    </uni-col>
-					    <uni-col :span="8">
-					       <uni-easyinput v-model="formData.userDetail" type="text" />
-					    </uni-col>
-						<uni-col :span="8">
-						   <button @click="searchUser" size="mini" type="primary">搜索</button>
-						</uni-col>
-					</uni-row>
-					<checkbox-group @change="checkChange">
-						<uni-row v-for="(item,index) in userList" :key="index" class="demo-uni-row" @click.native="chooseProUser(item)">
-							<uni-col :span="2">
-								 <view></view>
-							</uni-col>
-							<uni-col :span="10">
-								 <view>{{item.userName}}</view>
-							</uni-col>
-							<uni-col :span="4">
-								 <checkbox :value="item.userId" :checked="false" color="#FFCC33" style="transform:scale(0.8)" />
-							</uni-col>
-						</uni-row>
-					</checkbox-group>
-					<view v-if="isShowTitle">没有更多了</view>
-					<view class="sucessView">
-						<button @click="sucessClick" type="primary">确定</button>
-					</view>
-				</scroll-view>
-			</uni-drawer> -->
 		</template>
   </view>
 </template>
@@ -187,7 +147,8 @@ export default {
 		projectNameSearch: '',
 		showChatAll: false,
 		showAdd: false,
-		proIds: ''
+		proIds: '',
+		createBy: ''
   }
 },
 
@@ -211,7 +172,7 @@ export default {
 			this.proIds = val.proId
 		}
 		this.isChat = options.isChat;
-		
+		this.createBy = options.createBy
 	},
 	
 	mounted() {
@@ -223,7 +184,9 @@ export default {
 		// 初始化
 		init() {
 			this.timeoutFunc()
-			this.getChatDetailList()
+			if(this.isChat == 1) {
+				this.getChatDetailList()
+			}
 		},
 		// 获取评论列表
 		getChatDetailList() {
@@ -363,7 +326,8 @@ export default {
 					"proId": this.proIds,
 					"workDetail": this.formData.chatDetail,
 					"remarks1": 0,
-					"commentTime": uni.getStorageSync('datePeople')
+					"commentTime": uni.getStorageSync('datePeople'),
+					"temporaryName": this.createBy
 				}, {
 					"content-type": "application/x-www-form-urlencoded",
 					"cookie": uni.getStorageSync('setCookie')

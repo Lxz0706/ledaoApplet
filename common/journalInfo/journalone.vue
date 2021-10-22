@@ -222,7 +222,9 @@ export default {
 		// 初始化
 		init() {
 			this.timeoutFunc()
-			this.getChatDetailList()
+			if(this.isChat == 1) {
+				this.getChatDetailList()
+			}
 		},
 		// 获取评论列表
 		getChatDetailList() {

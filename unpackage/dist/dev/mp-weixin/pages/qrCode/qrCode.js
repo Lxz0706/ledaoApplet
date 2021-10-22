@@ -98,7 +98,10 @@ var components
 try {
   components = {
     uniPopup: function() {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */ "uni_modules/uni-popup/components/uni-popup/uni-popup").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 302))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-popup/components/uni-popup/uni-popup */ "uni_modules/uni-popup/components/uni-popup/uni-popup").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-popup/components/uni-popup/uni-popup.vue */ 292))
+    },
+    uniIcons: function() {
+      return Promise.all(/*! import() | uni_modules/uni-icons/components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-icons/components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-icons/components/uni-icons/uni-icons.vue */ 299))
     }
   }
 } catch (e) {
@@ -171,6 +174,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /**
 * author        chenjie
@@ -184,7 +200,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       trainId: '',
-      meetingInfo: {} };
+      meetingInfo: {},
+      message: '',
+      showNullTitle: false };
 
   },
 
@@ -209,30 +227,31 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     // 获取会议内容
     getMeetingInfo: function getMeetingInfo() {var _this = this;
-      this.$refs.popupCode.open();
       this.$request("/activity/trainadmin/selectById", "POST", {
         trainId: this.trainId },
       {
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (resMeetingInfo) {
-        _this.meetingInfo = resMeetingInfo.data;
+        if (resMeetingInfo.data) {
+          _this.$refs.popupCode.open();
+          _this.meetingInfo = resMeetingInfo.data;
+        } else {
+          _this.showNullTitle = true;
+        }
       });
     },
 
     // 签到成功
-    getTrainId: function getTrainId() {
+    getTrainId: function getTrainId() {var _this2 = this;
       this.$request("/system/trainuser/add", "POST", {
         trainId: this.trainId },
       {
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (resSuccess) {
-        uni.showToast({
-          title: resSuccess.msg,
-          icon: 'success',
-          duration: 3000 });
-
+        _this2.message = resSuccess.msg;
+        _this2.$refs.popupTitle.open();
       });
     },
 
@@ -244,13 +263,13 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     confirm: function confirm() {
-      this.getTrainId();
       this.$refs.popupCode.close();
+      this.getTrainId();
       setTimeout(function () {
         uni.switchTab({
           url: '../home/index' });
 
-      }, 1000 * 3);
+      }, 1000 * 5);
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

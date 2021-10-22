@@ -98,28 +98,28 @@ var components
 try {
   components = {
     uniForms: function() {
-      return Promise.all(/*! import() | uni_modules/uni-forms/components/uni-forms/uni-forms */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-forms/components/uni-forms/uni-forms")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-forms/components/uni-forms/uni-forms.vue */ 256))
+      return Promise.all(/*! import() | uni_modules/uni-forms/components/uni-forms/uni-forms */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-forms/components/uni-forms/uni-forms")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-forms/components/uni-forms/uni-forms.vue */ 246))
     },
     uniFormsItem: function() {
-      return Promise.all(/*! import() | uni_modules/uni-forms/components/uni-forms-item/uni-forms-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-forms/components/uni-forms-item/uni-forms-item")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-forms/components/uni-forms-item/uni-forms-item.vue */ 267))
+      return Promise.all(/*! import() | uni_modules/uni-forms/components/uni-forms-item/uni-forms-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-forms/components/uni-forms-item/uni-forms-item")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-forms/components/uni-forms-item/uni-forms-item.vue */ 257))
     },
     uniEasyinput: function() {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput */ "uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.vue */ 274))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput */ "uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.vue */ 264))
     },
     uniDataCheckbox: function() {
-      return Promise.all(/*! import() | uni_modules/uni-data-checkbox/components/uni-data-checkbox/uni-data-checkbox */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-data-checkbox/components/uni-data-checkbox/uni-data-checkbox")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-data-checkbox/components/uni-data-checkbox/uni-data-checkbox.vue */ 317))
+      return Promise.all(/*! import() | uni_modules/uni-data-checkbox/components/uni-data-checkbox/uni-data-checkbox */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-data-checkbox/components/uni-data-checkbox/uni-data-checkbox")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-data-checkbox/components/uni-data-checkbox/uni-data-checkbox.vue */ 307))
     },
     uniIcons: function() {
-      return Promise.all(/*! import() | uni_modules/uni-icons/components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-icons/components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-icons/components/uni-icons/uni-icons.vue */ 309))
+      return Promise.all(/*! import() | uni_modules/uni-icons/components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-icons/components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-icons/components/uni-icons/uni-icons.vue */ 299))
     },
     uniDrawer: function() {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-drawer/components/uni-drawer/uni-drawer */ "uni_modules/uni-drawer/components/uni-drawer/uni-drawer").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-drawer/components/uni-drawer/uni-drawer.vue */ 326))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-drawer/components/uni-drawer/uni-drawer */ "uni_modules/uni-drawer/components/uni-drawer/uni-drawer").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-drawer/components/uni-drawer/uni-drawer.vue */ 316))
     },
     uniRow: function() {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-row/components/uni-row/uni-row */ "uni_modules/uni-row/components/uni-row/uni-row").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-row/components/uni-row/uni-row.vue */ 333))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-row/components/uni-row/uni-row */ "uni_modules/uni-row/components/uni-row/uni-row").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-row/components/uni-row/uni-row.vue */ 323))
     },
     uniCol: function() {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-row/components/uni-col/uni-col */ "uni_modules/uni-row/components/uni-col/uni-col").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-row/components/uni-col/uni-col.vue */ 340))
+      return __webpack_require__.e(/*! import() | uni_modules/uni-row/components/uni-col/uni-col */ "uni_modules/uni-row/components/uni-col/uni-col").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-row/components/uni-col/uni-col.vue */ 330))
     }
   }
 } catch (e) {
@@ -177,6 +177,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} //
+//
 //
 //
 //
@@ -475,10 +476,10 @@ __webpack_require__.r(__webpack_exports__);
           });
         });
         if (_this4.curstomerForm.contactNumber == '' && _this4.curstomerForm.weChatNumber == '') {
-          uni.showToast({
+          wx.showToast({
             title: "联系电话和微信号必须填写其中一个！",
             icon: 'none',
-            duration: 3000 });
+            duration: 4000 });
 
           return;
         } else if (_this4.curstomerForm.contactNumber != '') {// 判断手机号是否正确
@@ -486,10 +487,10 @@ __webpack_require__.r(__webpack_exports__);
           for (var i = 0; i < newArray.length; i++) {
             console.log(newArray[i]);
             if (!/^1[3|4|5|6|7|8|9][0-9]\d{4,8}$/.test(newArray[i])) {
-              uni.showToast({
+              wx.showToast({
                 title: "请输入正确的手机号！",
                 icon: 'none',
-                duration: 3000 });
+                duration: 4000 });
 
               return true;
             }
@@ -508,11 +509,14 @@ __webpack_require__.r(__webpack_exports__);
             flagPhone = true;
           } else {
             resPhone = resPhone.slice(0, resPhone.length - 1);
-            uni.showToast({
+            wx.showToast({
               title: '联系电话：' + resPhone + '重复了！',
-              icon: 'none',
-              duration: 3000 });
+              icon: 'none' });
 
+
+            setTimeout(function () {
+              wx.hideToast();
+            }, 7000);
             return;
           }
         });
@@ -529,11 +533,14 @@ __webpack_require__.r(__webpack_exports__);
             flagWeChat = true;
           } else {
             resWeChat = resWeChat.slice(0, resWeChat.length - 1);
-            uni.showToast({
+            wx.showToast({
               title: '微信号：' + resWeChat + '重复了！',
-              icon: 'none',
-              duration: 3000 });
+              icon: 'none' });
 
+
+            setTimeout(function () {
+              wx.hideToast();
+            }, 7000);
             return;
           }
         });
@@ -559,7 +566,7 @@ __webpack_require__.r(__webpack_exports__);
               console.log('表单错误信息：', err);
             });
           }
-        }, 1000);
+        }, 7000);
       });
     },
     // 重置
@@ -591,18 +598,6 @@ __webpack_require__.r(__webpack_exports__);
     checkChange: function checkChange(e) {
       this.curstomerForm.shareUserName = e.target.value;
     },
-
-    // chooseProShare(e) {
-    // 	console.log('this.curstomerForm.shareUserId',this.curstomerForm.shareUserId)
-    // 	this.curstomerForm.shareUserId.map(item=>{
-    // 		console.log('item',item)
-    // 		if(item == e.userId) {
-    // 			this.curstomerForm.shareUserName.push(e.userName)
-    // 		}
-    // 	})
-
-    // 	console.log('e',e)
-    // },
 
     closeProDrawer: function closeProDrawer() {
       this.$refs.showProRight.close();
