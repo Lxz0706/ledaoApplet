@@ -137,6 +137,19 @@
 			<button type="primary" @click="submit">确认</button>
 			<button type="warn" @click="resetForm">重置</button>
 		</view>
+		
+	<!-- 手机重复弹框 -->
+	<uni-popup ref="popupPhone" type="center" background-color="#fff">
+		<view class="popup-content">
+			<view class="message">{{'联系电话中的手机号' + resPhoneTitle + '重复了！'}}</view>
+		</view>
+	</uni-popup>
+	<!-- 微信号弹框 -->
+	<uni-popup ref="popupWeChat" type="center" background-color="#fff">
+		<view class="popup-content">
+			<view class="message">{{'微信号' + resWeChatTitle + '重复了！'}}</view>
+		</view>
+	</uni-popup>
   </view>
 </template>
 
@@ -201,7 +214,9 @@ export default {
 				}
 			},
 			UserNameArray: [],
-			flagPhoneNumber: false
+			flagPhoneNumber: false,
+			resPhoneTitle: '',
+			resWeChatTitle: ''
     }
   },
 	
@@ -330,15 +345,11 @@ export default {
 					if(resPhone == '') {
 						flagPhone = true
 					} else {
-						resPhone = resPhone.slice(0, resPhone.length - 1);
-						wx.showToast({
-							title: '联系电话：' + resPhone + '重复了！',
-							icon: 'none',
-							
-						})
+						this.resPhoneTitle = resPhone.slice(0, resPhone.length - 1);
+						this.$refs.popupPhone.open()
 						setTimeout(() => {
-						     wx.hideToast();
-						   }, 7000)
+							 this.$refs.popupPhone.close()
+						 }, 5000)
 						return;
 					}
 				})
@@ -354,15 +365,11 @@ export default {
 					if(resWeChat == '') {
 						flagWeChat = true
 					} else {
-						resWeChat = resWeChat.slice(0, resWeChat.length - 1);
-						wx.showToast({
-							title: '微信号：' + resWeChat + '重复了！',
-							icon: 'none',
-							
-						})
+						this.resWeChatTitle = resWeChat.slice(0, resWeChat.length - 1);
+						this.$refs.popupWeChat.open()
 						setTimeout(() => {
-						     wx.hideToast();
-						   }, 7000)
+							 this.$refs.popupWeChat.close()
+						 }, 5000)
 						return;
 					}
 				})
@@ -388,7 +395,7 @@ export default {
 							console.log('表单错误信息：', err);
 						})
 					}
-				},7000)
+				},1000)
 			})
 		},
 		// 重置
@@ -524,8 +531,19 @@ export default {
 		
 	}
 }
+
+.popup-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 40rpx;
+	font-size: 13px;
+}
 </style>
 
 <style>
 	@import url("@/css/index.css");
+	.uni-popup .uni-popup__wrapper {
+		border-radius: 20rpx;
+	}
 </style>

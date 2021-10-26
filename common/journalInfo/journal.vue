@@ -211,7 +211,9 @@ export default {
 			this.$request("/system/comment/add","POST",{
 				"parentId": this.journalCommentId,
 				"chatDetail": this.Reply,
-				"journalId": this.formData.id
+				"journalId": this.formData.id,
+				"commentTime": uni.getStorageSync('datePeople'),
+				"temporaryName": this.createBy
 			},{
 				"content-type": "application/x-www-form-urlencoded",
 				"cookie": uni.getStorageSync('setCookie')

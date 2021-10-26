@@ -103,7 +103,8 @@
 					password: _this.passData,
 					rememberMe: true
 				}).then(res => {
-					uni.showLoading({  
+					uni.setStorageSync('loginSuccess',true)
+					uni.showLoading({
 						title: '登录中'
 					});
 					// console.log('rememberMe',res)

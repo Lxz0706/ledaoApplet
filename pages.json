@@ -103,6 +103,12 @@
 		}
 	},
 	{
+		"path": "common/journalInfo/journalone",
+		"style": {
+			"navigationBarTitleText": "日志填写"
+		}
+	},
+	{
 		"path": "common/journalInfo/journalList",
 		"style": {
 			"navigationBarTitleText": "日志列表"

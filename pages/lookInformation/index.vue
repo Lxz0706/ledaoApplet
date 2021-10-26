@@ -117,8 +117,9 @@ export default {
 		// 入库信息查看
 		InClick() {
 			const fileIn = JSON.stringify(this.inInfo)
+			const dailyItem = this.baseInfo.documentType == '1' ? this.baseInfo.dailyDocumentTypeLable : this.baseInfo.dailyDocumentTypeContractLable
 			uni.navigateTo({
-				url: 'processIn/processIn?item=' + fileIn + '&dailyItem=' + this.baseInfo.dailyDocumentTypeContractLable
+				url: 'processIn/processIn?item=' + fileIn + '&dailyItem=' + dailyItem
 			})
 		}
 	}
