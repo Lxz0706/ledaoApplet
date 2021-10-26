@@ -140,12 +140,14 @@
 		
 	<!-- 手机重复弹框 -->
 	<uni-popup ref="popupPhone" type="center" background-color="#fff">
-		<view class="popup-content">
-			<view class="message">{{'联系电话中的手机号' + resPhoneTitle + '重复了！'}}</view>
+		<view class="popup-content" >
+			<view class="message"  v-if="resWeChatTitle!=''">{{'微信号' + resWeChatTitle + '重复了！'}}</view>
+			<view class="message" v-if="resPhoneTitle!=''">{{'联系电话中的手机号' + resPhoneTitle + '重复了！'}}</view>
 		</view>
+		
 	</uni-popup>
 	<!-- 微信号弹框 -->
-	<uni-popup ref="popupWeChat" type="center" background-color="#fff">
+	<uni-popup ref="popupWeChat" type="bottom" background-color="#fff">
 		<view class="popup-content">
 			<view class="message">{{'微信号' + resWeChatTitle + '重复了！'}}</view>
 		</view>
@@ -349,6 +351,7 @@ export default {
 						this.$refs.popupPhone.open()
 						setTimeout(() => {
 							 this.$refs.popupPhone.close()
+							 	this.resPhoneTitle=''
 						 }, 5000)
 						return;
 					}
@@ -366,9 +369,10 @@ export default {
 						flagWeChat = true
 					} else {
 						this.resWeChatTitle = resWeChat.slice(0, resWeChat.length - 1);
-						this.$refs.popupWeChat.open()
+						this.$refs.popupPhone.open()
 						setTimeout(() => {
-							 this.$refs.popupWeChat.close()
+							 this.$refs.popupPhone.close()
+							 this.resWeChatTitle =''
 						 }, 5000)
 						return;
 					}

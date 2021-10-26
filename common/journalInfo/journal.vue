@@ -322,7 +322,16 @@ export default {
 		},
 		// 评论填写确定按钮  remarks1为0
 		submitIsChat() {
-			this.$refs.form.validate().then(res=>{
+
+			if(this.formData.chatDetail==''||this.formData.chatDetail==undefined){
+				uni.showToast({
+					title: '评论内容不能为空',
+					duration: 3000,
+					icon: 'none'
+				})
+				
+			}else{
+			this.$refs.form.validate().then(res=>{	
 				this.$request("/system/comment/add","POST",{
 					"journalId": this.formData.id == null ? '' : this.formData.id,
 					"proId": this.proIds,
@@ -350,6 +359,7 @@ export default {
 				})
 			}).catch(err =>{
 			})
+			}
 		},
 		
 		huifuClick(i,id) {
