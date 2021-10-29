@@ -84,9 +84,12 @@ export default {
 		getCusList() {
 			const beginTime = this.searchData.datetimerange.length > 0 ? this.searchData.datetimerange[0] : '' 
 			const endTime = this.searchData.datetimerange.length > 0 ? this.searchData.datetimerange[1] : ''
-			uni.showLoading({
-				title: '正在加载...'
-			})
+			setTimeout(()=>{
+				uni.showLoading({
+					title: '正在加载...'
+				})
+			},400)
+			
 			this.$request("/system/customer/list","POST", {
 				"params[beginTime]": beginTime,
 				"params[endTime]": endTime,
@@ -97,7 +100,9 @@ export default {
 			}).then(resCus=> {
 				console.log(resCus)
 				this.cusList = resCus.rows
-				uni.hideLoading()
+				setTimeout(()=>{
+					uni.hideLoading()
+				},300)
 			})
 		},
 		

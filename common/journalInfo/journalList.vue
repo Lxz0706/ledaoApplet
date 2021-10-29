@@ -53,6 +53,7 @@
 			console.log('options',options)
 			this.date = options.date
 			this.createBy = options.createBy
+			uni.setStorageSync('datePeople', this.date)
 		},
 		
 		mounted() {

@@ -141,12 +141,9 @@
 	<!-- 手机重复弹框 -->
 	<uni-popup ref="popupPhone" type="center" background-color="#fff">
 		<view class="popup-content" >
-			
 			<view class="message" v-if="resPhoneTitle!=''">{{'联系电话' + resPhoneTitle + '重复了！'}}</view>
 			<view class="message" v-if="resWeChatTitle!=''" >{{'微信号' + resWeChatTitle + '重复了！'}}</view>
-		
 		</view>
-		
 	</uni-popup>
 	<!-- 微信号弹框 -->
 	<uni-popup ref="popupWeChat" type="bottom" background-color="#fff">

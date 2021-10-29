@@ -219,40 +219,19 @@ __webpack_require__.r(__webpack_exports__);
   },
 
   onLoad: function onLoad(options) {
-    // this.getHomeList()
-    // if(uni.getStorageSync("setCookie")) {
-    // 	debugger
-    this.loginCode();
-    // } else {
-    // 	uni.redirectTo({
-    // 		url: "../../pages/login/index"
-    // 	})
-    // }
+    // 判断是否登陆过
+    if (!uni.getStorageSync("loginSuccess")) {
+      this.loginCode();
+    }
   },
 
   onShow: function onShow() {
   },
 
   mounted: function mounted() {
-    // this.islogin()
-    // this.loginCode()
   },
 
   methods: {
-    // 判断是否登录过
-    // islogin() {
-    // 	const value = uni.getStorageSync('setCookie');
-    // 	if(value) {
-    // 		uni.showToast({
-    // 			icon: 'success',
-    // 			position: 'bottom',
-    // 			title: '登录成功'
-    // 		});
-    // 		this.getHomeList()
-    // 	} else {
-    // 		this.loginCode()
-    // 	}
-    // },
     // 登录获取code换取openId
     loginCode: function loginCode() {var _this = this;
       uni.login({
@@ -264,14 +243,15 @@ __webpack_require__.r(__webpack_exports__);
             console.log('/Openid-------------', resOpenid);
             _this.openId = resOpenid.data.openId;
             if (resOpenid.code === 0) {
-              _this.$request('/wechatLogin', "POST", {
+              _this.$requestSession('/wechatLogin', "POST", {
                 openId: resOpenid.data.openId }).
               then(function (resWeChatLogin) {
-                console.log('登录是否成功', resWeChatLogin.code);
-                if (resWeChatLogin.code === 500) {
+                console.log('resWeChatLogin----------------------', resWeChatLogin);
+                console.log('登录是否成功', resWeChatLogin.data.code);
+                if (resWeChatLogin.data.code === 500) {
 
                   uni.showToast({
-                    title: resWeChatLogin.msg,
+                    title: resWeChatLogin.data.msg,
                     position: 'bottom',
                     icon: 'none',
                     mask: true });
@@ -282,18 +262,32 @@ __webpack_require__.r(__webpack_exports__);
 
                   }, 1000);
                 } else {
-                  var cookie = uni.getStorageSync("setCookie");
-                  if (cookie) {
-                    uni.showToast({
-                      icon: 'success',
-                      position: 'bottom',
-                      title: '登录成功' });
-
-                  } else {
-                    uni.redirectTo({
-                      url: "../../pages/login/index" });
-
+                  var cookie = resWeChatLogin.header['Set-Cookie'];
+                  // 字符串分割成数组
+                  var cookieArray = cookie.split(/,(?=[^,]*=)/);
+                  // 分号拼接数组
+                  var newCookie = cookieArray.join(';');
+                  // 存储拼接后的cookie
+                  try {
+                    uni.setStorageSync('setCookie', newCookie);
+                  } catch (error) {
+                    log.error('setStorageSync cookie fail');
                   }
+                  uni.setStorageSync("loginName", resWeChatLogin.data.data.loginName);
+                  uni.setStorageSync("userName", resWeChatLogin.data.data.userName);
+                  uni.setStorageSync("isDailyRemind", resWeChatLogin.data.data.isDailyRemind);
+                  // const getCookie = uni.getStorageSync("setCookie")
+                  // if (getCookie) {
+                  uni.showToast({
+                    icon: 'success',
+                    position: 'bottom',
+                    title: '登录成功' });
+
+                  // } else {
+                  // 	uni.redirectTo({
+                  // 		url: "../../pages/login/index"
+                  // 	})
+                  // }
                 }
               });
               uni.setStorage({

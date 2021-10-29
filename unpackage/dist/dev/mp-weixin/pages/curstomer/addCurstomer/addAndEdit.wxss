@@ -91,6 +91,16 @@
   display: flex;
   align-items: center;
 }
+.popup-content.data-v-61ea5618 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx;
+  font-size: 13px;
+}
+.message.data-v-61ea5618 {
+  margin: 10px 0;
+}
 
 /* title */
 .bgcolor {
@@ -160,4 +170,8 @@ button[disabled][type=primary] {
 	background-color: #E5E5E5;
 	height: 100vh;
 }
+.uni-popup .uni-popup__wrapper {
+	border-radius: 20rpx;
+}
+
 

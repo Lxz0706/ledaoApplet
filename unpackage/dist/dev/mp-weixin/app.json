@@ -17,6 +17,7 @@
     "pages/curstomer/addCurstomer/curstomerInfoAll",
     "pages/journal/index",
     "common/journalInfo/journal",
+    "common/journalInfo/journalone",
     "common/journalInfo/journalList",
     "common/journalInfo/journalDepart",
     "common/journalInfo/journalPeople",

@@ -31,4 +31,9 @@
   align-items: center;
   margin: 20rpx;
 }
+.title-tip.data-v-225736d7 {
+  font-size: 14px;
+  color: #C0C0C0;
+  margin-left: 10px;
+}
 

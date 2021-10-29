@@ -1,7 +1,7 @@
 <template>
   <view class="set-up">
 		<view class="item">
-			<view class="title">日志推送</view>
+			<view class="title">日志提醒<span class="title-tip">&nbsp;工作日21：00</span></view>
 			<view class="switch">
 				<switch :checked="isChecked" @change="switchChange" color="#3388EC" />
 			</view>
@@ -56,5 +56,11 @@ export default {
 	justify-content: space-between;
 	align-items: center;
 	margin: 20rpx;
+}
+
+.title-tip {
+ font-size: 14px;
+ color: #C0C0C0;
+ margin-left: 10px;
 }
 </style>
