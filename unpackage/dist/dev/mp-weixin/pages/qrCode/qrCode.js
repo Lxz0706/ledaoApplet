@@ -233,11 +233,30 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (resMeetingInfo) {
-        if (resMeetingInfo.data) {
-          _this.$refs.popupCode.open();
-          _this.meetingInfo = resMeetingInfo.data;
+        if (resMeetingInfo == 'login' || resMeetingInfo.code == 500 && resMeetingInfo.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          uni.showToast({
+            title: '登录已失效！',
+            icon: 'error',
+            duration: 3000 });
+
+          setTimeout(function () {
+            uni.switchTab({
+              url: "/pages/home/index",
+              success: function success() {
+                var page = getCurrentPages().pop();
+                if (!page) return;
+                page.onLoad();
+              } });
+
+          }, 2000);
         } else {
-          _this.showNullTitle = true;
+          if (resMeetingInfo.data) {
+            _this.$refs.popupCode.open();
+            _this.meetingInfo = resMeetingInfo.data;
+          } else {
+            _this.showNullTitle = true;
+          }
         }
       });
     },
@@ -250,8 +269,27 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (resSuccess) {
-        _this2.message = resSuccess.msg;
-        _this2.$refs.popupTitle.open();
+        if (resSuccess == 'login' || resSuccess.code == 500 && resSuccess.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          uni.showToast({
+            title: '登录已失效！',
+            icon: 'error',
+            duration: 3000 });
+
+          setTimeout(function () {
+            uni.switchTab({
+              url: "/pages/home/index",
+              success: function success() {
+                var page = getCurrentPages().pop();
+                if (!page) return;
+                page.onLoad();
+              } });
+
+          }, 2000);
+        } else {
+          _this2.message = resSuccess.msg;
+          _this2.$refs.popupTitle.open();
+        }
       });
     },
 

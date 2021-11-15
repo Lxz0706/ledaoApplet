@@ -276,11 +276,34 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (resCus) {
-        console.log(resCus);
-        _this.cusList = resCus.rows;
-        setTimeout(function () {
-          uni.hideLoading();
-        }, 300);
+        console.log('resCus', resCus);
+        if (resCus == 'login' || resCus.code == 500 && resCus.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          _this.cusList = resCus.rows;
+          setTimeout(function () {
+            uni.hideLoading();
+          }, 500);
+        }
+      }).catch(function (err) {
+        console.log('err', err);
       });
     },
 
@@ -293,11 +316,32 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (resRemove) {
-        if (resRemove.code == 0) {
-          uni.showToast({
-            title: '删除成功' });
+        if (resRemove == 'login' || resRemove.code == 500 && resRemove.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
 
-          _this2.getCusList();
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          if (resRemove.code == 0) {
+            uni.showToast({
+              title: '删除成功' });
+
+            _this2.getCusList();
+          }
         }
       });
     },

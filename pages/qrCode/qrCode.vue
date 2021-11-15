@@ -73,12 +73,31 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(resMeetingInfo=> {
-				if(resMeetingInfo.data) {
-					this.$refs.popupCode.open()
-					this.meetingInfo = resMeetingInfo.data
-				} else {
-					this.showNullTitle = true
-				}
+				if(resMeetingInfo == 'login' || (resMeetingInfo.code == 500 && resMeetingInfo.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					uni.showToast({
+						title: '登录已失效！',
+						icon: 'error',
+						duration: 3000
+					})
+						setTimeout(function() {
+						uni.switchTab({
+							url: "/pages/home/index",
+							success:function(){
+								let page = getCurrentPages().pop()
+								if(!page) return
+								page.onLoad()
+							}
+						})
+						}, 2000);
+					} else {
+						if(resMeetingInfo.data) {
+							this.$refs.popupCode.open()
+							this.meetingInfo = resMeetingInfo.data
+						} else {
+							this.showNullTitle = true
+						}
+					}
 			})
 		},
 		
@@ -90,8 +109,27 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(resSuccess=> {
-				this.message = resSuccess.msg
-				this.$refs.popupTitle.open()
+				if(resSuccess == 'login' || (resSuccess.code == 500 && resSuccess.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					uni.showToast({
+						title: '登录已失效！',
+						icon: 'error',
+						duration: 3000
+					})
+						setTimeout(function() {
+						uni.switchTab({
+							url: "/pages/home/index",
+							success:function(){
+								let page = getCurrentPages().pop()
+								if(!page) return
+								page.onLoad()
+							}
+						})
+						}, 2000);
+					} else {
+						this.message = resSuccess.msg
+						this.$refs.popupTitle.open()
+					}
 			})
 		},
 		

@@ -398,7 +398,8 @@ __webpack_require__.r(__webpack_exports__);
       UserNameArray: [],
       flagPhoneNumber: false,
       resPhoneTitle: '',
-      resWeChatTitle: '' };
+      resWeChatTitle: '',
+      isDisable: false };
 
   },
 
@@ -460,11 +461,31 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (resDict) {
-        _this2.customerLables = resDict.data.sysCustomerDicts.map(function (item, index) {
-          return { text: item, value: index };
-        });
-      });
+        if (resDict == 'login' || resDict.code == 500 && resDict.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
 
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          _this2.customerLables = resDict.data.sysCustomerDicts.map(function (item, index) {
+            return { text: item, value: index };
+          });
+        }
+      });
     },
     // 获取用户列表
     getApplyUserNameList: function getApplyUserNameList() {var _this3 = this;
@@ -474,7 +495,28 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (res) {
-        _this3.applyUserNameList = res.rows;
+        if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          _this3.applyUserNameList = res.rows;
+        }
       });
     },
 
@@ -485,6 +527,7 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {var _this4 = this;
       var flagPhone = false;
       var flagWeChat = false;
+      this.isDisable = true;
       this.$refs.form.validate().then(function (res) {
         _this4.applyUserNameList.map(function (itemList) {
           _this4.curstomerForm.shareUserName.map(function (itemName) {
@@ -500,6 +543,7 @@ __webpack_require__.r(__webpack_exports__);
             icon: 'none',
             duration: 4000 });
 
+          _this4.isDisable = false;
           return;
         } else if (_this4.curstomerForm.contactNumber != '') {// 判断手机号是否正确
           var newArray = _this4.curstomerForm.contactNumber.split('/');
@@ -511,6 +555,7 @@ __webpack_require__.r(__webpack_exports__);
                 icon: 'none',
                 duration: 4000 });
 
+              _this4.isDisable = false;
               return true;
             }
           }
@@ -524,17 +569,41 @@ __webpack_require__.r(__webpack_exports__);
           'cookie': uni.getStorageSync("setCookie") }).
         then(function (resPhone) {
           console.log('手机号码去重', resPhone);
-          if (resPhone == '') {
-            flagPhone = true;
-          } else {
-            _this4.resPhoneTitle = resPhone.slice(0, resPhone.length - 1);
-            _this4.$refs.popupPhone.open();
+          if (resPhone == 'login' || resPhone.code == 500 && resPhone.msg.includes("Authentication")) {
+            uni.setStorageSync('loginSuccess', false);
             setTimeout(function () {
-              _this4.$refs.popupPhone.close();
-              _this4.resPhoneTitle = '';
-            }, 5000);
-            return;
+              uni.showToast({
+                title: '登录已失效！',
+                icon: 'error',
+                duration: 3000 });
+
+              setTimeout(function () {
+                uni.switchTab({
+                  url: "/pages/home/index",
+                  success: function success() {
+                    var page = getCurrentPages().pop();
+                    if (!page) return;
+                    page.onLoad();
+                  } });
+
+              }, 3000);
+            }, 1000);
+          } else {
+            if (resPhone == '') {
+              flagPhone = true;
+            } else {
+              _this4.resPhoneTitle = resPhone.slice(0, resPhone.length - 1);
+              _this4.$refs.popupPhone.open();
+              setTimeout(function () {
+                _this4.$refs.popupPhone.close();
+                _this4.resPhoneTitle = '';
+              }, 5000);
+              _this4.isDisable = false;
+              return;
+            }
           }
+        }).catch(function (err) {
+          console.log('err', err);
         });
 
         // 微信号去重
@@ -545,19 +614,40 @@ __webpack_require__.r(__webpack_exports__);
           'cookie': uni.getStorageSync("setCookie") }).
         then(function (resWeChat) {
           console.log('微信号去重', resWeChat);
-          if (resWeChat == '') {
-            flagWeChat = true;
-          } else {
-            _this4.resWeChatTitle = resWeChat.slice(0, resWeChat.length - 1);
-            _this4.$refs.popupPhone.open();
+          if (resWeChat == 'login' || resWeChat.code == 500 && resWeChat.msg.includes("Authentication")) {
+            uni.setStorageSync('loginSuccess', false);
             setTimeout(function () {
-              _this4.$refs.popupPhone.close();
-              _this4.resWeChatTitle = '';
-            }, 5000);
-            return;
+              uni.showToast({
+                title: '登录已失效！',
+                icon: 'error',
+                duration: 3000 });
+
+              setTimeout(function () {
+                uni.switchTab({
+                  url: "/pages/home/index",
+                  success: function success() {
+                    var page = getCurrentPages().pop();
+                    if (!page) return;
+                    page.onLoad();
+                  } });
+
+              }, 3000);
+            }, 1000);
+          } else {
+            if (resWeChat == '') {
+              flagWeChat = true;
+            } else {
+              _this4.resWeChatTitle = resWeChat.slice(0, resWeChat.length - 1);
+              _this4.$refs.popupPhone.open();
+              setTimeout(function () {
+                _this4.$refs.popupPhone.close();
+                _this4.resWeChatTitle = '';
+              }, 5000);
+              _this4.isDisable = false;
+              return;
+            }
           }
         });
-
         // 新增客户信息
         setTimeout(function () {
           if (flagPhone && flagWeChat) {
@@ -570,16 +660,39 @@ __webpack_require__.r(__webpack_exports__);
               "content-type": "application/x-www-form-urlencoded",
               'cookie': uni.getStorageSync("setCookie") }).
             then(function (resCur) {
-              uni.hideLoading();
-              uni.redirectTo({
-                url: '../index' });
+              if (resCur == 'login' || resCur.code == 500 && resCur.msg.includes("Authentication")) {
+                uni.setStorageSync('loginSuccess', false);
+                setTimeout(function () {
+                  uni.showToast({
+                    title: '登录已失效！',
+                    icon: 'error',
+                    duration: 3000 });
 
-              console.log('客户接口', resCur);
+                  setTimeout(function () {
+                    uni.switchTab({
+                      url: "/pages/home/index",
+                      success: function success() {
+                        var page = getCurrentPages().pop();
+                        if (!page) return;
+                        page.onLoad();
+                      } });
+
+                  }, 3000);
+                }, 1000);
+              } else {
+                uni.hideLoading();
+                uni.redirectTo({
+                  url: '../index' });
+
+                console.log('客户接口', resCur);
+              }
             }).catch(function (err) {
               console.log('表单错误信息：', err);
             });
           }
         }, 1000);
+      }).catch(function (err) {
+        _this4.isDisable = false;
       });
     },
     // 重置

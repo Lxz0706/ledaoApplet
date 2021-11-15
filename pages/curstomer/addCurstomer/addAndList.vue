@@ -98,11 +98,34 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(resCus=> {
-				console.log(resCus)
-				this.cusList = resCus.rows
-				setTimeout(()=>{
-					uni.hideLoading()
-				},300)
+				console.log('resCus',resCus)
+				if(resCus == 'login' || (resCus.code == 500 && resCus.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					setTimeout(function() {
+						uni.showToast({
+							title: '登录已失效！',
+							icon: 'error',
+							duration: 3000
+						})
+						setTimeout(function() {
+							uni.switchTab({
+								url: "/pages/home/index",
+								success:function(){
+									let page = getCurrentPages().pop()
+									if(!page) return
+									page.onLoad()
+								}
+							})
+						},3000)
+					}, 1000);
+					} else {
+						this.cusList = resCus.rows
+						setTimeout(()=>{
+							uni.hideLoading()
+						},500)
+					}
+			}).catch(err => {
+				console.log('err',err)
 			})
 		},
 		
@@ -115,12 +138,33 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(resRemove=> {
-				if(resRemove.code == 0) {
-					uni.showToast({
-						title: '删除成功'
-					})
-					this.getCusList()
-				}
+				if(resRemove == 'login' || (resRemove.code == 500 && resRemove.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					setTimeout(function() {
+						uni.showToast({
+							title: '登录已失效！',
+							icon: 'error',
+							duration: 3000
+						})
+						setTimeout(function() {
+							uni.switchTab({
+								url: "/pages/home/index",
+								success:function(){
+									let page = getCurrentPages().pop()
+									if(!page) return
+									page.onLoad()
+								}
+							})
+						},3000)
+					}, 1000);
+					} else {
+						if(resRemove.code == 0) {
+							uni.showToast({
+								title: '删除成功'
+							})
+							this.getCusList()
+						}
+					}
 			})
 		},
 		

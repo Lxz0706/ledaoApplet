@@ -241,21 +241,41 @@ var _default =
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (res) {
-        _this.journalList = res.rows;
-        if (_this.journalList.length > 0) {
-          _this.journalList.map(function (item) {
-            if (item.createTime == null) {
-              item.createTime = '';
-            }
-            if (item.workDetail == null) {
-              item.workDetail = '无进展';
-            }
-            if (item.projectName == null) {
-              item.projectName = '无项目';
-            }
-          });
+        if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
         } else {
-          _this.showTitle = true;
+          _this.journalList = res.rows;
+          if (_this.journalList.length > 0) {
+            _this.journalList.map(function (item) {
+              if (item.createTime == null) {
+                item.createTime = '';
+              }
+              if (item.workDetail == null) {
+                item.workDetail = '无进展';
+              }
+              if (item.projectName == null) {
+                item.projectName = '无项目';
+              }
+            });
+          } else {
+            _this.showTitle = true;
+          }
         }
       });
     },
@@ -269,11 +289,31 @@ var _default =
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (resRemove) {
-        if (resRemove.code == 0) {
-          uni.showToast({
-            title: '删除成功' });
+        if (resRemove == 'login' || resRemove.code == 500 && resRemove.msg.includes("Authentication")) {
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
 
-          _this2.getJournalList();
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          if (resRemove.code == 0) {
+            uni.showToast({
+              title: '删除成功' });
+
+            _this2.getJournalList();
+          }
         }
       });
     },

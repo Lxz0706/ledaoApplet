@@ -77,8 +77,29 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				"cookie": uni.getStorageSync('setCookie')
 			}).then(resPeople=> {
-				console.log('人员选择列表',resPeople)
-				this.peopleList = resPeople.rows
+				if(resPeople == 'login' || (resPeople.code == 500 && resPeople.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					setTimeout(function() {
+						uni.showToast({
+							title: '登录已失效！',
+							icon: 'error',
+							duration: 3000
+						})
+						setTimeout(function() {
+							uni.switchTab({
+								url: "/pages/home/index",
+								success:function(){
+									let page = getCurrentPages().pop()
+									if(!page) return
+									page.onLoad()
+								}
+							})
+						},3000)
+					}, 1000);
+					} else {
+						console.log('人员选择列表',resPeople)
+						this.peopleList = resPeople.rows
+					}
 			})
 		},
 		

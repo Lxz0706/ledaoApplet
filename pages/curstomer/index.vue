@@ -59,6 +59,27 @@ export default {
 			},{
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
+			}).then(res => {
+				if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					setTimeout(function() {
+						uni.showToast({
+							title: '登录已失效！',
+							icon: 'error',
+							duration: 3000
+						})
+						setTimeout(function() {
+							uni.switchTab({
+								url: "/pages/home/index",
+								success:function(){
+									let page = getCurrentPages().pop()
+									if(!page) return
+									page.onLoad()
+								}
+							})
+						},3000)
+					}, 1000);
+					}
 			})
 		}
 	}

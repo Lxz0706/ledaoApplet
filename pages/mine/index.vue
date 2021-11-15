@@ -47,10 +47,6 @@ export default {
 	
 	methods:{
 		login() {
-			// uni.switchTab({
-			// 	url: "/pages/home/index"
-			// })
-			
 			uni.switchTab({
 				url: '/pages/home/index',
 				success:function(e){
@@ -66,11 +62,7 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			})
-			// uni.removeStorageSync('setCookie');
 			this.userName = "";
-			// uni.removeStorageSync('userName')
-			// uni.removeStorageSync('getOpenids')
-			// uni.removeStorageSync('getUnionId')
 			uni.clearStorage()
 			this.login()
 		},

@@ -199,8 +199,29 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         "cookie": uni.getStorageSync('setCookie') }).
       then(function (resDepart) {
-        // console.log('部门列表',resDepart)
-        _this.departList = resDepart.rows;
+        console.log('部门列表', resDepart);
+        if (resDepart == 'login' || resDepart.code == 500 && resDepart.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          _this.departList = resDepart.rows;
+        }
       });
     },
     // 选择单个部门进入journal-people

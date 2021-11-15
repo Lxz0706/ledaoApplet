@@ -191,13 +191,34 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(res=> {
-				this.rangeFileType = res.data.fileTypeDicts
-				this.rangeFileScanType = res.data.fileScanTypeDicts
-				this.rangeFileGetType = res.data.fileGetTypeDicts
-				this.rangeDocumentStatu = res.data.documentStatuDicts
-				this.rangeDocumentGetType = res.data.documentGetTypeDicts
-				this.rangeDocumentLevel = res.data.documentLevelDicts
-				console.log(res)
+				if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+						setTimeout(function() {
+							uni.showToast({
+								title: '登录已失效！',
+								icon: 'error',
+								duration: 3000
+							})
+							setTimeout(function() {
+								uni.switchTab({
+									url: "/pages/home/index",
+									success:function(){
+										let page = getCurrentPages().pop()
+										if(!page) return
+										page.onLoad()
+									}
+								})
+							},3000)
+						}, 1000);
+					} else {
+						this.rangeFileType = res.data.fileTypeDicts
+						this.rangeFileScanType = res.data.fileScanTypeDicts
+						this.rangeFileGetType = res.data.fileGetTypeDicts
+						this.rangeDocumentStatu = res.data.documentStatuDicts
+						this.rangeDocumentGetType = res.data.documentGetTypeDicts
+						this.rangeDocumentLevel = res.data.documentLevelDicts
+						console.log(res)
+					}
 			})
 		},
 		// 附件类型
@@ -290,17 +311,37 @@ export default {
 					"content-type": "application/x-www-form-urlencoded",
 					'cookie': uni.getStorageSync("setCookie")
 				}).then(res=> {
-					if(res.code == 0) {
-						//获取当前页面的页面栈
-						var page = getCurrentPages();
-						//获取上一个页面的页面栈
-						var lastPage = page[page.length - 2];
-						//调用onload事件
-						lastPage.onShow();
-						uni.navigateBack({
-						   delta: 1
-						})
-					}
+					if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+						setTimeout(function() {
+							uni.showToast({
+								title: '登录已失效！',
+								icon: 'error',
+								duration: 3000
+							})
+							setTimeout(function() {
+								uni.switchTab({
+									url: "/pages/home/index",
+									success:function(){
+										let page = getCurrentPages().pop()
+										if(!page) return
+										page.onLoad()
+									}
+								})
+							},3000)
+						}, 1000);
+						} else {
+							if(res.code == 0) {
+								//获取当前页面的页面栈
+								var page = getCurrentPages();
+								//获取上一个页面的页面栈
+								var lastPage = page[page.length - 2];
+								//调用onload事件
+								lastPage.onShow();
+								uni.navigateBack({
+								   delta: 1
+								})
+							}
+						}
 				})
 			}).catch(err => {
 				uni.showToast({

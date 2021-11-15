@@ -16,13 +16,6 @@
 							<uni-easyinput maxlength="-1" :autoHeight="true" v-model="formData.workDetail" :disabled="dateTimeDis || showAdd || isChat == 1" placeholder="请填写日志..." type="textarea" />
 						</view>
 					</uni-forms-item>
-<!-- 					<uni-forms-item label="分享" name="shared">
-						<view class="choose_css" @click="showUserRight()">
-							<block v-if="formData.userName.length == 0">请选择</block>
-							<block v-else v-for="(item,index) in formData.userName" :key="index">{{item + ','}}</block>
-							<uni-icons type="forward" size="30"></uni-icons>
-						</view>
-					</uni-forms-item> -->
 					<view class="chatAll" v-if="isChat == 1 && showChatAll">
 						<view class="chatDetailAll" v-for="(item,index) in chatDetailA" :key="index">
 							<view class="people">{{item.userName}}: {{item.chatDetail}}</view>
@@ -33,8 +26,8 @@
 						</view>
 					</view>
 					<view class="line"></view>
-					<uni-forms-item label="评论填写" v-if="isChat == 1" name="chatDetail">
-						<uni-easyinput v-model="formData.chatDetail" placeholder="请填写评论..." type="textarea" />
+					<uni-forms-item label="评论填写" v-if="isChat == 1" name="chatDetail">						
+						<uni-easyinput ref="chatDetail" v-model="formData.chatDetail" placeholder="请填写评论..." type="textarea" />
 					</uni-forms-item>
 		        </uni-forms>
 				<view class="footer">
@@ -152,18 +145,6 @@ export default {
   }
 },
 
-	// props:{
-	// 	statu: {
-	// 		type:String,
-	// 		default: ''
-	// 	}
-	// },
-	
-	// watch: {
-	// 	statu(newVal, oldVal) {
-	// 		this.getProList()
-	// 	}
-	// },
 	onLoad: function (options) {
 		if(options.item) {
 			const val = JSON.parse(options.item)
@@ -198,12 +179,34 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				"cookie": uni.getStorageSync('setCookie')
 			}).then(res=> {
-				this.chatDetailA = res.data
-				if(this.chatDetailA.length > 0) {
-					this.showChatAll = true
-					this.formData.id = res.data[0].journalId
-				}
-				console.log('获取评论列表的id',res)
+				if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					setTimeout(function() {
+						uni.showToast({
+							title: '登录已失效！',
+							icon: 'error',
+							duration: 3000
+						})
+						setTimeout(function() {
+							uni.switchTab({
+								url: "/pages/home/index",
+								success:function(){
+									let page = getCurrentPages().pop()
+									if(!page) return
+									page.onLoad()
+								}
+							})
+						},3000)
+					}, 1000);
+					} else {
+						this.chatDetailA = res.data
+						this.formData.chatDetail = ''
+						if(this.chatDetailA.length > 0) {
+							this.showChatAll = true
+							this.formData.id = res.data[0].journalId
+						}
+						console.log('获取评论列表的id',res)
+					}
 			})
 		},
 		// 回复
@@ -218,10 +221,31 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				"cookie": uni.getStorageSync('setCookie')
 			}).then(res=> {
-				if(res.code == 0) {
-					this.getChatDetailList()
-				}
-				console.log('获取回复的id',res)
+				if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					setTimeout(function() {
+						uni.showToast({
+							title: '登录已失效！',
+							icon: 'error',
+							duration: 3000
+						})
+						setTimeout(function() {
+							uni.switchTab({
+								url: "/pages/home/index",
+								success:function(){
+									let page = getCurrentPages().pop()
+									if(!page) return
+									page.onLoad()
+								}
+							})
+						},3000)
+					}, 1000);
+					} else {
+						if(res.code == 0) {
+							this.getChatDetailList()
+						}
+						console.log('获取回复的id',res)
+					}
 			})
 		},
 		
@@ -254,52 +278,45 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				"cookie": uni.getStorageSync('setCookie')
 			}).then(res => {
-				console.log(res)
-				if(res.code == 0) {
-					if(res.data.length > 0) {
-						_this.projectList = res.data
-					} else {
-						_this.projectList = []
-						_this.isShowTitle = true
+				if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					setTimeout(function() {
 						uni.showToast({
+							title: '登录已失效！',
 							icon: 'error',
-							position: 'bottom',
-							title: '没有更多了'
-						});
+							duration: 3000
+						})
+						setTimeout(function() {
+							uni.switchTab({
+								url: "/pages/home/index",
+								success:function(){
+									let page = getCurrentPages().pop()
+									if(!page) return
+									page.onLoad()
+								}
+							})
+						},3000)
+					}, 1000);
+					} else {
+						console.log(res)
+						if(res.code == 0) {
+							if(res.data.length > 0) {
+								_this.projectList = res.data
+							} else {
+								_this.projectList = []
+								_this.isShowTitle = true
+								uni.showToast({
+									icon: 'error',
+									position: 'bottom',
+									title: '没有更多了'
+								});
+							}
+						}
+						uni.hideLoading()
 					}
-				}
-				uni.hideLoading()
 			})
 		},
-		// getUserList () {
-		// 	const _this = this
-		// 	uni.showLoading({
-		// 		title: '加载中...',
-		// 		mask: true
-		// 	})
-		// 	this.$request("/system/user/list","POST",{
-				
-		// 	},{
-		// 		"content-type": "application/x-www-form-urlencoded",
-		// 		"cookie": uni.getStorageSync('setCookie')
-		// 	}).then(res => {
-		// 		console.log('用户',res)
-		// 		if(res.code == 0) {
-		// 			if(res.rows.length > 0) {
-		// 				_this.userList = res.rows
-		// 			} else {
-		// 				_this.userList = []
-		// 				_this.isShowTitle = true
-		// 				uni.showToast({
-		// 					icon: 'error',
-		// 					position: 'bottom',
-		// 					title: '暂无可用数据'
-		// 				});
-		// 			}
-		// 		}
-		// 		uni.hideLoading()
-		// 	})
-		// },
+
 		submit() {
 				this.$refs.form.validate().then(res=>{
 					this.$request("/system/journal/add","POST",{
@@ -308,13 +325,37 @@ export default {
 						"content-type": "application/x-www-form-urlencoded",
 						"cookie": uni.getStorageSync('setCookie')
 					}).then(res=> {
-						if(res.code == 0) {
-							// uni.navigateBack({
-							// 	delta:1
-							// })
-							this.showAdd = true
-						}
-						console.log(',tijiao',res)
+						if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+							setTimeout(function() {
+								uni.showToast({
+									title: '登录已失效！',
+									icon: 'error',
+									duration: 3000
+								})
+								setTimeout(function() {
+									uni.switchTab({
+										url: "/pages/home/index",
+										success:function(){
+											let page = getCurrentPages().pop()
+											if(!page) return
+											page.onLoad()
+										}
+									})
+								},3000)
+							}, 1000);
+							} else {
+								if(res.code == 0) {
+									this.showAdd = true
+									setTimeout(()=> {
+										uni.showToast({
+											title: '提交成功',
+											icon:'success',
+											duration:3000
+										})
+									},500)
+								}
+								console.log(',tijiao',res)
+							}
 					})
 				}).catch(err =>{
 					console.log('err',err)
@@ -322,16 +363,14 @@ export default {
 		},
 		// 评论填写确定按钮  remarks1为0
 		submitIsChat() {
-
 			if(this.formData.chatDetail==''||this.formData.chatDetail==undefined){
 				uni.showToast({
 					title: '评论内容不能为空',
 					duration: 3000,
 					icon: 'none'
 				})
-				
-			}else{
-			this.$refs.form.validate().then(res=>{	
+			} else {
+			this.$refs.form.validate().then(res=>{
 				this.$request("/system/comment/add","POST",{
 					"journalId": this.formData.id == null ? '' : this.formData.id,
 					"proId": this.proIds,
@@ -343,19 +382,31 @@ export default {
 					"content-type": "application/x-www-form-urlencoded",
 					"cookie": uni.getStorageSync('setCookie')
 				}).then(res=> {
-					if(res.code == 0) {
-						this.getChatDetailList()
-						// //获取当前页面的页面栈
-						// var page = getCurrentPages();
-						// //获取上一个页面的页面栈
-						// var lastPage = page[page.length - 2];
-						// //调用onload事件
-						// lastPage.onShow();
-						// // uni.navigateBack({
-						// //    delta: 1
-						// // })
-					}
-					console.log('IsChat',res)
+					if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+						setTimeout(function() {
+							uni.showToast({
+								title: '登录已失效！',
+								icon: 'error',
+								duration: 3000
+							})
+							setTimeout(function() {
+								uni.switchTab({
+									url: "/pages/home/index",
+									success:function(){
+										let page = getCurrentPages().pop()
+										if(!page) return
+										page.onLoad()
+									}
+								})
+							},3000)
+						}, 1000);
+						} else {
+							if(res.code == 0) {
+								this.$refs.chatDetail.val = ''
+								this.getChatDetailList()
+							}
+							console.log('IsChat',res)
+						}
 				})
 			}).catch(err =>{
 			})
@@ -383,26 +434,17 @@ export default {
 			this.$refs.popup.close()
 		},
 		
-		// checkChange(e) {
-		// 	this.formData.shared = e.target.value
-			
-		// 	console.log('checkbox',e)
-		// },
-		
 		showProRight() {
 			this.getProList();
 			this.$refs.showProRight.open();
 		},
-		// showUserRight() {
-		// 	this.getUserList();
-		// 	this.$refs.showUserRight.open();
-		// },
+
 		closeProDrawer() {
 			this.$refs.showProRight.close();
 		},
 		
 		inputFocus() {
-			if(this.dateTimeDis) {
+			if(this.dateTimeDis && this.isChat == 0) {
 				uni.showToast({
 					title: "非填写时段，请在 18:00-23:59 填写",
 					icon: 'none'
@@ -421,42 +463,54 @@ export default {
 					"cookie": uni.getStorageSync('setCookie')
 				}).then(resProId=> {
 					console.log('resProId',resProId)
-					if(resProId.rows.length > 0) {
-						uni.showModal({
-						    title: '该项目日志已存在，是否继续编辑？',
-						    success: function (res) {
-						        if (res.confirm) {
-						            console.log('用户点击确定');
-												if(resProId.rows[0].proId == 0) {
-													that.formData.projectName = '无项目'
-												} else {
-													that.formData.projectName = resProId.rows[0].projectName
-												}
-												that.formData.workDetail = resProId.rows[0].workDetail
-												that.formData.proId = resProId.rows[0].projectId;
-												that.formData.id = resProId.rows[0].id
-												that.$refs.showProRight.close();
-						        } else if (res.cancel) {
-						          
-						        }
-						    }
-						});
-					} else {
-						that.formData.projectName = e.projectName;
-						that.formData.proId = e.projectId;
-						that.$refs.showProRight.close();
-					}
+					if(resProId == 'login' || (resProId.code == 500 && resProId.msg.includes("Authentication"))) {
+						setTimeout(function() {
+							uni.showToast({
+								title: '登录已失效！',
+								icon: 'error',
+								duration: 3000
+							})
+							setTimeout(function() {
+								uni.switchTab({
+									url: "/pages/home/index",
+									success:function(){
+										let page = getCurrentPages().pop()
+										if(!page) return
+										page.onLoad()
+									}
+								})
+							},3000)
+						}, 1000);
+						} else {
+							if(resProId.rows.length > 0) {
+								uni.showModal({
+								    title: '该项目日志已存在，是否继续编辑？',
+								    success: function (res) {
+								        if (res.confirm) {
+								            console.log('用户点击确定');
+														if(resProId.rows[0].proId == 0) {
+															that.formData.projectName = '无项目'
+														} else {
+															that.formData.projectName = resProId.rows[0].projectName
+														}
+														that.formData.workDetail = resProId.rows[0].workDetail
+														that.formData.proId = resProId.rows[0].projectId;
+														that.formData.id = resProId.rows[0].id
+														that.$refs.showProRight.close();
+								        } else if (res.cancel) {
+								          
+								        }
+								    }
+								});
+							} else {
+								that.formData.projectName = e.projectName;
+								that.formData.proId = e.projectId;
+								that.$refs.showProRight.close();
+							}
+						}
 				})
 		},
-		// chooseProUser(e) {
-		// 	console.log('eeeeee',e)
-		// 	this.formData.userName.push(e.userName)
-		// 	// this.$refs.showUserRight.close();
-		// 	console.log('this.formData.userName',this.formData.userName)
-		// },
-		// closeUserDrawer() {
-		// 	this.$refs.showUserRight.close();
-		// },
+
 		searchPro() {
 			this.getProList()
 		}

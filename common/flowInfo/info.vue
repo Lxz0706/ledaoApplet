@@ -211,7 +211,27 @@ export default {
 					"content-type": "application/x-www-form-urlencoded",
 					'cookie': uni.getStorageSync("setCookie")
 				}).then(res=> {
-			this.fileList = res.rows
+					if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+							setTimeout(function() {
+								uni.showToast({
+									title: '登录已失效！',
+									icon: 'error',
+									duration: 3000
+								})
+								setTimeout(function() {
+									uni.switchTab({
+										url: "/pages/home/index",
+										success:function(){
+											let page = getCurrentPages().pop()
+											if(!page) return
+											page.onLoad()
+										}
+									})
+								},3000)
+							}, 1000);
+						} else {
+							this.fileList = res.rows
+						}
 			})
 		},
 		
@@ -223,13 +243,34 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(res=> {
-				this.stepOption = res.data
-				this.stepOption.map((item)=> {
-					this.$set(item, 'title', item.approveUserName)
-					this.$set(item, 'desc', item.createTime)
-				})
-				this.active = res.data.length
-				console.log('getHistoryList',this.stepOption)
+				if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					setTimeout(function() {
+						uni.showToast({
+							title: '登录已失效！',
+							icon: 'error',
+							duration: 3000
+						})
+						setTimeout(function() {
+							uni.switchTab({
+								url: "/pages/home/index",
+								success:function(){
+									let page = getCurrentPages().pop()
+									if(!page) return
+									page.onLoad()
+								}
+							})
+						},3000)
+					}, 1000);
+					} else {
+						this.stepOption = res.data
+						this.stepOption.map((item)=> {
+							this.$set(item, 'title', item.approveUserName)
+							this.$set(item, 'desc', item.createTime)
+						})
+						this.active = res.data.length
+						console.log('getHistoryList',this.stepOption)
+					}
 			})
 		},
 
@@ -255,48 +296,68 @@ export default {
 						"content-type": "application/x-www-form-urlencoded",
 						'cookie': uni.getStorageSync("setCookie")
 					}).then(res=> {
-						console.log('修改信息',res);
-						if(res.code === 0) {
-							this.flagEdit = true
-							this.$request("/applyIn/applyEditSave","POST",{
-								applyId: this.applyId,
-								approveStatu: this.num,
-								applyType: this.applyType,
-								remarks: this.contentPop
-							}, {
-								"content-type": "application/x-www-form-urlencoded",
-								'cookie': uni.getStorageSync("setCookie")
-							}).then(res=> {
-								if(res.code == 0) {
-									this.flagSuccess = true
-									uni.showToast({
-										title: res.msg,
-										icon: 'success',
-										mask: true
+						if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+							setTimeout(function() {
+								uni.showToast({
+									title: '登录已失效！',
+									icon: 'error',
+									duration: 3000
+								})
+								setTimeout(function() {
+									uni.switchTab({
+										url: "/pages/home/index",
+										success:function(){
+											let page = getCurrentPages().pop()
+											if(!page) return
+											page.onLoad()
+										}
 									})
-									if(this.flagEdit && this.flagSuccess) {
-										this.showPop = false
-										uni.switchTab({
-											url: '../../pages/workFlow/index',
-											success:function(e){
-												var page = getCurrentPages().pop();
-												if (page == undefined || page == null) return;
-												page.onShow();
+								},3000)
+							}, 1000);
+							} else {
+								console.log('修改信息',res);
+								if(res.code === 0) {
+									this.flagEdit = true
+									this.$request("/applyIn/applyEditSave","POST",{
+										applyId: this.applyId,
+										approveStatu: this.num,
+										applyType: this.applyType,
+										remarks: this.contentPop
+									}, {
+										"content-type": "application/x-www-form-urlencoded",
+										'cookie': uni.getStorageSync("setCookie")
+									}).then(res=> {
+										if(res.code == 0) {
+											this.flagSuccess = true
+											uni.showToast({
+												title: res.msg,
+												icon: 'success',
+												mask: true
+											})
+											if(this.flagEdit && this.flagSuccess) {
+												this.showPop = false
+												uni.switchTab({
+													url: '../../pages/workFlow/index',
+													success:function(e){
+														var page = getCurrentPages().pop();
+														if (page == undefined || page == null) return;
+														page.onShow();
+													}
+												})
 											}
-										})
-									}
-									uni.hideLoading()
-								} else if(res.code == 500) {
-									uni.hideLoading()
-									uni.showToast({
-										title: res.msg,
-										icon: 'none',
-										mask: true,
-										duration: 2000
+											uni.hideLoading()
+										} else if(res.code == 500) {
+											uni.hideLoading()
+											uni.showToast({
+												title: res.msg,
+												icon: 'none',
+												mask: true,
+												duration: 2000
+											})
+										}
 									})
 								}
-							})
-						}
+							}
 					})
 				})
 			}
@@ -315,21 +376,41 @@ export default {
 					"content-type": "application/x-www-form-urlencoded",
 					'cookie': uni.getStorageSync("setCookie")
 				}).then(res=> {
-					if(res.code == 0) {
-						uni.showToast({
-							title: res.msg,
-							icon: 'success',
-							mask: true
-						})
-						uni.switchTab({
-							url: '../../pages/workFlow/index',
-							success:function(e){
-								var page = getCurrentPages().pop();
-								if (page == undefined || page == null) return;
-								page.onShow();
+					if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+						setTimeout(function() {
+							uni.showToast({
+								title: '登录已失效！',
+								icon: 'error',
+								duration: 3000
+							})
+							setTimeout(function() {
+								uni.switchTab({
+									url: "/pages/home/index",
+									success:function(){
+										let page = getCurrentPages().pop()
+										if(!page) return
+										page.onLoad()
+									}
+								})
+							},3000)
+						}, 1000);
+						} else {
+							if(res.code == 0) {
+								uni.showToast({
+									title: res.msg,
+									icon: 'success',
+									mask: true
+								})
+								uni.switchTab({
+									url: '../../pages/workFlow/index',
+									success:function(e){
+										var page = getCurrentPages().pop();
+										if (page == undefined || page == null) return;
+										page.onShow();
+									}
+								})
 							}
-						})
-					}
+						}
 				})
 			})
 		},

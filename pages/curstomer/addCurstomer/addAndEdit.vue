@@ -134,7 +134,7 @@
 		</uni-drawer>
 		<!-- footer -->
 		<view class="footer">
-			<button type="primary" @click="submit">确认</button>
+			<button type="primary" @click="submit" :disabled="isDisable">确认</button>
 			<button type="warn" @click="resetForm">重置</button>
 		</view>
 		
@@ -217,7 +217,8 @@ export default {
 			UserNameArray: [],
 			flagPhoneNumber: false,
 			resPhoneTitle: '',
-			resWeChatTitle: ''
+			resWeChatTitle: '',
+			isDisable: false
     }
   },
 	
@@ -279,11 +280,31 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(resDict =>{
-				this.customerLables = resDict.data.sysCustomerDicts.map((item,index) => {
-					return {text: item,value:index}
-				})
+				if(resDict == 'login' || (resDict.code == 500 && resDict.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+						setTimeout(function() {
+							uni.showToast({
+								title: '登录已失效！',
+								icon: 'error',
+								duration: 3000
+							})
+							setTimeout(function() {
+								uni.switchTab({
+									url: "/pages/home/index",
+									success:function(){
+										let page = getCurrentPages().pop()
+										if(!page) return
+										page.onLoad()
+									}
+								})
+							},3000)
+						}, 1000);
+					} else {
+						this.customerLables = resDict.data.sysCustomerDicts.map((item,index) => {
+							return {text: item,value:index}
+						})
+					}
 			}) 
-			
 		},
 		// 获取用户列表
 		getApplyUserNameList() {
@@ -293,7 +314,28 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(res => {
-				this.applyUserNameList = res.rows
+				if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					setTimeout(function() {
+						uni.showToast({
+							title: '登录已失效！',
+							icon: 'error',
+							duration: 3000
+						})
+						setTimeout(function() {
+							uni.switchTab({
+								url: "/pages/home/index",
+								success:function(){
+									let page = getCurrentPages().pop()
+									if(!page) return
+									page.onLoad()
+								}
+							})
+						},3000)
+					}, 1000);
+					} else {
+						this.applyUserNameList = res.rows
+					}
 			})
 		},
 		
@@ -304,6 +346,7 @@ export default {
 		submit() {
 			var flagPhone = false
 			var flagWeChat = false
+			this.isDisable = true
 			this.$refs.form.validate().then(res=>{
 				this.applyUserNameList.map(itemList => {
 					this.curstomerForm.shareUserName.map(itemName => {
@@ -319,6 +362,7 @@ export default {
 						icon: 'none',
 						duration: 4000
 					})
+					this.isDisable = false
 					return;
 				} else if(this.curstomerForm.contactNumber != '') { // 判断手机号是否正确
 					const newArray = this.curstomerForm.contactNumber.split('/')
@@ -330,6 +374,7 @@ export default {
 								icon: 'none',
 								duration: 4000
 							})
+							this.isDisable = false
 							return true;
 						}
 					}
@@ -343,17 +388,41 @@ export default {
 						'cookie': uni.getStorageSync("setCookie")
 				}).then(resPhone=> {
 					console.log('手机号码去重',resPhone)
-					if(resPhone == '') {
-						flagPhone = true
-					} else {
-						this.resPhoneTitle = resPhone.slice(0, resPhone.length - 1);
-						this.$refs.popupPhone.open()
-						setTimeout(() => {
-							 this.$refs.popupPhone.close()
-							 	this.resPhoneTitle=''
-						 }, 5000)
-						return;
-					}
+					if(resPhone == 'login' || (resPhone.code == 500 && resPhone.msg.includes("Authentication"))) {
+						uni.setStorageSync('loginSuccess',false)
+						setTimeout(function() {
+							uni.showToast({
+								title: '登录已失效！',
+								icon: 'error',
+								duration: 3000
+							})
+							setTimeout(function() {
+								uni.switchTab({
+									url: "/pages/home/index",
+									success:function(){
+										let page = getCurrentPages().pop()
+										if(!page) return
+										page.onLoad()
+									}
+								})
+							},3000)
+						}, 1000);
+						} else {
+							if(resPhone == '') {
+								flagPhone = true
+							} else {
+								this.resPhoneTitle = resPhone.slice(0, resPhone.length - 1);
+								this.$refs.popupPhone.open()
+								setTimeout(() => {
+									 this.$refs.popupPhone.close()
+									 	this.resPhoneTitle=''
+								 }, 5000)
+								this.isDisable = false
+								return;
+							}
+						}
+				}).catch(err => {
+					console.log('err',err)
 				})
 				
 				// 微信号去重
@@ -364,19 +433,40 @@ export default {
 						'cookie': uni.getStorageSync("setCookie")
 				}).then(resWeChat=> {
 					console.log('微信号去重',resWeChat)
-					if(resWeChat == '') {
-						flagWeChat = true
-					} else {
-						this.resWeChatTitle = resWeChat.slice(0, resWeChat.length - 1);
-						this.$refs.popupPhone.open()
-						setTimeout(() => {
-							 this.$refs.popupPhone.close()
-							 this.resWeChatTitle =''
-						 }, 5000)
-						return;
-					}
+					if(resWeChat == 'login' || (resWeChat.code == 500 && resWeChat.msg.includes("Authentication"))) {
+						uni.setStorageSync('loginSuccess',false)
+						setTimeout(function() {
+							uni.showToast({
+								title: '登录已失效！',
+								icon: 'error',
+								duration: 3000
+							})
+							setTimeout(function() {
+								uni.switchTab({
+									url: "/pages/home/index",
+									success:function(){
+										let page = getCurrentPages().pop()
+										if(!page) return
+										page.onLoad()
+									}
+								})
+							},3000)
+						}, 1000);
+						} else {
+							if(resWeChat == '') {
+								flagWeChat = true
+							} else {
+								this.resWeChatTitle = resWeChat.slice(0, resWeChat.length - 1);
+								this.$refs.popupPhone.open()
+								setTimeout(() => {
+									 this.$refs.popupPhone.close()
+									 this.resWeChatTitle =''
+								 }, 5000)
+								this.isDisable = false
+								return;
+							}
+						}
 				})
-
 				// 新增客户信息
 				setTimeout(()=>{
 					if(flagPhone && flagWeChat) {
@@ -389,16 +479,39 @@ export default {
 							"content-type": "application/x-www-form-urlencoded",
 							'cookie': uni.getStorageSync("setCookie")
 						}).then(resCur => {
-							uni.hideLoading()
-							uni.redirectTo({
-								url: '../index'
-							})
-							console.log('客户接口',resCur)
+							if(resCur == 'login' || (resCur.code == 500 && resCur.msg.includes("Authentication"))) {
+								uni.setStorageSync('loginSuccess',false)
+								setTimeout(function() {
+									uni.showToast({
+										title: '登录已失效！',
+										icon: 'error',
+										duration: 3000
+									})
+									setTimeout(function() {
+										uni.switchTab({
+											url: "/pages/home/index",
+											success:function(){
+												let page = getCurrentPages().pop()
+												if(!page) return
+												page.onLoad()
+											}
+										})
+									},3000)
+								}, 1000);
+								} else {
+									uni.hideLoading()
+									uni.redirectTo({
+										url: '../index'
+									})
+									console.log('客户接口',resCur)
+								}
 						}).catch(err => {
 							console.log('表单错误信息：', err);
 						})
 					}
 				},1000)
+			}).catch(err => {
+				this.isDisable = false
 			})
 		},
 		// 重置

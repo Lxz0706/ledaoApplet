@@ -249,14 +249,35 @@ __webpack_require__.r(__webpack_exports__);
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (res) {
         console.log('res', res);
-        _this.stepOption = res.rows;
-        _this.stepOption.map(function (item) {
-          _this.$set(item, 'title', item.approveUserName);
-          _this.$set(item, 'desc', item.createTime);
-        });
-        _this.active = res.rows.length;
-        uni.hideLoading();
-        console.log('getHistoryList', _this.stepOption);
+        if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          _this.stepOption = res.rows;
+          _this.stepOption.map(function (item) {
+            _this.$set(item, 'title', item.approveUserName);
+            _this.$set(item, 'desc', item.createTime);
+          });
+          _this.active = res.rows.length;
+          uni.hideLoading();
+          console.log('getHistoryList', _this.stepOption);
+        }
       });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

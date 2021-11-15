@@ -251,9 +251,30 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (resDict) {
-        _this.customerLables = resDict.data.sysCustomerDicts.map(function (item, index) {
-          return { text: item, value: index };
-        });
+        if (resDict == 'login' || resDict.code == 500 && resDict.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          _this.customerLables = resDict.data.sysCustomerDicts.map(function (item, index) {
+            return { text: item, value: index };
+          });
+        }
       });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

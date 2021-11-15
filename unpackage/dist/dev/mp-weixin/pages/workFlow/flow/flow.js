@@ -174,6 +174,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 {
   name: 'flow',
   data: function data() {
@@ -236,26 +237,47 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         "cookie": uni.getStorageSync('setCookie') }).
       then(function (res) {
-        if (res.code == 0) {
-          if (res.rows.length > 0) {
-            _this.toDoList = res.rows;
-            _this.isShowTitle = false;
-          } else {
-            _this.toDoList = [];
-            _this.isShowTitle = true;
+        if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
             uni.showToast({
+              title: '登录已失效！',
               icon: 'error',
-              position: 'bottom',
-              title: '没有更多了' });
+              duration: 3000 });
 
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          if (res.code == 0) {
+            if (res.rows.length > 0) {
+              _this.toDoList = res.rows;
+              _this.isShowTitle = false;
+            } else {
+              _this.toDoList = [];
+              _this.isShowTitle = true;
+              uni.showToast({
+                icon: 'error',
+                position: 'bottom',
+                title: '没有更多了' });
+
+            }
           }
-        }
-        setTimeout(function () {
-          uni.hideLoading();
-        }, 3000);
+          setTimeout(function () {
+            uni.hideLoading();
+          }, 3000);
 
-        console.log('toDoList', _this2.toDoList);
-        _this2.flag = true;
+          console.log('toDoList', _this2.toDoList);
+          _this2.flag = true;
+        }
       });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

@@ -271,13 +271,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 /**
 * author        chenjie
@@ -338,18 +331,6 @@ __webpack_require__.r(__webpack_exports__);
 
   },
 
-  // props:{
-  // 	statu: {
-  // 		type:String,
-  // 		default: ''
-  // 	}
-  // },
-
-  // watch: {
-  // 	statu(newVal, oldVal) {
-  // 		this.getProList()
-  // 	}
-  // },
   onLoad: function onLoad(options) {
     if (options.item) {
       var val = JSON.parse(options.item);
@@ -384,12 +365,34 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         "cookie": uni.getStorageSync('setCookie') }).
       then(function (res) {
-        _this2.chatDetailA = res.data;
-        if (_this2.chatDetailA.length > 0) {
-          _this2.showChatAll = true;
-          _this2.formData.id = res.data[0].journalId;
+        if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          _this2.chatDetailA = res.data;
+          _this2.formData.chatDetail = '';
+          if (_this2.chatDetailA.length > 0) {
+            _this2.showChatAll = true;
+            _this2.formData.id = res.data[0].journalId;
+          }
+          console.log('获取评论列表的id', res);
         }
-        console.log('获取评论列表的id', res);
       });
     },
     // 回复
@@ -404,10 +407,31 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         "cookie": uni.getStorageSync('setCookie') }).
       then(function (res) {
-        if (res.code == 0) {
-          _this3.getChatDetailList();
+        if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          if (res.code == 0) {
+            _this3.getChatDetailList();
+          }
+          console.log('获取回复的id', res);
         }
-        console.log('获取回复的id', res);
       });
     },
 
@@ -440,52 +464,45 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         "cookie": uni.getStorageSync('setCookie') }).
       then(function (res) {
-        console.log(res);
-        if (res.code == 0) {
-          if (res.data.length > 0) {
-            _this.projectList = res.data;
-          } else {
-            _this.projectList = [];
-            _this.isShowTitle = true;
+        if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
             uni.showToast({
+              title: '登录已失效！',
               icon: 'error',
-              position: 'bottom',
-              title: '没有更多了' });
+              duration: 3000 });
 
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          console.log(res);
+          if (res.code == 0) {
+            if (res.data.length > 0) {
+              _this.projectList = res.data;
+            } else {
+              _this.projectList = [];
+              _this.isShowTitle = true;
+              uni.showToast({
+                icon: 'error',
+                position: 'bottom',
+                title: '没有更多了' });
+
+            }
           }
+          uni.hideLoading();
         }
-        uni.hideLoading();
       });
     },
-    // getUserList () {
-    // 	const _this = this
-    // 	uni.showLoading({
-    // 		title: '加载中...',
-    // 		mask: true
-    // 	})
-    // 	this.$request("/system/user/list","POST",{
 
-    // 	},{
-    // 		"content-type": "application/x-www-form-urlencoded",
-    // 		"cookie": uni.getStorageSync('setCookie')
-    // 	}).then(res => {
-    // 		console.log('用户',res)
-    // 		if(res.code == 0) {
-    // 			if(res.rows.length > 0) {
-    // 				_this.userList = res.rows
-    // 			} else {
-    // 				_this.userList = []
-    // 				_this.isShowTitle = true
-    // 				uni.showToast({
-    // 					icon: 'error',
-    // 					position: 'bottom',
-    // 					title: '暂无可用数据'
-    // 				});
-    // 			}
-    // 		}
-    // 		uni.hideLoading()
-    // 	})
-    // },
     submit: function submit() {var _this4 = this;
       this.$refs.form.validate().then(function (res) {
         _this4.$request("/system/journal/add", "POST", _objectSpread({},
@@ -494,13 +511,37 @@ __webpack_require__.r(__webpack_exports__);
           "content-type": "application/x-www-form-urlencoded",
           "cookie": uni.getStorageSync('setCookie') }).
         then(function (res) {
-          if (res.code == 0) {
-            // uni.navigateBack({
-            // 	delta:1
-            // })
-            _this4.showAdd = true;
+          if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+            setTimeout(function () {
+              uni.showToast({
+                title: '登录已失效！',
+                icon: 'error',
+                duration: 3000 });
+
+              setTimeout(function () {
+                uni.switchTab({
+                  url: "/pages/home/index",
+                  success: function success() {
+                    var page = getCurrentPages().pop();
+                    if (!page) return;
+                    page.onLoad();
+                  } });
+
+              }, 3000);
+            }, 1000);
+          } else {
+            if (res.code == 0) {
+              _this4.showAdd = true;
+              setTimeout(function () {
+                uni.showToast({
+                  title: '提交成功',
+                  icon: 'success',
+                  duration: 3000 });
+
+              }, 500);
+            }
+            console.log(',tijiao', res);
           }
-          console.log(',tijiao', res);
         });
       }).catch(function (err) {
         console.log('err', err);
@@ -508,13 +549,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     // 评论填写确定按钮  remarks1为0
     submitIsChat: function submitIsChat() {var _this5 = this;
-
       if (this.formData.chatDetail == '' || this.formData.chatDetail == undefined) {
         uni.showToast({
           title: '评论内容不能为空',
           duration: 3000,
           icon: 'none' });
-
 
       } else {
         this.$refs.form.validate().then(function (res) {
@@ -529,19 +568,31 @@ __webpack_require__.r(__webpack_exports__);
             "content-type": "application/x-www-form-urlencoded",
             "cookie": uni.getStorageSync('setCookie') }).
           then(function (res) {
-            if (res.code == 0) {
-              _this5.getChatDetailList();
-              // //获取当前页面的页面栈
-              // var page = getCurrentPages();
-              // //获取上一个页面的页面栈
-              // var lastPage = page[page.length - 2];
-              // //调用onload事件
-              // lastPage.onShow();
-              // // uni.navigateBack({
-              // //    delta: 1
-              // // })
+            if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+              setTimeout(function () {
+                uni.showToast({
+                  title: '登录已失效！',
+                  icon: 'error',
+                  duration: 3000 });
+
+                setTimeout(function () {
+                  uni.switchTab({
+                    url: "/pages/home/index",
+                    success: function success() {
+                      var page = getCurrentPages().pop();
+                      if (!page) return;
+                      page.onLoad();
+                    } });
+
+                }, 3000);
+              }, 1000);
+            } else {
+              if (res.code == 0) {
+                _this5.$refs.chatDetail.val = '';
+                _this5.getChatDetailList();
+              }
+              console.log('IsChat', res);
             }
-            console.log('IsChat', res);
           });
         }).catch(function (err) {
         });
@@ -569,26 +620,17 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs.popup.close();
     },
 
-    // checkChange(e) {
-    // 	this.formData.shared = e.target.value
-
-    // 	console.log('checkbox',e)
-    // },
-
     showProRight: function showProRight() {
       this.getProList();
       this.$refs.showProRight.open();
     },
-    // showUserRight() {
-    // 	this.getUserList();
-    // 	this.$refs.showUserRight.open();
-    // },
+
     closeProDrawer: function closeProDrawer() {
       this.$refs.showProRight.close();
     },
 
     inputFocus: function inputFocus() {
-      if (this.dateTimeDis) {
+      if (this.dateTimeDis && this.isChat == 0) {
         uni.showToast({
           title: "非填写时段，请在 18:00-23:59 填写",
           icon: 'none' });
@@ -607,42 +649,54 @@ __webpack_require__.r(__webpack_exports__);
         "cookie": uni.getStorageSync('setCookie') }).
       then(function (resProId) {
         console.log('resProId', resProId);
-        if (resProId.rows.length > 0) {
-          uni.showModal({
-            title: '该项目日志已存在，是否继续编辑？',
-            success: function success(res) {
-              if (res.confirm) {
-                console.log('用户点击确定');
-                if (resProId.rows[0].proId == 0) {
-                  that.formData.projectName = '无项目';
-                } else {
-                  that.formData.projectName = resProId.rows[0].projectName;
-                }
-                that.formData.workDetail = resProId.rows[0].workDetail;
-                that.formData.proId = resProId.rows[0].projectId;
-                that.formData.id = resProId.rows[0].id;
-                that.$refs.showProRight.close();
-              } else if (res.cancel) {
+        if (resProId == 'login' || resProId.code == 500 && resProId.msg.includes("Authentication")) {
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
 
-              }
-            } });
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
 
+            }, 3000);
+          }, 1000);
         } else {
-          that.formData.projectName = e.projectName;
-          that.formData.proId = e.projectId;
-          that.$refs.showProRight.close();
+          if (resProId.rows.length > 0) {
+            uni.showModal({
+              title: '该项目日志已存在，是否继续编辑？',
+              success: function success(res) {
+                if (res.confirm) {
+                  console.log('用户点击确定');
+                  if (resProId.rows[0].proId == 0) {
+                    that.formData.projectName = '无项目';
+                  } else {
+                    that.formData.projectName = resProId.rows[0].projectName;
+                  }
+                  that.formData.workDetail = resProId.rows[0].workDetail;
+                  that.formData.proId = resProId.rows[0].projectId;
+                  that.formData.id = resProId.rows[0].id;
+                  that.$refs.showProRight.close();
+                } else if (res.cancel) {
+
+                }
+              } });
+
+          } else {
+            that.formData.projectName = e.projectName;
+            that.formData.proId = e.projectId;
+            that.$refs.showProRight.close();
+          }
         }
       });
     },
-    // chooseProUser(e) {
-    // 	console.log('eeeeee',e)
-    // 	this.formData.userName.push(e.userName)
-    // 	// this.$refs.showUserRight.close();
-    // 	console.log('this.formData.userName',this.formData.userName)
-    // },
-    // closeUserDrawer() {
-    // 	this.$refs.showUserRight.close();
-    // },
+
     searchPro: function searchPro() {
       this.getProList();
     } } };exports.default = _default;

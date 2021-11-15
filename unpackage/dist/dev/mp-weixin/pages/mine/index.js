@@ -179,10 +179,6 @@ __webpack_require__.r(__webpack_exports__);
 
   methods: {
     login: function login() {
-      // uni.switchTab({
-      // 	url: "/pages/home/index"
-      // })
-
       uni.switchTab({
         url: '/pages/home/index',
         success: function success(e) {
@@ -198,11 +194,7 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") });
 
-      // uni.removeStorageSync('setCookie');
       this.userName = "";
-      // uni.removeStorageSync('userName')
-      // uni.removeStorageSync('getOpenids')
-      // uni.removeStorageSync('getUnionId')
       uni.clearStorage();
       this.login();
     },

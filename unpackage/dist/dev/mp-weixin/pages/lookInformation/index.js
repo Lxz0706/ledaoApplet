@@ -258,18 +258,39 @@ __webpack_require__.r(__webpack_exports__);
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (resList) {
         console.log('resList', resList);
-        if (resList.code != 500) {
-          _this.baseInfo = resList.data.baseInfo;
-          _this.outInfo = resList.data.outInfo;
-          _this.inInfo = resList.data.inInfo;
+        if (resList == 'login' || resList.code == 500 && resList.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
           setTimeout(function () {
-            uni.hideLoading();
-          }, 3000);
-        } else {
-          uni.showToast({
-            title: '未搜索到相关信息！',
-            icon: 'error' });
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
 
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          if (resList.code != 500) {
+            _this.baseInfo = resList.data.baseInfo;
+            _this.outInfo = resList.data.outInfo;
+            _this.inInfo = resList.data.inInfo;
+            setTimeout(function () {
+              uni.hideLoading();
+            }, 3000);
+          } else {
+            uni.showToast({
+              title: '未搜索到相关信息！',
+              icon: 'error' });
+
+          }
         }
       });
     },

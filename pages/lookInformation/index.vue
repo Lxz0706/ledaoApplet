@@ -92,19 +92,40 @@ export default {
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(resList => {
 				console.log('resList',resList)
-				if(resList.code != 500) {
-					this.baseInfo = resList.data.baseInfo
-					this.outInfo = resList.data.outInfo
-					this.inInfo = resList.data.inInfo
-					setTimeout(()=> {
-						uni.hideLoading()
-					},3000)
-				} else {
-					uni.showToast({
-						title: '未搜索到相关信息！',
-						icon: 'error'
-					})
-				}
+				if(resList == 'login' || (resList.code == 500 && resList.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					setTimeout(function() {
+						uni.showToast({
+							title: '登录已失效！',
+							icon: 'error',
+							duration: 3000
+						})
+						setTimeout(function() {
+							uni.switchTab({
+								url: "/pages/home/index",
+								success:function(){
+									let page = getCurrentPages().pop()
+									if(!page) return
+									page.onLoad()
+								}
+							})
+						},3000)
+					}, 1000);
+					} else {
+						if(resList.code != 500) {
+							this.baseInfo = resList.data.baseInfo
+							this.outInfo = resList.data.outInfo
+							this.inInfo = resList.data.inInfo
+							setTimeout(()=> {
+								uni.hideLoading()
+							},3000)
+						} else {
+							uni.showToast({
+								title: '未搜索到相关信息！',
+								icon: 'error'
+							})
+						}
+					}
 			})
 		},
 		// 出库档案明细

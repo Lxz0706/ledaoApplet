@@ -354,13 +354,34 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (res) {
-        _this.rangeFileType = res.data.fileTypeDicts;
-        _this.rangeFileScanType = res.data.fileScanTypeDicts;
-        _this.rangeFileGetType = res.data.fileGetTypeDicts;
-        _this.rangeDocumentStatu = res.data.documentStatuDicts;
-        _this.rangeDocumentGetType = res.data.documentGetTypeDicts;
-        _this.rangeDocumentLevel = res.data.documentLevelDicts;
-        console.log(res);
+        if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          _this.rangeFileType = res.data.fileTypeDicts;
+          _this.rangeFileScanType = res.data.fileScanTypeDicts;
+          _this.rangeFileGetType = res.data.fileGetTypeDicts;
+          _this.rangeDocumentStatu = res.data.documentStatuDicts;
+          _this.rangeDocumentGetType = res.data.documentGetTypeDicts;
+          _this.rangeDocumentLevel = res.data.documentLevelDicts;
+          console.log(res);
+        }
       });
     },
     // 附件类型
@@ -453,16 +474,36 @@ __webpack_require__.r(__webpack_exports__);
           "content-type": "application/x-www-form-urlencoded",
           'cookie': uni.getStorageSync("setCookie") }).
         then(function (res) {
-          if (res.code == 0) {
-            //获取当前页面的页面栈
-            var page = getCurrentPages();
-            //获取上一个页面的页面栈
-            var lastPage = page[page.length - 2];
-            //调用onload事件
-            lastPage.onShow();
-            uni.navigateBack({
-              delta: 1 });
+          if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+            setTimeout(function () {
+              uni.showToast({
+                title: '登录已失效！',
+                icon: 'error',
+                duration: 3000 });
 
+              setTimeout(function () {
+                uni.switchTab({
+                  url: "/pages/home/index",
+                  success: function success() {
+                    var page = getCurrentPages().pop();
+                    if (!page) return;
+                    page.onLoad();
+                  } });
+
+              }, 3000);
+            }, 1000);
+          } else {
+            if (res.code == 0) {
+              //获取当前页面的页面栈
+              var page = getCurrentPages();
+              //获取上一个页面的页面栈
+              var lastPage = page[page.length - 2];
+              //调用onload事件
+              lastPage.onShow();
+              uni.navigateBack({
+                delta: 1 });
+
+            }
           }
         });
       }).catch(function (err) {

@@ -83,14 +83,35 @@ export default {
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(res=> {
 				console.log('res',res)
-				this.stepOption = res.rows
-				this.stepOption.map((item)=> {
-					this.$set(item, 'title', item.approveUserName)
-					this.$set(item, 'desc', item.createTime)
-				})
-				this.active = res.rows.length
-				uni.hideLoading()
-				console.log('getHistoryList',this.stepOption)
+				if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+					setTimeout(function() {
+						uni.showToast({
+							title: '登录已失效！',
+							icon: 'error',
+							duration: 3000
+						})
+						setTimeout(function() {
+							uni.switchTab({
+								url: "/pages/home/index",
+								success:function(){
+									let page = getCurrentPages().pop()
+									if(!page) return
+									page.onLoad()
+								}
+							})
+						},3000)
+					}, 1000);
+					} else {
+						this.stepOption = res.rows
+							this.stepOption.map((item)=> {
+								this.$set(item, 'title', item.approveUserName)
+								this.$set(item, 'desc', item.createTime)
+							})
+							this.active = res.rows.length
+							uni.hideLoading()
+							console.log('getHistoryList',this.stepOption)
+					}
 			})
 		}
 	}

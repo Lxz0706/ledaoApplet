@@ -153,7 +153,7 @@ __webpack_require__.r(__webpack_exports__);
   name: '',
   data: function data() {
     return {
-      isChecked: uni.getStorageSync('isDailyRemind') !== 'n' ? true : false };
+      isChecked: uni.getStorageSync('isDailyRemind') != 'n' ? true : false };
 
   },
 
@@ -163,17 +163,41 @@ __webpack_require__.r(__webpack_exports__);
 
   methods: {
     switchChange: function switchChange(e) {var _this = this;
+
+      this.isChecked = e.target.value;
+      console.log(this.isChecked);
       console.log('switch1 发生 change 事件，携带值为', e.target.value);
       this.$request('/system/user/editUser', "POST", {
-        isDailyRemind: this.isChecked ? 'n' : 'y' },
+        isDailyRemind: this.isChecked ? 'y' : 'n' },
       {
         "content-type": "application/x-www-form-urlencoded",
         "cookie": uni.getStorageSync('setCookie') }).
       then(function (switchRes) {
-        if (_this.isChecked) {
-          uni.setStorageSync('isDailyRemind', 'n');
+        if (switchRes == 'login' || switchRes.code == 500 && switchRes.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
         } else {
-          uni.setStorageSync('isDailyRemind', 'y');
+          if (_this.isChecked) {
+            uni.setStorageSync('isDailyRemind', 'y');
+          } else {
+            uni.setStorageSync('isDailyRemind', 'n');
+          }
         }
       });
     } } };exports.default = _default;

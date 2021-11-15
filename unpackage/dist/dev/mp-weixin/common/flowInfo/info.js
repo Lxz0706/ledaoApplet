@@ -383,7 +383,27 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (res) {
-        _this.fileList = res.rows;
+        if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          _this.fileList = res.rows;
+        }
       });
     },
 
@@ -395,13 +415,34 @@ __webpack_require__.r(__webpack_exports__);
         "content-type": "application/x-www-form-urlencoded",
         'cookie': uni.getStorageSync("setCookie") }).
       then(function (res) {
-        _this2.stepOption = res.data;
-        _this2.stepOption.map(function (item) {
-          _this2.$set(item, 'title', item.approveUserName);
-          _this2.$set(item, 'desc', item.createTime);
-        });
-        _this2.active = res.data.length;
-        console.log('getHistoryList', _this2.stepOption);
+        if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+          uni.setStorageSync('loginSuccess', false);
+          setTimeout(function () {
+            uni.showToast({
+              title: '登录已失效！',
+              icon: 'error',
+              duration: 3000 });
+
+            setTimeout(function () {
+              uni.switchTab({
+                url: "/pages/home/index",
+                success: function success() {
+                  var page = getCurrentPages().pop();
+                  if (!page) return;
+                  page.onLoad();
+                } });
+
+            }, 3000);
+          }, 1000);
+        } else {
+          _this2.stepOption = res.data;
+          _this2.stepOption.map(function (item) {
+            _this2.$set(item, 'title', item.approveUserName);
+            _this2.$set(item, 'desc', item.createTime);
+          });
+          _this2.active = res.data.length;
+          console.log('getHistoryList', _this2.stepOption);
+        }
       });
     },
 
@@ -427,47 +468,67 @@ __webpack_require__.r(__webpack_exports__);
             "content-type": "application/x-www-form-urlencoded",
             'cookie': uni.getStorageSync("setCookie") }).
           then(function (res) {
-            console.log('修改信息', res);
-            if (res.code === 0) {
-              _this3.flagEdit = true;
-              _this3.$request("/applyIn/applyEditSave", "POST", {
-                applyId: _this3.applyId,
-                approveStatu: _this3.num,
-                applyType: _this3.applyType,
-                remarks: _this3.contentPop },
-              {
-                "content-type": "application/x-www-form-urlencoded",
-                'cookie': uni.getStorageSync("setCookie") }).
-              then(function (res) {
-                if (res.code == 0) {
-                  _this3.flagSuccess = true;
-                  uni.showToast({
-                    title: res.msg,
-                    icon: 'success',
-                    mask: true });
+            if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+              setTimeout(function () {
+                uni.showToast({
+                  title: '登录已失效！',
+                  icon: 'error',
+                  duration: 3000 });
 
-                  if (_this3.flagEdit && _this3.flagSuccess) {
-                    _this3.showPop = false;
-                    uni.switchTab({
-                      url: '../../pages/workFlow/index',
-                      success: function success(e) {
-                        var page = getCurrentPages().pop();
-                        if (page == undefined || page == null) return;
-                        page.onShow();
-                      } });
+                setTimeout(function () {
+                  uni.switchTab({
+                    url: "/pages/home/index",
+                    success: function success() {
+                      var page = getCurrentPages().pop();
+                      if (!page) return;
+                      page.onLoad();
+                    } });
+
+                }, 3000);
+              }, 1000);
+            } else {
+              console.log('修改信息', res);
+              if (res.code === 0) {
+                _this3.flagEdit = true;
+                _this3.$request("/applyIn/applyEditSave", "POST", {
+                  applyId: _this3.applyId,
+                  approveStatu: _this3.num,
+                  applyType: _this3.applyType,
+                  remarks: _this3.contentPop },
+                {
+                  "content-type": "application/x-www-form-urlencoded",
+                  'cookie': uni.getStorageSync("setCookie") }).
+                then(function (res) {
+                  if (res.code == 0) {
+                    _this3.flagSuccess = true;
+                    uni.showToast({
+                      title: res.msg,
+                      icon: 'success',
+                      mask: true });
+
+                    if (_this3.flagEdit && _this3.flagSuccess) {
+                      _this3.showPop = false;
+                      uni.switchTab({
+                        url: '../../pages/workFlow/index',
+                        success: function success(e) {
+                          var page = getCurrentPages().pop();
+                          if (page == undefined || page == null) return;
+                          page.onShow();
+                        } });
+
+                    }
+                    uni.hideLoading();
+                  } else if (res.code == 500) {
+                    uni.hideLoading();
+                    uni.showToast({
+                      title: res.msg,
+                      icon: 'none',
+                      mask: true,
+                      duration: 2000 });
 
                   }
-                  uni.hideLoading();
-                } else if (res.code == 500) {
-                  uni.hideLoading();
-                  uni.showToast({
-                    title: res.msg,
-                    icon: 'none',
-                    mask: true,
-                    duration: 2000 });
-
-                }
-              });
+                });
+              }
             }
           });
         });
@@ -487,20 +548,40 @@ __webpack_require__.r(__webpack_exports__);
           "content-type": "application/x-www-form-urlencoded",
           'cookie': uni.getStorageSync("setCookie") }).
         then(function (res) {
-          if (res.code == 0) {
-            uni.showToast({
-              title: res.msg,
-              icon: 'success',
-              mask: true });
+          if (res == 'login' || res.code == 500 && res.msg.includes("Authentication")) {
+            setTimeout(function () {
+              uni.showToast({
+                title: '登录已失效！',
+                icon: 'error',
+                duration: 3000 });
 
-            uni.switchTab({
-              url: '../../pages/workFlow/index',
-              success: function success(e) {
-                var page = getCurrentPages().pop();
-                if (page == undefined || page == null) return;
-                page.onShow();
-              } });
+              setTimeout(function () {
+                uni.switchTab({
+                  url: "/pages/home/index",
+                  success: function success() {
+                    var page = getCurrentPages().pop();
+                    if (!page) return;
+                    page.onLoad();
+                  } });
 
+              }, 3000);
+            }, 1000);
+          } else {
+            if (res.code == 0) {
+              uni.showToast({
+                title: res.msg,
+                icon: 'success',
+                mask: true });
+
+              uni.switchTab({
+                url: '../../pages/workFlow/index',
+                success: function success(e) {
+                  var page = getCurrentPages().pop();
+                  if (page == undefined || page == null) return;
+                  page.onShow();
+                } });
+
+            }
           }
         });
       });

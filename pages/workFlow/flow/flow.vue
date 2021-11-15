@@ -7,8 +7,9 @@
 						<view class="slot-box slot-text lable-title" v-if="statu == 3">申请人：{{item.applyUserName}}</view>
 						<view class="slot-box slot-text lable-title" v-if="item.documentType == 0">项目名称：{{item.projectName}}</view>
 						<view class="slot-box slot-text lable-title">公司名称：{{item.companyNameLab}}</view>
+						<view class="slot-box slot-text lable-title">实际提交人：{{item.applyUserName}}</view>
+						<view class="slot-box slot-text lable-title">申请时间：{{item.applyTime == null ? '' : item.applyTime}}</view>
 						<view class="slot-box slot-text lable-title">测试备注：{{item.remarks}}</view>
-						<!-- <view class="slot-box slot-text" v-if="item.applyType == 1">是否归还：{{item.isOut}}</view> -->
 						<view v-if="statu == 1" class="slot-box slot-text lable-title">审批结果：{{item.approveStatu}}</view>
 					</template>
 				</uni-list-item>
@@ -92,26 +93,47 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				"cookie": uni.getStorageSync('setCookie')
 			}).then(res => {
-				if(res.code == 0) {
-					if(res.rows.length > 0) {
-						_this.toDoList = res.rows
-						_this.isShowTitle = false
+				if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+					uni.setStorageSync('loginSuccess',false)
+						setTimeout(function() {
+							uni.showToast({
+								title: '登录已失效！',
+								icon: 'error',
+								duration: 3000
+							})
+							setTimeout(function() {
+								uni.switchTab({
+									url: "/pages/home/index",
+									success:function(){
+										let page = getCurrentPages().pop()
+										if(!page) return
+										page.onLoad()
+									}
+								})
+							},3000)
+						}, 1000);
 					} else {
-						_this.toDoList = []
-						_this.isShowTitle = true
-						uni.showToast({
-							icon: 'error',
-							position: 'bottom',
-							title: '没有更多了'
-						});
+						if(res.code == 0) {
+							if(res.rows.length > 0) {
+								_this.toDoList = res.rows
+								_this.isShowTitle = false
+							} else {
+								_this.toDoList = []
+								_this.isShowTitle = true
+								uni.showToast({
+									icon: 'error',
+									position: 'bottom',
+									title: '没有更多了'
+								});
+							}
+						}
+						setTimeout(()=> {
+							uni.hideLoading()
+						},3000)
+						
+						console.log('toDoList',this.toDoList)
+						this.flag = true
 					}
-				}
-				setTimeout(()=> {
-					uni.hideLoading()
-				},3000)
-
-				console.log('toDoList',this.toDoList)
-				this.flag = true
 			})
 		}
 	}

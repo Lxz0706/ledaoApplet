@@ -49,20 +49,11 @@ export default {
 				uni.navigateTo({
 					url: '/common/journalInfo/journal?isChat=0'
 				})
-				// this.menuId = '1'
 			} else {
 				uni.navigateTo({
 					url: '/common/journalInfo/journalDepart'
 				})
-				// this.menuId = '2'
 			}
-			// 快捷入口操作习惯
-			// this.$request('/system/oper/add',"POST",{
-			// 	menuId: this.menuId
-			// },{
-			// 	"content-type": "application/x-www-form-urlencoded",
-			// 	'cookie': uni.getStorageSync("setCookie")
-			// })
 		}
 	}
 }
