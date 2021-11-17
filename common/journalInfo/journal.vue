@@ -4,7 +4,7 @@
 		    <view class="flow-container">
 		        <uni-forms ref="form" :modelValue="formData" :rules="rules" label-width="100">
 					<uni-forms-item required label="项目名称" name="projectName">
-						<view class="choose_css" @click="!showAdd && showProRight()">
+						<view class="choose_css" @click="!showAdd && !(isChat == 1) && showProRight()">
 							<uni-easyinput v-show="ture" v-model="formData.projectName" type="text" />
 							<block v-if="formData.projectName == ''">请选择</block>
 							<block v-else>{{formData.projectName}}</block>

@@ -1,7 +1,10 @@
 <template>
 	<view class="container">
 			<template>
-				<uni-list v-for="(item,index) in journalList" :key="index">
+				<view class="unfilled-log" v-if="showTitle || dateTimeDis">
+					<view class="unfilled-title">未填日志</view>
+				</view>
+				<uni-list v-for="(item,index) in journalList" :key="index" v-else>
 					<uni-swipe-action>
 						<uni-swipe-action-item :right-options="options"  @click="bindClick(item.id)">
 								<uni-list-item link="navigateTo" @click="onClick($event,item)" >
@@ -14,9 +17,6 @@
 						</uni-swipe-action-item>
 					</uni-swipe-action>
 				</uni-list>
-				<view class="unfilled-log" v-if="showTitle">
-					<view class="unfilled-title">未填日志</view>
-				</view>
 			</template>
 	</view>
 </template>
@@ -45,7 +45,9 @@
 								backgroundColor: '#dd524d'
 						}
 				}],
-				showTitle: false
+				showTitle: false,
+				nowDate: '',
+				dateTimeDis: false
 		}
 		},
 		
@@ -58,6 +60,7 @@
 		
 		mounted() {
 			this.getJournalList()
+			this.getDate()
 		},
 		
 		onShow() {
@@ -65,6 +68,24 @@
 		},
 
 		methods: {
+			// 获取当天的日期
+			getDate () {
+				const date = new Date()
+				const year = date.getFullYear()
+				const month = date.getMonth() + 1
+				const day = date.getDate()
+				const hour = date.getHours()
+				this.nowDate = year + "-" + month + "-" + day
+				if(this.nowDate == this.date) {
+					if(hour >= 18 && hour < 24) {
+						this.dateTimeDis = false
+					} else {
+						this.dateTimeDis = true
+					}
+				} else {
+					this.dateTimeDis = false
+				}
+			},
 			getJournalList() {
 				const beginTime = this.searchData.datetimerange.length > 0 ? this.searchData.datetimerange[0].replace(/-/g,'') : ''
 				const endTime = this.searchData.datetimerange.length > 0 ? this.searchData.datetimerange[1].replace(/-/g,'') : '' 

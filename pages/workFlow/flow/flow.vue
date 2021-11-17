@@ -9,7 +9,7 @@
 						<view class="slot-box slot-text lable-title">公司名称：{{item.companyNameLab}}</view>
 						<view class="slot-box slot-text lable-title">实际提交人：{{item.applyUserName}}</view>
 						<view class="slot-box slot-text lable-title">申请时间：{{item.applyTime == null ? '' : item.applyTime}}</view>
-						<view class="slot-box slot-text lable-title">测试备注：{{item.remarks}}</view>
+						<view class="slot-box slot-text lable-title">备注：{{item.remarks}}</view>
 						<view v-if="statu == 1" class="slot-box slot-text lable-title">审批结果：{{item.approveStatu}}</view>
 					</template>
 				</uni-list-item>
