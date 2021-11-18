@@ -1,6 +1,19 @@
 <template>
 	<view class="container">
 			<template>
+				<view class="search-bar">
+					 <view class="contact">
+						 <view class="contactTitle">
+									项目名称：
+						 </view>
+						 <view class="contactsLable">
+							 	<uni-easyinput v-model="projectName" type="text" placeholder="请输入项目名称"/>
+						 </view>
+						</view>
+					 <view class="search-but">
+						 <button @click="getJournalList" size="mini" type="primary">搜索</button>
+					 </view>
+				</view>
 				<view class="unfilled-log" v-if="showTitle || dateTimeDis">
 					<view class="unfilled-title">未填日志</view>
 				</view>
@@ -39,6 +52,7 @@
 			deptNameInput: '',
 			userNameInput: '',
 			createBy: '',
+			projectName:'',
 			options:[{
 						text: '删除',
 						style: {
@@ -87,11 +101,17 @@
 				}
 			},
 			getJournalList() {
+				setTimeout(()=>{
+					uni.showLoading({
+						title: '正在加载...'
+					})
+				},400)
 				const beginTime = this.searchData.datetimerange.length > 0 ? this.searchData.datetimerange[0].replace(/-/g,'') : ''
 				const endTime = this.searchData.datetimerange.length > 0 ? this.searchData.datetimerange[1].replace(/-/g,'') : '' 
 				this.$request("/system/journal/list","POST",{
 					createBy: this.createBy,
-					createTimeFormat: this.date
+					createTimeFormat: this.date,
+					projectName:this.projectName
 				},{
 					"content-type": "application/x-www-form-urlencoded",
 					'cookie': uni.getStorageSync("setCookie")
@@ -131,6 +151,9 @@
 							} else {
 								this.showTitle = true
 							}
+							setTimeout(()=>{
+								uni.hideLoading()
+							},500)
 						}
 				})
 			},
@@ -227,6 +250,17 @@
 		background: #fff;
 		border-radius: 50rpx;
 	}
+}
+.contact {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	margin-top: 15rpx;
+}
+.search-but {
+	text-align: right;
+	margin: 40rpx 40rpx 0 0;
 }
 </style>
 <style>
