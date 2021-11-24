@@ -58,21 +58,18 @@
 					key: 'getOpenids',
 						success: function (res) {
 							_this.openId = res.data
-								// console.log("res",res.data);
 						}
 				})
 				uni.getStorage({
 					key: 'getUnionId',
 						success: function (res) {
 							_this.unionId = res.data
-								// console.log("res",res.data);
 						}
 				})
 			},
 
 			startLogin(e) {
 				const _this = this
-				console.log("eeeee",e)
 				//登录
 				if (this.isRotate) {
 					//判断是否加载中，避免重复点击请求
@@ -107,7 +104,6 @@
 					uni.showLoading({
 						title: '登录中'
 					});
-					// console.log('rememberMe',res)
 					uni.removeStorageSync('setCookie')
 					var cookie =res.header['Set-Cookie']
 					// 字符串分割成数组
@@ -121,8 +117,6 @@
 					  log.error('setStorageSync cookie fail')
 					}
 					// uni.setStorageSync('setCookie',res.header["Set-Cookie"])
-					console.log(res.header["Set-Cookie"])
-					console.log('cookie',uni.getStorageSync("setCookie"))
 					this.$request("/saveOpenid","POST",{
 						openId: _this.openId,
 						unionId: _this.unionId

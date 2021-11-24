@@ -98,7 +98,6 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(resCus=> {
-				console.log('resCus',resCus)
 				if(resCus == 'login' || (resCus.code == 500 && resCus.msg.includes("Authentication"))) {
 					uni.setStorageSync('loginSuccess',false)
 					setTimeout(function() {
@@ -131,7 +130,6 @@ export default {
 		
 		// 删除客户
 		bindClick(id) {
-			console.log('删除客户')
 			this.$request("/system/customer/remove","POST",{
 				ids: id
 			},{

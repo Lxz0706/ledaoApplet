@@ -41,7 +41,6 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				"cookie": uni.getStorageSync('setCookie')
 			}).then(resDepart=> {
-				console.log('部门列表',resDepart)
 				if(resDepart == 'login' || (resDepart.code == 500 && resDepart.msg.includes("Authentication"))) {
 					uni.setStorageSync('loginSuccess',false)
 					setTimeout(function() {

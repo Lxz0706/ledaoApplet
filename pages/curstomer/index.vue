@@ -42,7 +42,6 @@ export default {
 	
 	methods: {
 		curstomerListClick(index) {
-			console.log(index)
 			if(index == 0) {
 				uni.navigateTo({
 					url: 'addCurstomer/addAndEdit'

@@ -225,7 +225,6 @@ export default {
 	onLoad(options) {
 		if(options.ocrData) {
 			const ocrList = JSON.parse(options.ocrData)
-			console.log('editOp----ocr',ocrList)
 			// 匹配所属字段，待优化
 			ocrList.map(item=> {
 				// const reg = /.+?(省|市|自治区|自治州|县|区|街道)/g
@@ -367,7 +366,6 @@ export default {
 				} else if(this.curstomerForm.contactNumber != '') { // 判断手机号是否正确
 					const newArray = this.curstomerForm.contactNumber.split('/')
 					for(var i =0; i < newArray.length; i++) {
-						console.log(newArray[i])
 						if(!/^1[3|4|5|6|7|8|9][0-9]\d{4,8}$/.test(newArray[i])) {
 							wx.showToast({
 								title: "请输入正确的手机号！",
@@ -387,7 +385,6 @@ export default {
 						"content-type": "application/x-www-form-urlencoded",
 						'cookie': uni.getStorageSync("setCookie")
 				}).then(resPhone=> {
-					console.log('手机号码去重',resPhone)
 					if(resPhone == 'login' || (resPhone.code == 500 && resPhone.msg.includes("Authentication"))) {
 						uni.setStorageSync('loginSuccess',false)
 						setTimeout(function() {
@@ -432,7 +429,6 @@ export default {
 						"content-type": "application/x-www-form-urlencoded",
 						'cookie': uni.getStorageSync("setCookie")
 				}).then(resWeChat=> {
-					console.log('微信号去重',resWeChat)
 					if(resWeChat == 'login' || (resWeChat.code == 500 && resWeChat.msg.includes("Authentication"))) {
 						uni.setStorageSync('loginSuccess',false)
 						setTimeout(function() {
@@ -534,7 +530,6 @@ export default {
 		},
 		
 		choosePro(e) {
-			console.log(e)
 			this.curstomerForm.creator = e.userName;
 			this.curstomerForm.createBy = e.loginName
 			this.$refs.showProRight.close();

@@ -39,12 +39,9 @@ export default {
     }
   },
   mounted() {
-	  console.log(1)
   },
 	methods: {
 		clickToPage(e) {
-			console.log("22")
-			console.log(e)
 			if(e === 0) {
 				uni.navigateTo({
 					url: '/common/journalInfo/journal?isChat=0'

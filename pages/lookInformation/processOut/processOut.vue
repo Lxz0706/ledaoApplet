@@ -70,7 +70,6 @@ export default {
 	onLoad(options) {
 		const file = JSON.parse(options.item)
 		this.processInfo = file
-		console.log('options的信息=====',this.processInfo)
 	},
 	
 	mounted() {

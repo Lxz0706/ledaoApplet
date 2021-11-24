@@ -94,18 +94,14 @@
 			loginCode() {
 				uni.login({
 					success: (resLogin) => {
-						console.log('code--------------', resLogin)
 						this.$request('/getOpenid', 'POST', {
 							jsCode: resLogin.code
 						}).then(resOpenid => {
-							console.log('/Openid-------------', resOpenid)
 							this.openId = resOpenid.data.openId
 							if (resOpenid.code === 0) {
 								this.$requestSession('/wechatLogin', "POST", {
 									openId: resOpenid.data.openId
 								}).then(resWeChatLogin => {
-									console.log('resWeChatLogin----------------------',resWeChatLogin)
-									console.log('登录是否成功', resWeChatLogin.data.code)
 									if (resWeChatLogin.data.code === 500) {
 										
 										uni.showToast({
@@ -169,7 +165,6 @@
 			},
 
 			homeListClick(e) {
-				console.log(e)
 				if (e === 0) {
 					uni.navigateTo({
 						url: '../journal/index'
@@ -182,7 +177,6 @@
 			},
 
 			collapseClick(e) {
-				console.log(e)
 				if (e == 0) {
 					uni.redirectTo({
 						url: '/common/journalInfo/journal?isChat=0'

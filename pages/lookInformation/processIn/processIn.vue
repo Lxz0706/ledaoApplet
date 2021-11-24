@@ -61,7 +61,6 @@ export default {
 	
 	onLoad(options) {
 		const file = JSON.parse(options.item)
-		console.log('file',file)
 		this.processInInfo = file
 		this.dailyItem = options.dailyItem
 	},
@@ -82,7 +81,6 @@ export default {
 				"content-type": "application/x-www-form-urlencoded",
 				'cookie': uni.getStorageSync("setCookie")
 			}).then(res=> {
-				console.log('res',res)
 				if(res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
 					uni.setStorageSync('loginSuccess',false)
 					setTimeout(function() {

@@ -18,10 +18,27 @@
 					</uni-forms-item>
 					<view class="chatAll" v-if="isChat == 1 && showChatAll">
 						<view class="chatDetailAll" v-for="(item,index) in chatDetailA" :key="index">
-							<view class="people">{{item.userName}}: {{item.chatDetail}}</view>
-							<view v-if="item.details == null"></view>
-							<view v-else v-for="(items,index) in item.details" :key="index">{{items.userName + ' 回复：'}}{{items.chatDetail}}</view>
-							<view class="huifu" @click="huifuClick(index,item.id)">回复</view>
+							<view v-if="item.remarks1 == 0" @click="huifuClick(index,item.id,item.createBy,item.userName)">
+								<view class="list-title">
+									<view style="color: #3B9DEC;">{{item.userName}}</view>
+									<uni-dateformat class="right" :date="item.createTimeComment" format="yyyy/MM/dd hh:mm" :threshold="[60000, 3600000]"></uni-dateformat>
+								</view>
+								<view class="list-title">
+									{{item.chatDetail}}
+								</view>
+							</view>
+							<view v-else @click="huifuClick(index,item.id,item.createBy,item.userName)">
+								<view class="list-title">
+									<view style="text-align: left;color: #3B9DEC;">{{item.userName}}</view>
+									<uni-dateformat class="right" :date="item.createTimeComment" format="yyyy/MM/dd hh:mm" :threshold="[60000, 3600000]"></uni-dateformat>
+								</view>
+								<view class="list-title" v-if="item.replyName !=null">
+									回复 {{item.replyName}} ：{{item.chatDetail}}
+								</view>
+								<view class="list-title" v-else>
+									回复 ：{{item.chatDetail}}
+								</view>
+							</view>
 							<view class="hr"></view>
 						</view>
 					</view>
@@ -46,7 +63,7 @@
 		    </view>
 				<uni-popup ref="popup" type="bottom">
 					<view class="pop">
-						<input type="text" :focus="setFocus" v-model="Reply" placeholder="请输入...">
+						<input type="text" :focus="setFocus" v-model="Reply" :placeholder="holder" >
 						<button type="default" @click="send">回复</button>
 					</view>
 				</uni-popup>
@@ -141,15 +158,22 @@ export default {
 		showChatAll: false,
 		showAdd: false,
 		proIds: '',
-		createBy: ''
+		createBy: '',
+		replyName: '',
+		replyBy:'',
+		holder:''
   }
 },
+  watch: {
+	  holder:function(){
+		  this.holder = '回复  '+this.replyName;
+	  }
+  },
 
 	onLoad: function (options) {
 		if(options.item) {
 			const val = JSON.parse(options.item)
 			this.formData = val
-			console.log('this.formData--',this.formData)
 			this.proIds = val.proId
 		}
 		this.isChat = options.isChat;
@@ -205,7 +229,6 @@ export default {
 							this.showChatAll = true
 							this.formData.id = res.data[0].journalId
 						}
-						console.log('获取评论列表的id',res)
 					}
 			})
 		},
@@ -216,7 +239,9 @@ export default {
 				"chatDetail": this.Reply,
 				"journalId": this.formData.id,
 				"commentTime": uni.getStorageSync('datePeople'),
-				"temporaryName": this.createBy
+				"temporaryName": this.createBy,
+				"replyBy": this.replyBy,
+				"replyName":this.replyName
 			},{
 				"content-type": "application/x-www-form-urlencoded",
 				"cookie": uni.getStorageSync('setCookie')
@@ -244,7 +269,6 @@ export default {
 						if(res.code == 0) {
 							this.getChatDetailList()
 						}
-						console.log('获取回复的id',res)
 					}
 			})
 		},
@@ -298,7 +322,6 @@ export default {
 						},3000)
 					}, 1000);
 					} else {
-						console.log(res)
 						if(res.code == 0) {
 							if(res.data.length > 0) {
 								_this.projectList = res.data
@@ -413,11 +436,14 @@ export default {
 			}
 		},
 		
-		huifuClick(i,id) {
+		huifuClick(i,id,createBy,userName) {
 			this.$refs.popup.open('bottom')
 			this.setFocus = true
 			this.indexV = i
-			this.journalCommentId = id
+			this.journalCommentId = id,
+			this.replyBy = createBy,
+			this.replyName = userName
+			this.holder = '回复：'+userName
 		},
 		
 		send() {
@@ -430,6 +456,7 @@ export default {
 			} else {
 				this.jonClick()
 			}
+			
 			this.Reply = ''
 			this.$refs.popup.close()
 		},
@@ -455,14 +482,12 @@ export default {
 			const that = this
 			// that.formData.projectName = e.projectName;
 			// that.formData.proId = e.projectId;
-			console.log(e)
 			that.$request("/system/journal/listByProId","POST",{
 					proId: e.projectId
 				},{
 					"content-type": "application/x-www-form-urlencoded",
 					"cookie": uni.getStorageSync('setCookie')
 				}).then(resProId=> {
-					console.log('resProId',resProId)
 					if(resProId == 'login' || (resProId.code == 500 && resProId.msg.includes("Authentication"))) {
 						setTimeout(function() {
 							uni.showToast({
@@ -557,7 +582,7 @@ export default {
 	padding-right: 30rpx;
 }
 .chatAll {
-	background-color: #E5E5E5;
+	background-color: #F5F5F5;
 	max-height: 420rpx;
 	overflow: auto;
 	border-radius: 20rpx;
@@ -566,6 +591,7 @@ export default {
 	.chatDetailAll {
 		margin-bottom: 40rpx;
 	}
+	font-size: 30rpx;
 }
 
 .date {
@@ -583,6 +609,19 @@ export default {
 	text-align: right;
 	color: #3B9DEC;
 	margin: 30rpx 20rpx;
+}
+
+.list-title {
+
+	padding: 10px;
+
+	display: flex;
+
+	justify-content: space-between;
+
+}
+.right{
+	color: #3B9DEC;;
 }
 
 </style>

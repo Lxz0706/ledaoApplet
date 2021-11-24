@@ -1,35 +1,37 @@
 <template>
 	<view class="container">
 			<template>
-				<view class="search-bar">
-					 <view class="contact">
-						 <view class="contactTitle">
-									项目名称：
-						 </view>
-						 <view class="contactsLable">
-							 	<uni-easyinput v-model="projectName" type="text" placeholder="请输入项目名称"/>
-						 </view>
-						</view>
-					 <view class="search-but">
-						 <button @click="getJournalList" size="mini" type="primary">搜索</button>
-					 </view>
-				</view>
 				<view class="unfilled-log" v-if="showTitle || dateTimeDis">
 					<view class="unfilled-title">未填日志</view>
 				</view>
-				<uni-list v-for="(item,index) in journalList" :key="index" v-else>
-					<uni-swipe-action>
-						<uni-swipe-action-item :right-options="options"  @click="bindClick(item.id)">
-								<uni-list-item link="navigateTo" @click="onClick($event,item)" >
-									<template slot="body">
-										<view class="slot-box slot-text">项目名称：{{item.projectName}}</view>
-										<view class="slot-box slot-text">录入日期：{{item.createTime}}</view>
-										<view class="slot-box slot-text">日志内容：{{item.workDetail}}</view>
-									</template>
-								</uni-list-item>
-						</uni-swipe-action-item>
-					</uni-swipe-action>
-				</uni-list>
+				<view v-else>
+					<view class="search-bar">
+						 <view class="contact">
+							 <view class="contactTitle">
+										项目名称：
+							 </view>
+							 <view class="contactsLable">
+								 	<uni-easyinput v-model="projectName" type="text" placeholder="请输入项目名称"/>
+							 </view>
+							</view>
+						 <view class="search-but">
+							 <button @click="getJournalList" size="mini" type="primary">搜索</button>
+						 </view>
+					</view>
+					<uni-list v-for="(item,index) in journalList" :key="index">
+						<uni-swipe-action>
+							<uni-swipe-action-item :right-options="options"  @click="bindClick(item.id)">
+									<uni-list-item link="navigateTo" @click="onClick($event,item)" >
+										<template slot="body">
+											<view class="slot-box slot-text">项目名称：{{item.projectName}}</view>
+											<view class="slot-box slot-text">录入日期：{{item.createTime}}</view>
+											<view class="slot-box slot-text">日志内容：{{item.workDetail}}</view>
+										</template>
+									</uni-list-item>
+							</uni-swipe-action-item>
+						</uni-swipe-action>
+					</uni-list>
+				</view>
 			</template>
 	</view>
 </template>
@@ -66,7 +68,6 @@
 		},
 		
 		onLoad(options) {
-			console.log('options',options)
 			this.date = options.date
 			this.createBy = options.createBy
 			uni.setStorageSync('datePeople', this.date)
@@ -101,13 +102,11 @@
 				}
 			},
 			getJournalList() {
-				setTimeout(()=>{
-					uni.showLoading({
-						title: '正在加载...'
-					})
-				},400)
 				const beginTime = this.searchData.datetimerange.length > 0 ? this.searchData.datetimerange[0].replace(/-/g,'') : ''
 				const endTime = this.searchData.datetimerange.length > 0 ? this.searchData.datetimerange[1].replace(/-/g,'') : '' 
+				uni.showLoading({
+					title: '加载中...'
+				})
 				this.$request("/system/journal/list","POST",{
 					createBy: this.createBy,
 					createTimeFormat: this.date,
@@ -153,14 +152,13 @@
 							}
 							setTimeout(()=>{
 								uni.hideLoading()
-							},500)
+							},4000)
 						}
 				})
 			},
 			
 			// 删除日志
 			bindClick(id) {
-				// console.log('删除')
 				this.$request("/system/journal/remove","POST",{
 					ids: id
 				},{
@@ -197,8 +195,6 @@
 			},
 			
 			onClick(e,val) {
-					// console.log('this.formData1',e)
-					// console.log('this.formData2',val)
 				const objVal = JSON.stringify(val)
 				uni.navigateTo({
 					url: '/common/journalInfo/journal?isChat=1&item=' + objVal + '&createBy=' + this.createBy

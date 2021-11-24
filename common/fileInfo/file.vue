@@ -163,7 +163,6 @@ export default {
 	
 	onLoad: function (options) {
 		var file = JSON.parse(options.item)
-		console.log('options',file)
 		this.formDataFile = file
 		this.documentType = options.documentType
 		this.applyType = options.applyType
@@ -176,7 +175,6 @@ export default {
 			this.showFileScan = false 
 			
 		}
-		console.log('this.formDataFile',this.formDataFile)
 	},
 	
 	mounted() {

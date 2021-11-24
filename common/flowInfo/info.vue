@@ -162,7 +162,6 @@ export default {
 	onLoad(options) {
 		const op = JSON.parse(options.item)
 		this.statu = options.statu
-		console.log('options',op)
 		this.formData = op
 		this.applyId = op.applyId
 		this.applyType = op.applyType
@@ -180,7 +179,6 @@ export default {
 		setTimeout(function(){
 			uni.hideLoading()
 		},1000 * 2)
-		console.log('------------',this.formData)
 	},
 	
 	mounted() {
@@ -315,7 +313,6 @@ export default {
 								},3000)
 							}, 1000);
 							} else {
-								console.log('修改信息',res);
 								if(res.code === 0) {
 									this.flagEdit = true
 									this.$request("/applyIn/applyEditSave","POST",{
@@ -436,8 +433,6 @@ export default {
 				uni.navigateTo({
 					url: '../../common/fileInfo/file?item=' + fileObjectVal + '&documentType=' + this.documentType + '&applyType=' + this.applyType + '&statu=' + this.statu + '&companyName=' + this.formData.companyNameLab + '&projectName=' + this.formData.projectName
 				})
-				console.log('flow',e)
-				console.log('flow',val)
 		}
 	}
 }

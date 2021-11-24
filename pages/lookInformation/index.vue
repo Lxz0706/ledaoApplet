@@ -64,7 +64,6 @@ export default {
 	
 	onLoad(options) {
 		this.documentId = decodeURIComponent(options.scene)
-		console.log('二维码进入查看档案入库出库	基本信息---',this.documentId)
 	},
 	
 	mounted() {

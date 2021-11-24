@@ -97,7 +97,6 @@ export default {
 						},3000)
 					}, 1000);
 					} else {
-						console.log('人员选择列表',resPeople)
 						this.peopleList = resPeople.rows
 					}
 			})

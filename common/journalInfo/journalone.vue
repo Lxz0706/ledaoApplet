@@ -197,7 +197,6 @@ export default {
 						if(this.chatDetailA.length > 0) {
 							this.showChatAll = true
 						}
-						console.log('获取评论列表的id',res)
 					}
 			})
 		},
@@ -233,7 +232,6 @@ export default {
 						if(res.code == 0) {
 							this.getChatDetailList()
 						}
-						console.log('获取回复的id',res)
 					}
 			})
 		},
@@ -433,14 +431,12 @@ export default {
 			const that = this
 			// that.formData.projectName = e.projectName;
 			// that.formData.proId = e.projectId;
-			console.log(e)
 			that.$request("/system/journal/listByProId","POST",{
 					proId: e.projectId
 				},{
 					"content-type": "application/x-www-form-urlencoded",
 					"cookie": uni.getStorageSync('setCookie')
 				}).then(resProId=> {
-					console.log('resProId',resProId)
 					if(resProId == 'login' || (resProId.code == 500 && resProId.msg.includes("Authentication"))) {
 						setTimeout(function() {
 							uni.showToast({
