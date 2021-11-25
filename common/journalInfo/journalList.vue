@@ -20,7 +20,7 @@
 					</view>
 					<uni-list v-for="(item,index) in journalList" :key="index">
 						<uni-swipe-action>
-							<uni-swipe-action-item :right-options="options"  @click="bindClick(item.id)">
+							<uni-swipe-action-item :right-options="options" :disabled="!journalDelete"  @click="bindClick(item.id)">
 									<uni-list-item link="navigateTo" @click="onClick($event,item)" >
 										<template slot="body">
 											<view class="slot-box slot-text">项目名称：{{item.projectName}}</view>
@@ -63,13 +63,30 @@
 				}],
 				showTitle: false,
 				nowDate: '',
-				dateTimeDis: false
+				dateTimeDis: false,
+				journalDelete: false
 		}
 		},
 		
 		onLoad(options) {
+			const loginName = uni.getStorageSync('loginName')
+			const date = new Date();
+			const seperator1 = "-";
+			const year = date.getFullYear();
+			const month = date.getMonth() + 1;
+			const strDate = date.getDate();
+			if (month >= 1 && month <= 9) {
+					month = "0" + month;
+			}
+			if (strDate >= 0 && strDate <= 9) {
+					strDate = "0" + strDate;
+			}
+			const currentdate = year + seperator1 + month + seperator1 + strDate;
 			this.date = options.date
 			this.createBy = options.createBy
+			if(loginName == this.createBy && currentdate == this.date) {
+				this.journalDelete = true
+			}
 			uni.setStorageSync('datePeople', this.date)
 		},
 		

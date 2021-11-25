@@ -54,7 +54,7 @@ export default {
 		this.departId = options.deptId
 	},
 	
-	mounted() {
+	onShow() {
 		this.getPeopleList()
 	},
 	
