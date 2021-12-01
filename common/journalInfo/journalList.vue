@@ -69,12 +69,12 @@
 		},
 		
 		onLoad(options) {
-			const loginName = uni.getStorageSync('loginName')
-			const date = new Date();
-			const seperator1 = "-";
-			const year = date.getFullYear();
-			const month = date.getMonth() + 1;
-			const strDate = date.getDate();
+			let loginName = uni.getStorageSync('loginName');
+			let date = new Date();
+			let seperator1 = "-";
+			let year = date.getFullYear();
+			let month = date.getMonth() + 1;
+			let strDate = date.getDate();
 			if (month >= 1 && month <= 9) {
 					month = "0" + month;
 			}
@@ -102,11 +102,17 @@
 		methods: {
 			// 获取当天的日期
 			getDate () {
-				const date = new Date()
-				const year = date.getFullYear()
-				const month = date.getMonth() + 1
-				const day = date.getDate()
-				const hour = date.getHours()
+				let date = new Date();
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+				let hour = date.getHours();
+				if (month >= 1 && month <= 9) {
+						month = "0" + month
+				}
+				if (day >= 0 && day <= 9) {
+						day = "0" + day
+				}
 				this.nowDate = year + "-" + month + "-" + day
 				if(this.nowDate == this.date) {
 					if(hour >= 18 && hour < 24) {
