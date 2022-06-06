@@ -32,7 +32,7 @@
 			 <!-- 日常经营类 -->
 			 <view v-if="documentType !== '0'">
 				 <uni-forms-item label="公司名称" name="companyName">
-				     <uni-easyinput type="text" disabled v-model="formDataFile.companyName" />
+				     <uni-easyinput type="textarea" disabled v-model="formDataFile.companyName" />
 				 </uni-forms-item>
 				 <uni-forms-item label="种类" :name="documentType == 1 ? 'dailyDocumentTypeLable' : 'dailyDocumentTypeContractLable'">
 					 <uni-easyinput v-if="documentType == 1" type="text" disabled v-model="formDataFile.dailyDocumentTypeLable" />
@@ -41,7 +41,7 @@
 			 </view>
 			 <!-- end -->
 			 <uni-forms-item label="文件名称" name="fileName">
-			     <uni-easyinput type="text" :disabled="showInfo || !documentAdmin" v-model="formDataFile.fileName" />
+			     <uni-easyinput type="textarea" :disabled="showInfo || !documentAdmin" v-model="formDataFile.fileName" />
 			 </uni-forms-item>
 			 <uni-forms-item required label="附件类型" name="fileTypeLable">
 			     <uni-easyinput v-if="showInfo || !documentAdmin" type="text" disabled v-model="formDataFile.fileTypeLable" />

@@ -25,7 +25,10 @@
 										<template slot="body">
 											<view class="slot-box slot-text">项目名称：{{item.projectName}}</view>
 											<view class="slot-box slot-text">录入日期：{{item.createTime}}</view>
-											<view class="slot-box slot-text">日志内容：{{item.workDetail}}</view>
+											<text class="slot-box slot-text">
+												日志内容：{{item.workDetail}}
+											</text>
+											<!-- <view class="slot-box slot-text">日志内容：{{item.workDetail}}</view> -->
 										</template>
 									</uni-list-item>
 							</uni-swipe-action-item>

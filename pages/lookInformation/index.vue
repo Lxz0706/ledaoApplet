@@ -5,12 +5,12 @@
 			<span class="btn" @click="InClick">入库信息查看</span>
 		</view>
 		<view class="basic-info">
-			<uni-forms ref="form" :modelValue="baseInfo" label-width="100">
+			<uni-forms ref="form" :modelValue="baseInfo">
 				<uni-forms-item label="公司名称" name="companyName">
-						<uni-easyinput disabled v-model="baseInfo.companyName" type="text" />
+						<uni- disabled v-model="baseInfo.companyName" type="textarea"/>
 				</uni-forms-item>
 				<uni-forms-item label="项目名称" name="projectName">
-						<uni-easyinput disabled v-model="baseInfo.projectName" type="text" />
+						<uni-easyinput disabled v-model="baseInfo.projectName" type="textarea" />
 				</uni-forms-item>
 				<uni-forms-item label="实际提交者" name="applyUserName">
 						<uni-easyinput disabled v-model="inInfo.applyUserName" type="text" />
@@ -19,7 +19,7 @@
 						<uni-easyinput disabled v-model="inInfo.roleType" type="text" />
 				</uni-forms-item>
 				<uni-forms-item label="备注" name="remarks">
-						<uni-easyinput disabled v-model="inInfo.remarks" type="text" />
+						<uni-easyinput disabled v-model="inInfo.remarks" type="textarea" />
 				</uni-forms-item>
 			</uni-forms>
 		</view>

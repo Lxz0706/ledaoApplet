@@ -9,13 +9,13 @@
 					<uni-easyinput disabled v-model="dailyItem" type="text" />
 			</uni-forms-item>
 			<uni-forms-item label="公司名称" name="companyName">
-					<uni-easyinput disabled v-model="processInInfo.companyNameLab" type="text" />
+					<uni-easyinput disabled v-model="processInInfo.companyNameLab" type="textarea" />
 			</uni-forms-item>
     	<uni-forms-item label="项目名称" name="projectName">
-    			<uni-easyinput disabled v-model="processInInfo.projectName" type="text" />
+    			<uni-easyinput disabled v-model="processInInfo.projectName" type="textarea" />
     	</uni-forms-item>
     	<uni-forms-item label="债务人名称" name="debtorName">
-    			<uni-easyinput disabled v-model="processInInfo.debtorName" type="text" />
+    			<uni-easyinput disabled v-model="processInInfo.debtorName" type="textarea" />
     	</uni-forms-item>
     	<uni-forms-item label="实际提交人" name="applyUserName">
     			<uni-easyinput disabled v-model="processInInfo.applyUserName" type="text" />

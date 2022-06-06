@@ -20,7 +20,7 @@
 		            </uni-forms-item> 
 					
 		            <uni-forms-item label="公司名称" name="companyNameLab">
-		                <uni-easyinput :disabled="basicInfoDis" v-model="formData.companyNameLab" type="text" />
+		                <uni-easyinput :disabled="basicInfoDis" v-model="formData.companyNameLab" type="textarea" />
 		            </uni-forms-item>
 								<uni-forms-item v-if="formData.documentType === '0'" label="债务人名称" name="debtorName">
 								    <uni-easyinput :disabled="basicInfoDis" v-model="formData.debtorName" type="text" />
@@ -68,12 +68,12 @@
 									    <uni-easyinput disabled v-model="formData.realReturnTime" type="text" />
 									</uni-forms-item>
 									<uni-forms-item label="出库原因" name="outReason">
-									    <uni-easyinput disabled v-model="formData.outReason" type="text" />
+									    <uni-easyinput disabled v-model="formData.outReason" type="textarea" />
 									</uni-forms-item>
 								</view>
 								<!--    end -->
 								<uni-forms-item label="备注" name="remarks">
-								    <uni-easyinput :disabled="basicInfoDis" v-model="formData.remarks" type="text" />
+								    <uni-easyinput :disabled="basicInfoDis" v-model="formData.remarks" type="textarea" />
 								</uni-forms-item>
 		        </uni-forms>
 						<view class="bgcolor">档案明细</view>
