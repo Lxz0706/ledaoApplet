@@ -70,6 +70,9 @@
 					{
 						modularName: '客户管理',
 						modularIcon: '/static/icon/cus-mang'
+					},{
+						modularName: '估值地图',
+						modularIcon: '/static/icon/map'
 					}
 				],
 				openId: ''
@@ -172,6 +175,10 @@
 				} else if (e === 1) {
 					uni.navigateTo({
 						url: '../curstomer/index'
+					})
+				}else if (e === 2) {
+					uni.navigateTo({
+						url: '../valueMap/index'
 					})
 				}
 			},

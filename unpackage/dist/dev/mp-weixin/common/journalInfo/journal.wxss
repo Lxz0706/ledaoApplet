@@ -61,12 +61,13 @@
   padding-right: 30rpx;
 }
 .chatAll.data-v-63a98d17 {
-  background-color: #E5E5E5;
+  background-color: #F5F5F5;
   max-height: 420rpx;
   overflow: auto;
   border-radius: 20rpx;
   padding: 30rpx;
   margin-bottom: 44rpx;
+  font-size: 30rpx;
 }
 .chatAll .chatDetailAll.data-v-63a98d17 {
   margin-bottom: 40rpx;
@@ -84,6 +85,14 @@
   text-align: right;
   color: #3B9DEC;
   margin: 30rpx 20rpx;
+}
+.list-title.data-v-63a98d17 {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.right.data-v-63a98d17 {
+  color: #3B9DEC;
 }
 
 /* title */

@@ -137,6 +137,11 @@
 		"style": {
 			"navigationBarTitleText": "我的设置"
 		}
+	},{
+		"path":"pages/valueMap/index",
+		"style":{
+			"navigationBarTitleText":"估值地图"
+		}
 	}
 	],
 	"globalStyle": {
@@ -167,10 +172,20 @@
 	        "selectedIconPath": "static/icon/workFlow.png",
 	        "text": "工作流"
 	    },{
+			"pagePath":"pages/valueMap/index",
+			"iconPath":"static/icon/map.png",
+			"selectedIconPath":"static/icon/map.png",
+			"text":"估值地图"
+		},{
 	        "pagePath": "pages/mine/index",
 	        "iconPath": "static/icon/mine.png",
 	        "selectedIconPath": "static/icon/mine.png",
 	        "text": "我的"
 	    }]
-	}
+	},
+	 "permission": {
+	    "scope.userLocation":{
+	      "desc": "点击确认"
+	    }
+	  }
 }

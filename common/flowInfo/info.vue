@@ -288,7 +288,7 @@ export default {
 					title: '加载中...'
 				})
 				this.$refs.form.validate().then(res=>{
-					this.$request("/applyIn/edit","POST",{
+					this.$request("/applyIn/applyEditSave","POST",{
 						...res
 					},{
 						"content-type": "application/x-www-form-urlencoded",
