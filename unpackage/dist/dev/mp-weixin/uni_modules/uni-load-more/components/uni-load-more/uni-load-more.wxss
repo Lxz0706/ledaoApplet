@@ -24,36 +24,36 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.uni-load-more.data-v-90d4256a {
+.uni-load-more {
   display: flex;
   flex-direction: row;
   height: 40px;
   align-items: center;
   justify-content: center;
 }
-.uni-load-more__text.data-v-90d4256a {
-  font-size: 15px;
+.uni-load-more__text {
+  font-size: 14px;
+  margin-left: 8px;
 }
-.uni-load-more__img.data-v-90d4256a {
+.uni-load-more__img {
   width: 24px;
   height: 24px;
-  margin-right: 8px;
 }
-.uni-load-more__img--nvue.data-v-90d4256a {
+.uni-load-more__img--nvue {
   color: #666666;
 }
-.uni-load-more__img--android.data-v-90d4256a,
-.uni-load-more__img--ios.data-v-90d4256a {
+.uni-load-more__img--android,
+.uni-load-more__img--ios {
   width: 24px;
   height: 24px;
   -webkit-transform: rotate(0deg);
           transform: rotate(0deg);
 }
-.uni-load-more__img--android.data-v-90d4256a {
+.uni-load-more__img--android {
   -webkit-animation: loading-ios 1s 0s linear infinite;
           animation: loading-ios 1s 0s linear infinite;
 }
-@-webkit-keyframes loading-android-data-v-90d4256a {
+@-webkit-keyframes loading-android {
 0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
@@ -63,7 +63,7 @@
             transform: rotate(360deg);
 }
 }
-@keyframes loading-android-data-v-90d4256a {
+@keyframes loading-android {
 0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
@@ -73,19 +73,19 @@
             transform: rotate(360deg);
 }
 }
-.uni-load-more__img--ios-H5.data-v-90d4256a {
+.uni-load-more__img--ios-H5 {
   position: relative;
-  -webkit-animation: loading-ios-H5-data-v-90d4256a 1s 0s step-end infinite;
-          animation: loading-ios-H5-data-v-90d4256a 1s 0s step-end infinite;
+  -webkit-animation: loading-ios-H5 1s 0s step-end infinite;
+          animation: loading-ios-H5 1s 0s step-end infinite;
 }
-.uni-load-more__img--ios-H5 > image.data-v-90d4256a {
+.uni-load-more__img--ios-H5 image {
   position: absolute;
   width: 100%;
   height: 100%;
   left: 0;
   top: 0;
 }
-@-webkit-keyframes loading-ios-H5-data-v-90d4256a {
+@-webkit-keyframes loading-ios-H5 {
 0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
@@ -139,7 +139,7 @@
             transform: rotate(360deg);
 }
 }
-@keyframes loading-ios-H5-data-v-90d4256a {
+@keyframes loading-ios-H5 {
 0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
@@ -193,7 +193,7 @@
             transform: rotate(360deg);
 }
 }
-.uni-load-more__img--android-MP.data-v-90d4256a {
+.uni-load-more__img--android-MP {
   position: relative;
   width: 24px;
   height: 24px;
@@ -202,7 +202,7 @@
   -webkit-animation: loading-ios 1s 0s ease infinite;
           animation: loading-ios 1s 0s ease infinite;
 }
-.uni-load-more__img--android-MP > view.data-v-90d4256a {
+.uni-load-more__img--android-MP .uni-load-more__img-icon {
   position: absolute;
   box-sizing: border-box;
   width: 100%;
@@ -213,19 +213,19 @@
   -webkit-transform-origin: center;
           transform-origin: center;
 }
-.uni-load-more__img--android-MP > view.data-v-90d4256a:nth-child(1) {
-  -webkit-animation: loading-android-MP-1-data-v-90d4256a 1s 0s linear infinite;
-          animation: loading-android-MP-1-data-v-90d4256a 1s 0s linear infinite;
+.uni-load-more__img--android-MP .uni-load-more__img-icon:nth-child(1) {
+  -webkit-animation: loading-android-MP-1 1s 0s linear infinite;
+          animation: loading-android-MP-1 1s 0s linear infinite;
 }
-.uni-load-more__img--android-MP > view.data-v-90d4256a:nth-child(2) {
-  -webkit-animation: loading-android-MP-2-data-v-90d4256a 1s 0s linear infinite;
-          animation: loading-android-MP-2-data-v-90d4256a 1s 0s linear infinite;
+.uni-load-more__img--android-MP .uni-load-more__img-icon:nth-child(2) {
+  -webkit-animation: loading-android-MP-2 1s 0s linear infinite;
+          animation: loading-android-MP-2 1s 0s linear infinite;
 }
-.uni-load-more__img--android-MP > view.data-v-90d4256a:nth-child(3) {
-  -webkit-animation: loading-android-MP-3-data-v-90d4256a 1s 0s linear infinite;
-          animation: loading-android-MP-3-data-v-90d4256a 1s 0s linear infinite;
+.uni-load-more__img--android-MP .uni-load-more__img-icon:nth-child(3) {
+  -webkit-animation: loading-android-MP-3 1s 0s linear infinite;
+          animation: loading-android-MP-3 1s 0s linear infinite;
 }
-@keyframes loading-android-data-v-90d4256a {
+@keyframes loading-android {
 0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
@@ -235,21 +235,7 @@
             transform: rotate(360deg);
 }
 }
-@-webkit-keyframes loading-android-MP-1-data-v-90d4256a {
-0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-}
-50% {
-    -webkit-transform: rotate(90deg);
-            transform: rotate(90deg);
-}
-100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-}
-}
-@keyframes loading-android-MP-1-data-v-90d4256a {
+@-webkit-keyframes loading-android-MP-1 {
 0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
@@ -263,7 +249,21 @@
             transform: rotate(360deg);
 }
 }
-@-webkit-keyframes loading-android-MP-2-data-v-90d4256a {
+@keyframes loading-android-MP-1 {
+0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+}
+50% {
+    -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+}
+100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+}
+}
+@-webkit-keyframes loading-android-MP-2 {
 0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
@@ -277,7 +277,7 @@
             transform: rotate(360deg);
 }
 }
-@keyframes loading-android-MP-2-data-v-90d4256a {
+@keyframes loading-android-MP-2 {
 0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
@@ -291,7 +291,7 @@
             transform: rotate(360deg);
 }
 }
-@-webkit-keyframes loading-android-MP-3-data-v-90d4256a {
+@-webkit-keyframes loading-android-MP-3 {
 0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
@@ -305,7 +305,7 @@
             transform: rotate(360deg);
 }
 }
-@keyframes loading-android-MP-3-data-v-90d4256a {
+@keyframes loading-android-MP-3 {
 0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);

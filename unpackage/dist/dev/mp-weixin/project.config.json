@@ -8,6 +8,7 @@
         "urlCheck": true,
         "postcss": true,
         "es6": true,
+        "minified": true,
         "babelSetting": {
             "ignore": [],
             "disablePlugins": [],
@@ -15,7 +16,7 @@
         }
     },
     "compileType": "miniprogram",
-    "libVersion": "2.24.6",
+    "libVersion": "",
     "appid": "wx9356d3274f830bf6",
     "projectname": "ledaoApplet",
     "condition": {},

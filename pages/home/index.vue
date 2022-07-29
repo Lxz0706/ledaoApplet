@@ -70,9 +70,6 @@
 					{
 						modularName: '客户管理',
 						modularIcon: '/static/icon/cus-mang'
-					},{
-						modularName: '估值地图',
-						modularIcon: '/static/icon/map'
 					}
 				],
 				openId: ''
@@ -81,16 +78,14 @@
 
 		onLoad(options) {
 			// 判断是否登陆过
-			if(!uni.getStorageSync("loginSuccess")) {
+			if (!uni.getStorageSync("loginSuccess")) {
 				this.loginCode()
 			}
 		},
 
-		onShow() {
-		},
+		onShow() {},
 
-		mounted() {
-		},
+		mounted() {},
 
 		methods: {
 			// 登录获取code换取openId
@@ -106,7 +101,7 @@
 									openId: resOpenid.data.openId
 								}).then(resWeChatLogin => {
 									if (resWeChatLogin.data.code === 500) {
-										
+
 										uni.showToast({
 											title: resWeChatLogin.data.msg,
 											position: 'bottom',
@@ -119,27 +114,30 @@
 											})
 										}, 1000);
 									} else {
-										var cookie =resWeChatLogin.header['Set-Cookie']
+										var cookie = resWeChatLogin.header['Set-Cookie']
 										// 字符串分割成数组
 										var cookieArray = cookie.split(/,(?=[^,]*=)/)
 										// 分号拼接数组
 										var newCookie = cookieArray.join(';')
 										// 存储拼接后的cookie
 										try {
-										  uni.setStorageSync('setCookie', newCookie)
+											uni.setStorageSync('setCookie', newCookie)
 										} catch (error) {
-										  log.error('setStorageSync cookie fail')
+											log.error('setStorageSync cookie fail')
 										}
-										uni.setStorageSync("loginName",resWeChatLogin.data.data.loginName)
-										uni.setStorageSync("userName",resWeChatLogin.data.data.userName)
-										uni.setStorageSync("isDailyRemind",resWeChatLogin.data.data.isDailyRemind)
+										uni.setStorageSync("loginName", resWeChatLogin.data
+											.data.loginName)
+										uni.setStorageSync("userName", resWeChatLogin.data.data
+											.userName)
+										uni.setStorageSync("isDailyRemind", resWeChatLogin.data
+											.data.isDailyRemind)
 										// const getCookie = uni.getStorageSync("setCookie")
 										// if (getCookie) {
-											uni.showToast({
-												icon: 'success',
-												position: 'bottom',
-												title: '登录成功'
-											});
+										uni.showToast({
+											icon: 'success',
+											position: 'bottom',
+											title: '登录成功'
+										});
 										// } else {
 										// 	uni.redirectTo({
 										// 		url: "../../pages/login/index"
@@ -176,10 +174,6 @@
 					uni.navigateTo({
 						url: '../curstomer/index'
 					})
-				}else if (e === 2) {
-					uni.navigateTo({
-						url: '../valueMap/index'
-					})
 				}
 			},
 
@@ -207,7 +201,6 @@
 </script>
 
 <style lang="scss" scoped>
-
 	.list {
 		display: flex;
 		flex-direction: row;
@@ -249,23 +242,23 @@
 		background-color: #fff;
 		margin: 20rpx 0
 	}
-	
+
 	.collapse-list-img {
 		text-align: center;
 	}
-	
+
 	.collapse {
 		background-color: #fff;
 		border-radius: 20px;
 		padding: 15rpx;
 		margin: 30rpx;
 	}
-	
+
 	.title {
 		margin-bottom: 40rpx;
 	}
 </style>
 
 <style>
-		@import url("@/css/index.css");
+	@import url("@/css/index.css");
 </style>
