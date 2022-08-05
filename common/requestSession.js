@@ -1,4 +1,4 @@
-const BASE_URL = "http://192.168.2.210:8010"
+const BASE_URL = "https://dev.ledaoamc.com"
 const sessionCookie = uni.getStorageSync('setCookie')
 
 const requestSession = (url, method, data, header) => {

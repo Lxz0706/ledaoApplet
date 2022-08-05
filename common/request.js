@@ -1,5 +1,5 @@
 // 默认地址url常量 http://139.196.186.29:8001 https://dev.ledaoamc.com http://192.168.3.8:8001
-const BASE_URL = "http://192.168.2.210:8010"
+const BASE_URL = "https://dev.ledaoamc.com"
 const sessionCookie = uni.getStorageSync('setCookie')
 // 封装好的函数导入
 const request = (url, method, data, header) => {

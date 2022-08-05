@@ -125,12 +125,13 @@
 	margin-bottom: 6rpx;
 }
 /* button[type=primary] */
-button[type=primary] {
+/* button[type=primary] {
 	background-color: #3B9DEC;
 }
+
 button[disabled][type=primary] {
 	background-color: #E5E5E5;
-}
+} */
 .select-picker {
 	border: 1px solid #000;
 	border-radius: 4px;
