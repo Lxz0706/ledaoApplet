@@ -56,6 +56,8 @@ export function start(params) {
   };
   wx.getSetting({
     success(res) {
+		console.log("theme:-----"+theme)
+		console.log("ROUTE_ENUM[ocrType]:==="+ROUTE_ENUM[ocrType])
       if (!res.authSetting['scope.camera']) {
         wx.authorize({
           scope: 'scope.camera',

@@ -20,6 +20,7 @@ function themeToSeal(theme) {
 }
 
 function getTheme(theme) {
+	console.log("th:-----"+theme)
   return THEME_ENUM[theme] || THEME_ENUM.primary;
 }
 

@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "工作流",
-  "usingComponents": {
-    "uni-segmented-control": "/uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control",
-    "v-flow": "/pages/workFlow/flow/flow"
-  }
-}

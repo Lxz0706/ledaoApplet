@@ -1,5 +1,5 @@
 <template>
-	<view class="ocr">
+	<view>
 		<ocrsdk></ocrsdk>
 	</view>
 </template>
@@ -21,6 +21,7 @@
 
 		mounted() {
 			const ocrSdk = require('@/wxcomponents/ocrsdk/index.js');
+			console.log("leixing :----"+ocrSdk.OcrType.BUSINESS_CARD);
 			ocrSdk.start({
 				secretId: '', // 不推荐在生产环境中使用固定密钥
 				secretKey: '', // 不推荐在生产环境中使用固定密钥
