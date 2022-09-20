@@ -21,11 +21,21 @@
 						</picker>
 					</view>
 					<view class="uni-list-cell-left">
-						类型：
+						债权类型：
 					</view>
 					<view class="uni-list-cell-db">
 						<picker :range="typeList" range-key="typeName" @change="typeChange">
-							<view style="margin-left: 10px;" class="uni-input">{{before_type? before_type: '请选择类型...' }}
+							<view style="margin-left: 10px;" class="uni-input">{{before_type? before_type: '请选择债权类型...' }}
+							</view>
+						</picker>
+					</view>
+					<view class="uni-list-cell-left">
+						司法状态：
+					</view>
+					<view class="uni-list-cell-db">
+						<picker :range="judicialList" range-key="judicialName" @change="judicialChange">
+							<view style="margin-left: 10px;" class="uni-input">
+								{{before_judicial? before_judicial: '请选择司法状态...' }}
 							</view>
 						</picker>
 					</view>
@@ -98,7 +108,10 @@
 				itemCurrentprice: '',
 				itemEndTime: '',
 				tags: '',
-				link: ''
+				link: '',
+				judicialList: [],
+				judicialName: '',
+				before_judicial: ''
 			}
 		},
 		onLoad() {
@@ -139,6 +152,7 @@
 				let that = this;
 				that.getValueMapGap();
 				that.getType();
+				that.getJudicialList();
 				uni.getLocation({
 					geocode: true,
 					type: 'gcj02',
@@ -203,6 +217,15 @@
 					this.typeList = resDict;
 				})
 			},
+			getJudicialList() {
+				this.viewshow = false;
+				this.$request("/system/judicial/getJudicialList", "POST", {}, {
+					"content-type": "application/x-www-form-urlencoded",
+					'cookie': uni.getStorageSync("setCookie")
+				}).then(resDict => {
+					this.judicialList = resDict;
+				})
+			},
 			async getList() {
 				let that = this;
 				that.viewshow = false;
@@ -212,7 +235,8 @@
 				that.$request("/system/judicial/valuationmapList", "POST", {
 					itemType: that.type,
 					radius: that.radius,
-					circlePoint: that.cireclePoint
+					circlePoint: that.cireclePoint,
+					itemStatus: that.judicialName
 				}).then(res => {
 					let arr = res;
 					let temArr = [];
@@ -245,9 +269,28 @@
 				})
 			},
 			fetchShopDetail(e) {
-				if (!uni.getStorageSync("loginSuccess")) {
-					this.loginCode()
-				}
+				var that = this;
+				wx.login({
+					success: function(res) {
+						if (res.code) {
+							that.$request("/system/judicial/decodeUserInfo", "GET", {
+								code: res.code
+							}).then(res => {
+								if (0 === res.code) {
+									that.showTest(e);
+								} else {
+									uni.showToast({
+										title: '未关注公众号！',
+										icon: 'error',
+										duration: 5000
+									})
+								}
+							})
+						}
+					}
+				})
+			},
+			async showTest(e) {
 				this.viewshow = true;
 				let obj = this.markers[this.markers.findIndex((role) => role.id === e.detail.markerId)];
 				this.itemTitle = obj.itemTitle;
@@ -264,7 +307,6 @@
 				if (this.radius == '') {
 					this.radius = 1000;
 				}
-				console.log("所在地址：-------" + this.address);
 				//调用地址解析接口
 				qqmapsdk.geocoder({
 					//获取表单传入地址 e.detail.value.geocoder
@@ -300,10 +342,10 @@
 			schoolChange(e) {
 				this.viewshow = false;
 				const index = e.target.value
-				this.before_school = this.list[index].waterWorkName
+				this.before_school = this.list[index].waterWorkName;
 				this.radius = this.list[index].url;
 				this.formSubmit();
-				if (this.type !== '') {
+				if (this.type !== '' && this.judicialName !== '') {
 					if (this.address == '') {
 						let obj = {};
 						let tempArr = [];
@@ -330,10 +372,40 @@
 			},
 			typeChange(e) {
 				this.viewshow = false;
-				const index = e.target.value
-				this.before_type = this.typeList[index].typeName;
+				const index = e.target.value;
+				this.before_type = this.typeList[index].url;
 				this.type = this.typeList[index].url;
-				if (this.radius !== '') {
+				if (this.radius !== '' && this.judicialName !== '') {
+					if (this.address == '') {
+						let obj = {};
+						let tempArr = [];
+						obj.id = 1
+						obj.longitude = parseInt(this.longitude)
+						obj.latitude = parseInt(this.latitude)
+						obj.width = 30
+						obj.height = 20
+						obj.radius = parseInt(this.radius)
+						obj.strokeWidth = 2
+						obj.fillColor = '#e6060a6a'
+						tempArr.push(obj);
+						this.currLoca = {
+							longitude: this.longitude,
+							latitude: this.latitude,
+						}
+						this.circles = tempArr;
+						this.cireclePoint = this.longitude + "," + this.latitude
+						this.getList();
+					} else {
+						this.getList();
+					}
+				}
+			},
+			judicialChange(e) {
+				this.viewshow = false;
+				const index = e.target.value
+				this.before_judicial = this.judicialList[index].judicialName
+				this.judicialName = this.judicialList[index].url;
+				if (this.radius !== '' && this.type !== '') {
 					if (this.address == '') {
 						let obj = {};
 						let tempArr = [];
@@ -368,73 +440,6 @@
 						});
 					}
 				});
-			},
-			loginCode() {
-				uni.login({
-					success: (resLogin) => {
-						this.$request('/getOpenid', 'POST', {
-							jsCode: resLogin.code
-						}).then(resOpenid => {
-							this.openId = resOpenid.data.openId
-							if (resOpenid.code === 0) {
-								this.$requestSession('/wechatLogin', "POST", {
-									openId: resOpenid.data.openId
-								}).then(resWeChatLogin => {
-									if (resWeChatLogin.data.code === 500) {
-										uni.showToast({
-											title: resWeChatLogin.data.msg,
-											position: 'bottom',
-											icon: 'none',
-											mask: true
-										});
-										setTimeout(function() {
-											uni.redirectTo({
-												url: "../../pages/login/index"
-											})
-										}, 1000);
-									} else {
-										var cookie = resWeChatLogin.header['Set-Cookie']
-										// 字符串分割成数组
-										var cookieArray = cookie.split(/,(?=[^,]*=)/)
-										// 分号拼接数组
-										var newCookie = cookieArray.join(';')
-										// 存储拼接后的cookie
-										try {
-											uni.setStorageSync('setCookie', newCookie)
-										} catch (error) {
-											log.error('setStorageSync cookie fail')
-										}
-										uni.setStorageSync("loginName", resWeChatLogin.data
-											.data.loginName)
-										uni.setStorageSync("userName", resWeChatLogin.data.data
-											.userName)
-										uni.setStorageSync("isDailyRemind", resWeChatLogin.data
-											.data.isDailyRemind)
-										uni.showToast({
-											icon: 'success',
-											position: 'bottom',
-											title: '登录成功'
-										});
-									}
-								})
-								uni.setStorage({
-									key: 'getOpenids',
-									data: resOpenid.data.openId,
-									success: function() {
-										console.log('success');
-									}
-								})
-								uni.setStorage({
-									key: 'getUnionId',
-									data: resOpenid.data.unionId,
-									success: function() {
-										console.log('success');
-									}
-								})
-							}
-						})
-					}
-				})
 			}
 		}
 
