@@ -1,32 +1,22 @@
-import { isPC } from "./isPC"
-export default {
+let mpMixins = {}
+let is_pc = null
+// #ifdef H5
+import {
+	isPC
+} from "./isPC"
+is_pc = isPC()
+// #endif
+// #ifdef APP-VUE|| MP-WEIXIN || H5
+
+mpMixins = {
 	data() {
 		return {
-			position: [],
-			button: {},
-			btn: "[]"
+			is_show: 'none'
 		}
 	},
 	watch: {
-		button: {
-			handler(newVal) {
-				this.btn = JSON.stringify(newVal)
-			},
-			deep: true
-		},
 		show(newVal) {
-			if (this.autoClose) return
-			if (!this.button) {
-				this.init()
-				return
-			}
-			this.button.show = newVal
-		},
-		leftOptions() {
-			this.init()
-		},
-		rightOptions() {
-			this.init()
+			this.is_show = this.show
 		}
 	},
 	created() {
@@ -36,19 +26,10 @@ export default {
 		}
 	},
 	mounted() {
-		this.init()
-	},
-	// fixme by mehaotian 在页面激活的时候需要重新获取元素信息
-	activated(){
-		this.init()
+		this.is_show = this.show
 	},
 	methods: {
-		init() {
-			clearTimeout(this.swipetimer)
-			this.swipetimer = setTimeout(() => {
-				this.getButtonSize()
-			}, 50)
-		},
+		// wxs 中调用
 		closeSwipe(e) {
 			if (!this.autoClose) return
 			this.swipeaction.closeOther(this)
@@ -56,17 +37,13 @@ export default {
 
 		change(e) {
 			this.$emit('change', e.open)
-			let show = this.button.show
-			if (show !== e.open) {
-				this.button.show = e.open
+			if (this.is_show !== e.open) {
+				this.is_show = e.open
 			}
-
 		},
 
 		appTouchStart(e) {
-			// #ifdef H5
-			if(isPC()) return
-			// #endif
+			if (is_pc) return
 			const {
 				clientX
 			} = e.changedTouches[0]
@@ -74,9 +51,7 @@ export default {
 			this.timestamp = new Date().getTime()
 		},
 		appTouchEnd(e, index, item, position) {
-			// #ifdef H5
-			if(isPC()) return
-			// #endif
+			if (is_pc) return
 			const {
 				clientX
 			} = e.changedTouches[0]
@@ -92,32 +67,17 @@ export default {
 			}
 		},
 		onClickForPC(index, item, position) {
+			if (!is_pc) return
 			// #ifdef H5
-			if(!isPC()) return
 			this.$emit('click', {
 				content: item,
 				index,
 				position
 			})
 			// #endif
-		},
-		getButtonSize() {
-			const views = uni.createSelectorQuery().in(this)
-			views
-				.selectAll('.uni-swipe_button-group')
-				.boundingClientRect(data => {
-					let show = 'none'
-					if (this.autoClose) {
-						show = 'none'
-					} else {
-						show = this.show
-					}
-					this.button = {
-						data,
-						show
-					}
-				})
-				.exec()
 		}
 	}
 }
+
+// #endif
+export default mpMixins

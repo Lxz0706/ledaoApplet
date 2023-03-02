@@ -1,13 +1,22 @@
 <template>
-	<view class="uni-section" nvue>
-		<view v-if="type" class="uni-section__head">
-			<view :class="type" class="uni-section__head-tag" />
+	<view class="uni-section">
+		<view class="uni-section-header" @click="onClick">
+				<view class="uni-section-header__decoration" v-if="type" :class="type" />
+        <slot v-else name="decoration"></slot>
+
+        <view class="uni-section-header__content">
+          <text :style="{'font-size':titleFontSize,'color':titleColor}" class="uni-section__content-title" :class="{'distraction':!subTitle}">{{ title }}</text>
+          <text v-if="subTitle" :style="{'font-size':subTitleFontSize,'color':subTitleColor}" class="uni-section-header__content-sub">{{ subTitle }}</text>
+        </view>
+
+        <view class="uni-section-header__slot-right">
+          <slot name="right"></slot>
+        </view>
 		</view>
-		<view class="uni-section__content">
-			<text :class="{'distraction':!subTitle}" class="uni-section__content-title">{{ title }}</text>
-			<text v-if="subTitle" class="uni-section__content-sub">{{ subTitle }}</text>
+
+		<view class="uni-section-content" :style="{padding: _padding}">
+			<slot />
 		</view>
-		<slot />
 	</view>
 </template>
 
@@ -16,16 +25,22 @@
 	/**
 	 * Section 标题栏
 	 * @description 标题栏
-	 * @property {String} type = [line|circle] 标题装饰类型
+	 * @property {String} type = [line|circle|square] 标题装饰类型
 	 * 	@value line 竖线
 	 * 	@value circle 圆形
+	 * 	@value square 正方形
 	 * @property {String} title 主标题
+	 * @property {String} titleFontSize 主标题字体大小
+	 * @property {String} titleColor 主标题字体颜色
 	 * @property {String} subTitle 副标题
+	 * @property {String} subTitleFontSize 副标题字体大小
+	 * @property {String} subTitleColor 副标题字体颜色
+	 * @property {String} padding 默认插槽 padding
 	 */
 
 	export default {
 		name: 'UniSection',
-		emits:['click'],
+    emits:['click'],
 		props: {
 			type: {
 				type: String,
@@ -33,16 +48,43 @@
 			},
 			title: {
 				type: String,
+				required: true,
 				default: ''
+			},
+      titleFontSize: {
+        type: String,
+        default: '14px'
+      },
+			titleColor:{
+				type: String,
+				default: '#333'
 			},
 			subTitle: {
 				type: String,
 				default: ''
+			},
+      subTitleFontSize: {
+        type: String,
+        default: '12px'
+      },
+      subTitleColor: {
+        type: String,
+        default: '#999'
+      },
+			padding: {
+				type: [Boolean, String],
+				default: false
 			}
 		},
-		data() {
-			return {}
-		},
+    computed:{
+      _padding(){
+        if(typeof this.padding === 'string'){
+          return this.padding
+        }
+
+        return this.padding?'10px':''
+      }
+    },
 		watch: {
 			title(newVal) {
 				if (uni.report && newVal !== '') {
@@ -50,91 +92,76 @@
 				}
 			}
 		},
-		methods: {
+    methods: {
 			onClick() {
 				this.$emit('click')
 			}
 		}
 	}
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
+	$uni-primary: #2979ff !default;
+
 	.uni-section {
-		position: relative;
-		/* #ifndef APP-NVUE */
-		display: flex;
-		/* #endif */
-		margin-top: 10px;
-		flex-direction: row;
-		align-items: center;
-		padding: 0 10px;
-		height: 50px;
-		background-color: $uni-bg-color-grey;
-		/* #ifdef APP-NVUE */
-		// border-bottom-color: $uni-border-color;
-		// border-bottom-style: solid;
-		// border-bottom-width: 0.5px;
-		/* #endif */
-		font-weight: normal;
-	}
-	/* #ifndef APP-NVUE */
-	// .uni-section:after {
-	// 	position: absolute;
-	// 	bottom: 0;
-	// 	right: 0;
-	// 	left: 0;
-	// 	height: 1px;
-	// 	content: '';
-	// 	-webkit-transform: scaleY(.5);
-	// 	transform: scaleY(.5);
-	// 	background-color: $uni-border-color;
-	// }
-	/* #endif */
+		background-color: #fff;
+    .uni-section-header {
+      position: relative;
+      /* #ifndef APP-NVUE */
+      display: flex;
+      /* #endif */
+      flex-direction: row;
+      align-items: center;
+      padding: 12px 10px;
+      font-weight: normal;
 
-	.uni-section__head {
-		flex-direction: row;
-		justify-content: center;
-		align-items: center;
-		margin-right: 10px;
-	}
+      &__decoration{
+        margin-right: 6px;
+        background-color: $uni-primary;
+        &.line {
+          width: 4px;
+          height: 12px;
+          border-radius: 10px;
+        }
 
-	.line {
-		height: 15px;
-		background-color: $uni-text-color-disable;
-		border-radius: 5px;
-		width: 3px;
-	}
+        &.circle {
+          width: 8px;
+          height: 8px;
+          border-top-right-radius: 50px;
+          border-top-left-radius: 50px;
+          border-bottom-left-radius: 50px;
+          border-bottom-right-radius: 50px;
+        }
 
-	.circle {
-		width: 8px;
-		height: 8px;
-		border-top-right-radius: 50px;
-		border-top-left-radius: 50px;
-		border-bottom-left-radius: 50px;
-		border-bottom-right-radius: 50px;
-		background-color: $uni-text-color-disable;
-	}
+        &.square {
+          width: 8px;
+          height: 8px;
+        }
+      }
 
-	.uni-section__content {
-		/* #ifndef APP-NVUE */
-		display: flex;
-		/* #endif */
-		flex-direction: column;
-		flex: 1;
-		color: $uni-text-color;
-	}
+      &__content {
+        /* #ifndef APP-NVUE */
+        display: flex;
+        /* #endif */
+        flex-direction: column;
+        flex: 1;
+        color: #333;
 
-	.uni-section__content-title {
-		font-size: $uni-font-size-base;
-		color: $uni-text-color;
-	}
+        .distraction {
+          flex-direction: row;
+          align-items: center;
+        }
+        &-sub {
+          margin-top: 2px;
+        }
+      }
 
-	.distraction {
-		flex-direction: row;
-		align-items: center;
-	}
+      &__slot-right{
+        font-size: 14px;
+      }
+    }
 
-	.uni-section__content-sub {
-		font-size: $uni-font-size-sm;
-		color: $uni-text-color-grey;
+    .uni-section-content{
+      font-size: 14px;
+    }
 	}
 </style>

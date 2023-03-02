@@ -1,11 +1,20 @@
 <template>
 	<view class="contact">
 		<view class="page-section page-section-gap">
+			<view class="contactTitle">区域选择：</view>
+			<view class="contactsLable">
+				<!-- <uni-data-picker id="city" placeholder="请选择地址" popup-title="请选择城市" collection="opendb-city-china"
+					field="code as value, name as text" orderby="value asc" :step-searh="true" self-field="code"
+					parent-field="parent_code" @change="onchange" @nodeclick="onnodeclick">
+				</uni-data-picker> -->
+				<wangding-pickerAddress class="city" @change="onchange">{{city}}</wangding-pickerAddress>
+			</view>
 			<view class="contactTitle">
 				地址：
 			</view>
 			<view class="contactsLable">
-				<uni-easyinput id="address" v-model="address" type="text" placeholder="请输入要搜索的地址" @blur="formSubmit">
+				<uni-easyinput id="address" v-model="address" type="text"
+					placeholder="请输入要搜索的地址地址中,请包含城市名称，否则会影响解析效果，如：‘无锡市建筑西路559号’" @blur="formSubmit">
 				</uni-easyinput>
 			</view>
 			<view class="uni-list">
@@ -25,7 +34,8 @@
 					</view>
 					<view class="uni-list-cell-db">
 						<picker :range="typeList" range-key="typeName" @change="typeChange">
-							<view style="margin-left: 10px;" class="uni-input">{{before_type? before_type: '请选择债权类型...' }}
+							<view style="margin-left: 10px;" class="uni-input">
+								{{before_type? before_type: '请选择债权类型...' }}
 							</view>
 						</picker>
 					</view>
@@ -75,6 +85,14 @@
 						<text>状态：</text>
 						<text class="flex flex-direction">{{tags}}</text>
 					</view>
+					<view class="uni-flex uni-row" style="-webkit-flex: 1;flex: 1;">
+						<text>距离：</text>
+						<text class="flex flex-direction">{{latLon}}</text>
+					</view>
+					<view class="uni-flex uni-row" style="-webkit-flex: 1;flex: 1;">
+						<text>估值计算：</text>
+						<text class="flex flex-direction" @click="toValuation(itemId,latLon)">估值计算</text>
+					</view>
 				</view>
 			</map>
 		</view>
@@ -111,7 +129,12 @@
 				link: '',
 				judicialList: [],
 				judicialName: '',
-				before_judicial: ''
+				before_judicial: '',
+				itemCity: '',
+				city: '请选择地址',
+				title: 'Hello',
+				itemId: '',
+				latLon: ''
 			}
 		},
 		onLoad() {
@@ -145,6 +168,10 @@
 			}
 		},
 		methods: {
+			onchange(data) {
+				this.city = data.data.join('')
+				this.itemCity = data.data[1];
+			},
 			tap() { //地图空白处点击事件
 				this.viewshow = false;
 			},
@@ -158,7 +185,6 @@
 					type: 'gcj02',
 					async success(res) {},
 					async complete(res) {
-						console.log(res);
 						// 如果同意位置授权获取机主位置，否则默认北京天安门经纬度
 						if (res.errMsg == 'getLocation:ok') {
 							that.currLoca = res;
@@ -229,6 +255,13 @@
 			async getList() {
 				let that = this;
 				that.viewshow = false;
+				if (that.itemCity === '' || that.itemCity === null) {
+					uni.showToast({
+						title: '请选择地区',
+						duration: 2000,
+						icon: 'none'
+					})
+				}
 				uni.showLoading({
 					title: '加载中...'
 				})
@@ -236,18 +269,33 @@
 					itemType: that.type,
 					radius: that.radius,
 					circlePoint: that.cireclePoint,
-					itemStatus: that.judicialName
+					itemStatus: that.judicialName,
+					itemCity: that.itemCity
 				}).then(res => {
 					let arr = res;
 					let temArr = [];
 					arr.forEach(item => {
 						let labelColor = '#aaaab0'
+						let iconPath = '../../static/icon/dw.png';
+						if (item.itemType === '住宅用房') {
+							iconPath = '../../static/icon/zzyf.png';
+						} else if (item.itemType === '商业用房') {
+							iconPath = '../../static/icon/syyf.png';
+						} else if (item.itemType === '工业用房') {
+							iconPath = '../../static/icon/gyyf.png';
+						} else if (item.itemType === '其他用房') {
+							iconPath = '../../static/icon/qtyf.png';
+						} else if (item.itemType === '土地') {
+							iconPath = '../../static/icon/td.png';
+						} else {
+							iconPath = '../../static/icon/dw.png';
+						}
 						let markObj = {
 							"id": parseInt(item.id),
 							"latitude": item.latitude,
 							"longitude": item.longitude,
-							"width": '89rpx',
-							"height": '103rpx',
+							"width": 20,
+							"height": 20,
 							"zINdex": item.id + 1,
 							"itemTitle": item.itemTitle,
 							"itemType": item.itemType,
@@ -255,7 +303,10 @@
 							"itemLink": item.itemLink,
 							"itemCurrentprice": item.itemCurrentprice,
 							"itemEndTime": item.itemEndTime,
-							"tags": item.tags
+							"tags": item.tags,
+							'itemId': item.itemId,
+							'latLon': item.latLon,
+							iconPath,
 						}
 						temArr.push(markObj);
 					});
@@ -300,6 +351,9 @@
 				this.itemCurrentprice = obj.itemCurrentprice;
 				this.itemEndTime = obj.itemEndTime;
 				this.tags = obj.tags;
+				this.itemId = obj.itemId;
+				this.latLon = obj.latLon;
+
 			},
 			formSubmit() {
 				this.viewshow = false;
@@ -310,7 +364,7 @@
 				//调用地址解析接口
 				qqmapsdk.geocoder({
 					//获取表单传入地址 e.detail.value.geocoder
-					address: that.address, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
+					address: that.itemCity + that.address, //地址参数
 					success: (res) => { //成功后的回调
 						let obj = {};
 						let tempArr = [];
@@ -434,12 +488,19 @@
 				uni.setClipboardData({
 					data: link,
 					success: function(res) {
-						console.log('复制的信息：', link);
 						uni.showToast({
 							title: '复制成功',
 						});
 					}
 				});
+			},
+			toValuation(itemId, latLon) {
+				uni.redirectTo({
+					url: '/pages/valuation/index?itemId=' + itemId + "&latLon=" + JSON.stringify(latLon),
+					fail(error) {
+						console.log(error);
+					}
+				})
 			}
 		}
 

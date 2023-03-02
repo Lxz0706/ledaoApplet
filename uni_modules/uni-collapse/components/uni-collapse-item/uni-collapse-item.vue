@@ -11,10 +11,10 @@
 					</view>
 				</slot>
 			</view>
-			<view
+			<view v-if="showArrow"
 				:class="{ 'uni-collapse-item__title-arrow-active': isOpen, 'uni-collapse-item--animation': showAnimation === true }"
 				class="uni-collapse-item__title-arrow">
-				<uni-icons :color="disabled?'#ddd':'#bbb'" size="14" type="arrowdown" />
+				<uni-icons :color="disabled?'#ddd':'#bbb'" size="14" type="bottom" />
 			</view>
 		</view>
 		<view class="uni-collapse-item__wrap" :class="{'is--transition':showAnimation}"
@@ -38,8 +38,12 @@
 	 * @property {String} title 标题文字
 	 * @property {String} thumb 标题左侧缩略图
 	 * @property {String} name 唯一标志符
+	 * @property {Boolean} open = [true|false] 是否展开组件
+	 * @property {Boolean} titleBorder = [true|false] 是否显示标题分隔线
+	 * @property {Boolean} border = [true|false] 是否显示分隔线
 	 * @property {Boolean} disabled = [true|false] 是否展开面板
 	 * @property {Boolean} showAnimation = [true|false] 开启动画
+	 * @property {Boolean} showArrow = [true|false] 是否显示右侧箭头
 	 */
 	export default {
 		name: 'uniCollapseItem',
@@ -87,8 +91,11 @@
 				type: String,
 				default: 'auto'
 			},
-			// 是否显示分隔线
 			border: {
+				type: Boolean,
+				default: true
+			},
+			showArrow: {
 				type: Boolean,
 				default: true
 			}
@@ -107,17 +114,18 @@
 		watch: {
 			open(val) {
 				this.isOpen = val
-				this.onClick(val,'init')
+				this.onClick(val, 'init')
 			}
 		},
 		updated(e) {
-			this.$nextTick(()=> {
+			this.$nextTick(() => {
 				this.init(true)
 			})
 		},
-		created(){
+		created() {
 			this.collapse = this.getCollapse()
 			this.oldHeight = 0
+			this.onClick(this.open, 'init')
 		},
 		// #ifndef VUE3
 		// TODO vue2
@@ -133,9 +141,7 @@
 			this.uninstall()
 		},
 		// #endif
-		
 		mounted() {
-			
 			if (!this.collapse) return
 			if (this.name !== '') {
 				this.nameSync = this.name
@@ -175,14 +181,14 @@
 					})
 				}
 			},
-			onClick(isOpen,type) {
+			onClick(isOpen, type) {
 				if (this.disabled) return
 				this.isOpen = isOpen
 				if (this.isOpen && this.collapse) {
 					this.collapse.setAccordion(this)
 				}
-				if(type !== 'init'){
-					this.collapse.onChange(isOpen,this)
+				if (type !== 'init') {
+					this.collapse.onChange(isOpen, this)
 				}
 			},
 			getCollapseHeight(type, index = 0) {
@@ -207,10 +213,10 @@
 						// #endif
 						this.isheight = true
 						if (type) return
-						this.onClick(this.open,'init')
+						this.onClick(this.isOpen, 'init')
 					})
 					.exec()
-			}, 
+			},
 			getNvueHwight(type) {
 				const result = dom.getComponentRect(this.$refs['collapse--hook'], option => {
 					if (option && option.result && option.size) {
@@ -222,7 +228,7 @@
 						// #endif
 						this.isheight = true
 						if (type) return
-						this.onClick(this.open,'init')
+						this.onClick(this.open, 'init')
 					}
 				})
 			},
@@ -243,7 +249,7 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	.uni-collapse-item {
 		/* #ifndef APP-NVUE */
 		box-sizing: border-box;
@@ -259,7 +265,7 @@
 			align-items: center;
 			transition: border-bottom-color .3s;
 
-			// transition-property: border-bottom-color; 
+			// transition-property: border-bottom-color;
 			// transition-duration: 5s;
 			&-wrap {
 				width: 100%;
@@ -290,7 +296,7 @@
 				/* #endif */
 				&.is-disabled {
 					.uni-collapse-item__title-text {
-						color: $uni-text-color-disable;
+						color: #999;
 					}
 				}
 
@@ -305,14 +311,14 @@
 			}
 
 			&-img {
-				height: $uni-img-size-base;
-				width: $uni-img-size-base;
+				height: 22px;
+				width: 22px;
 				margin-right: 10px;
 			}
 
 			&-text {
 				flex: 1;
-				font-size: $uni-font-size-base;
+				font-size: 14px;
 				/* #ifndef APP-NVUE */
 				white-space: nowrap;
 				color: inherit;
@@ -337,7 +343,7 @@
 				transform: rotate(0deg);
 
 				&-active {
-					transform: rotate(180deg);
+					transform: rotate(-180deg);
 				}
 			}
 
@@ -355,7 +361,7 @@
 			height: 0;
 
 			&.is--transition {
-				// transition: all 0.3s; 
+				// transition: all 0.3s;
 				transition-property: height, border-bottom-width;
 				transition-duration: 0.3s;
 				/* #ifndef APP-NVUE */

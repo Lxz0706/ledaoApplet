@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "日志列表",
+  "usingComponents": {
+    "uni-easyinput": "/uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput",
+    "uni-list": "/uni_modules/uni-list/components/uni-list/uni-list",
+    "uni-swipe-action": "/uni_modules/uni-swipe-action/components/uni-swipe-action/uni-swipe-action",
+    "uni-swipe-action-item": "/uni_modules/uni-swipe-action/components/uni-swipe-action-item/uni-swipe-action-item",
+    "uni-list-item": "/uni_modules/uni-list/components/uni-list-item/uni-list-item"
+  }
+}

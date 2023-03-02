@@ -1,0 +1,122 @@
+.map-container.data-v-277815a7 {
+  position: relative;
+  overflow: hidden;
+}
+.map-container .cover-view.data-v-277815a7 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80rpx;
+  height: 80rpx;
+  color: #484848;
+  background-color: #fff;
+  background-size: 120rpx 120rpx;
+  background-position: center center;
+  position: absolute;
+  bottom: 100rpx;
+  right: 32rpx;
+}
+.map-container .cover-image.data-v-277815a7 {
+  display: inline-block;
+  width: 30rpx;
+  height: 30rpx;
+}
+.uni-row-show.data-v-277815a7 {
+  margin: upx;
+  border-radius: 25rpx;
+  position: absolute;
+  left: 70rpx;
+  width: 650rpx;
+  color: #000000;
+  background-color: #ffffff;
+}
+.uni-row.data-v-277815a7 {
+  width: 95%;
+  margin: 5px auto !important;
+  line-height: 20px;
+}
+.uni-row > text.data-v-277815a7:last-child {
+  color: gray;
+  width: 67%;
+}
+.close.data-v-277815a7 {
+  width: 15px;
+  height: 15px;
+  margin-top: -10rpx;
+  margin-right: -30rpx;
+}
+.audio.data-v-277815a7 {
+  padding: 20rpx;
+}
+
+/* title */
+.bgcolor {
+	background-color: #f5f5f5;
+	padding: 8px 0;
+	font-size: 40rpx;
+	font-weight: bold;
+	margin-bottom: 40rpx;
+	text-align: center;
+	margin: 0 -40rpx;
+}
+.select-picker {
+	border: 1px solid #e5e5e5;
+	min-height: 72rpx;
+	line-height: 72rpx;
+	padding-left: 20rpx;
+}
+.lable-text {
+	margin-bottom: 20rpx;
+}
+.lable-title {
+	margin-bottom: 6rpx;
+}
+/* button[type=primary] */
+/* button[type=primary] {
+	background-color: #3B9DEC;
+}
+
+button[disabled][type=primary] {
+	background-color: #E5E5E5;
+} */
+.select-picker {
+	border: 1px solid #000;
+	border-radius: 4px;
+}
+/* uni-row */
+.uni-row{
+	display: flex;
+	align-items: center;
+}
+.uni-col-6{
+	display: flex;
+	justify-content: flex-start;
+}
+.uni-col-8{
+	display: flex;
+	align-items: center;
+}
+.uni-col-7{
+	display: flex;
+	justify-content: flex-end;
+}
+/* forms-item */
+.uni-forms-item__inner {
+	padding-bottom: 30rpx;
+}
+/* input框颜色 */
+.uni-easyinput {
+	border: 1px solid #000;
+	border-radius: 8rpx;
+}
+/* input-date框 */
+.uni-date .uni-date-x--border {
+	border: 1px solid #000;
+	border-radius: 8rpx;
+}
+.ct-bg {
+	background-color: #E5E5E5;
+	height: 100vh;
+}
+

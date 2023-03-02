@@ -26,7 +26,7 @@
 				'uni-calendar-item--before-checked':weeks.beforeMultiple,
 				'uni-calendar-item--multiple': weeks.multiple,
 				'uni-calendar-item--after-checked':weeks.afterMultiple,
-				}">今天</text>
+				}">{{todayText}}</text>
 			<text v-if="lunar&&!weeks.extraInfo" class="uni-calendar-item__weeks-lunar-text" :class="{
 				'uni-calendar-item--isDay-text':weeks.isDay,
 				'uni-calendar-item--isDay':calendar.fullDate === weeks.fullDate && weeks.isDay,
@@ -35,7 +35,7 @@
 				'uni-calendar-item--multiple': weeks.multiple,
 				'uni-calendar-item--after-checked':weeks.afterMultiple,
 				'uni-calendar-item--disable':weeks.disable,
-				}">{{weeks.isDay?'今天': (weeks.lunar.IDayCn === '初一'?weeks.lunar.IMonthCn:weeks.lunar.IDayCn)}}</text>
+				}">{{weeks.isDay ? todayText : (weeks.lunar.IDayCn === '初一'?weeks.lunar.IMonthCn:weeks.lunar.IDayCn)}}</text>
 			<text v-if="weeks.extraInfo&&weeks.extraInfo.info" class="uni-calendar-item__weeks-lunar-text" :class="{
 				'uni-calendar-item--extra':weeks.extraInfo.info,
 				'uni-calendar-item--isDay-text':weeks.isDay,
@@ -51,6 +51,11 @@
 </template>
 
 <script>
+	import {
+	initVueI18n
+	} from '@dcloudio/uni-i18n'
+	import messages from './i18n/index.js'
+	const {	t	} = initVueI18n(messages)
 	export default {
 		emits:['change'],
 		props: {
@@ -77,6 +82,11 @@
 				default: false
 			}
 		},
+		computed: {
+			todayText() {
+				return t("uni-calender.today")
+			},
+		},
 		methods: {
 			choiceDate(weeks) {
 				this.$emit('change', weeks)
@@ -86,6 +96,13 @@
 </script>
 
 <style lang="scss" scoped>
+	$uni-font-size-base:14px;
+	$uni-text-color:#333;
+	$uni-font-size-sm:12px;
+	$uni-color-error: #e43d33;
+	$uni-opacity-disabled: 0.3;
+	$uni-text-color-disable:#c0c0c0;
+	$uni-primary: #2979ff !default;
 	.uni-calendar-item__weeks-box {
 		flex: 1;
 		/* #ifndef APP-NVUE */
@@ -135,11 +152,11 @@
 	}
 
 	.uni-calendar-item--isDay-text {
-		color: $uni-color-primary;
+		color: $uni-primary;
 	}
 
 	.uni-calendar-item--isDay {
-		background-color: $uni-color-primary;
+		background-color: $uni-primary;
 		opacity: 0.8;
 		color: #fff;
 	}
@@ -150,13 +167,13 @@
 	}
 
 	.uni-calendar-item--checked {
-		background-color: $uni-color-primary;
+		background-color: $uni-primary;
 		color: #fff;
 		opacity: 0.8;
 	}
 
 	.uni-calendar-item--multiple {
-		background-color: $uni-color-primary;
+		background-color: $uni-primary;
 		color: #fff;
 		opacity: 0.8;
 	}

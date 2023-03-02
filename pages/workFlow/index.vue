@@ -41,7 +41,6 @@
 
 		onShow() {
 			this.$refs.initFlow.getFlowList();
-			console.log('indexonShow')
 		},
 
 		// onLoad(options) {
