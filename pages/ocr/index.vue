@@ -22,8 +22,8 @@
 		mounted() {
 			const ocrSdk = require('@/wxcomponents/ocrsdk/index.js');
 			ocrSdk.start({
-				secretId: 'AKIDTmoZ5KI3ZppXz92ez2oJXZQ2NSK0SebK', // 不推荐在生产环境中使用固定密钥
-				secretKey: 'VllVzEEySgfOr42kCORFn57uUpukKeiX', // 不推荐在生产环境中使用固定密钥
+				secretId: '', // 不推荐在生产环境中使用固定密钥
+				secretKey: '', // 不推荐在生产环境中使用固定密钥
 				ocrType: ocrSdk.OcrType.BUSINESS_CARD,
 				ocrOption: {
 					Config: {
