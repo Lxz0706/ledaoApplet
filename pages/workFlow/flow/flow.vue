@@ -77,8 +77,6 @@ export default {
 			uni.navigateTo({
 				url: '/common/flowInfo/info?item=' + objectVal + '&statu=' + statu
 			})
-			console.log('flow',e)
-			console.log('flow',val)
 		},
 		
 		getFlowList () {
@@ -131,7 +129,6 @@ export default {
 							uni.hideLoading()
 						},3000)
 						
-						console.log('toDoList',this.toDoList)
 						this.flag = true
 					}
 			})

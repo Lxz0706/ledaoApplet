@@ -146,6 +146,11 @@
 			"style": {
 				"navigationBarTitleText": "估值计算"
 			}
+		}, {
+			"path": "common/journalInfo/journalForWorkDetail",
+			"style": {
+				"navigationBarTitleText": "日志查询"
+			}
 		}
 	],
 	"globalStyle": {
@@ -175,7 +180,7 @@
 			"iconPath": "static/icon/workFlow.png",
 			"selectedIconPath": "static/icon/workFlow.png",
 			"text": "工作流"
-		},{
+		}, {
 			"pagePath": "pages/mine/index",
 			"iconPath": "static/icon/mine.png",
 			"selectedIconPath": "static/icon/mine.png",

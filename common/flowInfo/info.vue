@@ -4,7 +4,7 @@
 			<uni-forms ref="form" :modelValue="formData" :rules="rules" label-width="100">
 				<view class="bgcolor">基础信息</view>
 				<view class="isNotShow">
-					<uni-forms-item label="档案ID" name="applyId" >
+					<uni-forms-item label="档案ID" name="applyId">
 						<uni-easyinput v-model="formData.applyId" type="text" />
 					</uni-forms-item>
 					<uni-forms-item label="出/入库" name="applyType" v-show="false">
@@ -61,7 +61,8 @@
 						<picker v-if="documentAdmin && statu == 1 && approveStatuFlag" :value="formData.isReceived"
 							:range="rangeIsReceived" @change="bindPickerChangeIsReceived">
 							<view class="uni-input">
-								{{formData.isReceived == '' ? "请选择" : rangeIsReceived[formData.isReceived]}}</view>
+								{{formData.isReceived == '' ? "请选择" : rangeIsReceived[formData.isReceived]}}
+							</view>
 						</picker>
 						<uni-easyinput v-else :value="formData.isReceived === '0' ? '是' : '否'" disabled type="text" />
 					</uni-forms-item>
@@ -95,8 +96,8 @@
 				</uni-list>
 			</view>
 			<!-- step审批流 -->
-			<view class="steps" v-if="statu !== '0'">
-				<view class="bgcolor">操作详情</view>
+			<view class="steps">
+				<view class="bgcolor">审批历史</view>
 				<uni-steps :options="stepOption" direction="column" :active="active">
 				</uni-steps>
 			</view>
@@ -268,7 +269,7 @@
 						this.stepOption = res.data
 						this.stepOption.map((item) => {
 							this.$set(item, 'title', item.approveUserName)
-							this.$set(item, 'desc', item.createTime)
+							this.$set(item, 'desc', item.remarks+"\n"+item.createTime)
 						})
 						this.active = res.data.length
 						console.log('getHistoryList', this.stepOption)
@@ -299,7 +300,7 @@
 							'cookie': uni.getStorageSync("setCookie")
 						}).then(res => {
 							if (res == 'login' || (res.code == 500 && res.msg.includes(
-								"Authentication"))) {
+									"Authentication"))) {
 								setTimeout(function() {
 									uni.showToast({
 										title: '登录已失效！',
@@ -471,7 +472,8 @@
 	}
 
 	.disabledClass {}
-	.isNotShow{
+
+	.isNotShow {
 		display: none;
 	}
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<template>
-			<view class="unfilled-log" v-if="showTitle || dateTimeDis">
+			<view class="unfilled-log" v-if="showTitle && dateTimeDis">
 				<view class="unfilled-title">未填日志</view>
 			</view>
 			<view v-else>
@@ -25,7 +25,7 @@
 							<uni-list-item link="navigateTo" @click="onClick($event,item)">
 								<template slot="body">
 									<view class="slot-box slot-text">项目名称：{{item.projectName}}</view>
-									<view class="slot-box slot-text">录入日期：{{item.createTime}}</view>
+									<view class="slot-box slot-text">录入日期：{{item.journalTime}}</view>
 									<text class="slot-box slot-text">
 										日志内容：{{item.workDetail}}
 									</text>
@@ -95,11 +95,12 @@
 
 		mounted() {
 			this.getJournalList()
-			this.getDate()
+			//this.getDate();
+			this.getJournalTime();
 		},
 
 		onShow() {
-			this.getJournalList()
+			//this.getJournalList()
 		},
 
 		methods: {
@@ -118,6 +119,7 @@
 				}
 				this.nowDate = year + "-" + month + "-" + day
 				if (this.nowDate == this.date) {
+					this.checkAuditTime();
 					if (hour >= 18 && hour < 24) {
 						this.dateTimeDis = false
 					} else {
@@ -174,6 +176,9 @@
 								if (item.projectName == null) {
 									item.projectName = '无项目'
 								}
+								if (item.journalTime == null) {
+									item.journalTime = ''
+								}
 							})
 						} else {
 							this.showTitle = true
@@ -194,7 +199,7 @@
 					'cookie': uni.getStorageSync("setCookie")
 				}).then(resRemove => {
 					if (resRemove == 'login' || (resRemove.code == 500 && resRemove.msg.includes(
-						"Authentication"))) {
+							"Authentication"))) {
 						setTimeout(function() {
 							uni.showToast({
 								title: '登录已失效！',
@@ -228,7 +233,62 @@
 				uni.navigateTo({
 					url: '/common/journalInfo/journal?isChat=1&item=' + objVal + '&createBy=' + this.createBy
 				})
-			}
+			},
+			getJournalTime() {
+				var _this = this;
+				this.$request("/system/journal/getJournalTime", "POST", {}, {
+					"content-type": "application/x-www-form-urlencoded",
+					"cookie": uni.getStorageSync('setCookie')
+				}).then(res => {
+					_this.journalTimeList = res.data;
+					var str = "";
+					for (var i in res.data) {
+						str = res.data[i].configValue;
+						_this.journalTimeMsg = res.data[0].remark;
+					}
+					var st = "";
+					for (var j in str.split(',')) {
+						st += str.split(",")[j] + ",";
+					}
+					var s = st.substring(0, st.lastIndexOf(","));
+					let date = new Date();
+					let year = date.getFullYear();
+					let month = date.getMonth() + 1;
+					let day = date.getDate();
+					let hour = date.getHours();
+					if (month >= 1 && month <= 9) {
+						month = "0" + month
+					}
+					if (day >= 0 && day <= 9) {
+						day = "0" + day
+					}
+					_this.nowDate = year + "-" + month + "-" + day
+					if (_this.nowDate == _this.date) {
+						_this.dateTimeDis = _this.checkAuditTime(s.split(",")[0].replace(/-/gi, '/'), s.split(",")[1].replace(/-/gi, '/'));
+					} else {
+						_this.dateTimeDis = false
+					}
+
+					uni.hideLoading();
+				})
+			},
+			checkAuditTime(startTime, endTime) {
+				// 获取当前时间
+				const date = new Date()
+				// 获取当前时间的年月日
+				const dataStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} `
+				// 获取开始时间、结束时间、现在时间的时间戳
+				let startDate = new Date(startTime).getTime();
+				let endDate = new Date(endTime).getTime();
+				let nowDate = date.getTime();
+				//开始时间不大于结束时间
+				const s = startDate < endDate;
+				if (nowDate > startDate && nowDate < endDate) {
+					return s ? false : true
+				} else {
+					return s ? true : false
+				}
+			},
 		}
 	}
 </script>
@@ -257,8 +317,8 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 20rpx;
-	
-	.dept-input {
+
+		.dept-input {
 			flex: 1
 		}
 

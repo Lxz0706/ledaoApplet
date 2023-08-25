@@ -167,7 +167,12 @@
 				createBy: '',
 				replyName: '',
 				replyBy: '',
-				holder: ''
+				holder: '',
+				journalTimeList: [],
+				journalTimeMsg: '',
+				projectType: '',
+				startTime: '',
+				enTime: ''
 			}
 		},
 		watch: {
@@ -183,24 +188,26 @@
 				this.proIds = val.proId
 			}
 			this.isChat = options.isChat;
-			this.createBy = options.createBy
-		},
+			this.createBy = options.createBy;
+			this.loginName = uni.getStorageSync('userName');
 
+		},
 		mounted() {
-			this.loginName = uni.getStorageSync('userName')
-			this.init()
+			this.getJournalTime();
+			var _this = this;
+			_this.init();
 		},
 
 		methods: {
-			// 初始化
-			init() {
-				this.timeoutFunc()
+			async init() {
 				if (this.isChat == 1) {
 					this.getChatDetailList()
 				}
+				var _this = this;
+				console.log(_this.startTime + "=====" + _this.enTime);
 			},
 			// 获取评论列表
-			getChatDetailList() {
+			async getChatDetailList() {
 				this.$request("/system/comment/listCommentDtail", "POST", {
 					journalId: this.formData.id == null ? '' : this.formData.id, // 评论id，无评论则为空
 					proId: this.proIds,
@@ -278,18 +285,6 @@
 					}
 				})
 			},
-
-			// 定时填写日志
-			timeoutFunc() {
-				const curDate = new Date()
-				const hour = curDate.getHours()
-				if (hour >= 18 && hour < 24) {
-					this.dateTimeDis = false
-				} else {
-					this.dateTimeDis = true
-				}
-			},
-
 			fabClick() {
 				uni.redirectTo({
 					url: './journalone'
@@ -347,6 +342,12 @@
 			},
 
 			submit() {
+				var _this = this;
+				setTimeout(function() {
+					_this.submitJournal();
+				}, 500)
+			},
+			async submitJournal() {
 				this.$refs.form.validate().then(res => {
 					this.$request("/system/journal/add", "POST", {
 						...this.formData
@@ -354,7 +355,8 @@
 						"content-type": "application/x-www-form-urlencoded",
 						"cookie": uni.getStorageSync('setCookie')
 					}).then(res => {
-						if (res == 'login' || (res.code == 500 && res.msg.includes("Authentication"))) {
+						if (res == 'login' || (res.code == 500 && res.msg.includes(
+								"Authentication"))) {
 							setTimeout(function() {
 								uni.showToast({
 									title: '登录已失效！',
@@ -365,7 +367,9 @@
 									uni.switchTab({
 										url: "/pages/home/index",
 										success: function() {
-											let page = getCurrentPages().pop()
+											let page =
+												getCurrentPages()
+												.pop()
 											if (!page) return
 											page.onLoad()
 										}
@@ -382,8 +386,18 @@
 										duration: 3000
 									})
 								}, 500)
+							} else {
+								console.log(res.msg);
+								var msg = res.msg;
+								setTimeout(() => {
+									uni.showToast({
+										title: msg,
+										icon: 'none',
+										mask: true,
+										duration: 3000,
+									})
+								}, 500)
 							}
-							console.log(',tijiao', res)
 						}
 					})
 				}).catch(err => {
@@ -412,18 +426,18 @@
 							"cookie": uni.getStorageSync('setCookie')
 						}).then(res => {
 							if (res == 'login' || (res.code == 500 && res.msg.includes(
-								"Authentication"))) {
+									"Authentication"))) {
 								setTimeout(function() {
 									uni.showToast({
 										title: '登录已失效！',
-										icon: 'error',
-										duration: 3000
+										icon: 'error'
 									})
 									setTimeout(function() {
 										uni.switchTab({
 											url: "/pages/home/index",
 											success: function() {
-												let page = getCurrentPages()
+												let page =
+													getCurrentPages()
 													.pop()
 												if (!page) return
 												page.onLoad()
@@ -447,9 +461,9 @@
 				this.$refs.popup.open('bottom')
 				this.setFocus = true
 				this.indexV = i
-				this.journalCommentId = id,
-					this.replyBy = createBy,
-					this.replyName = userName
+				this.journalCommentId = id
+				this.replyBy = createBy
+				this.replyName = userName
 				this.holder = '回复：' + userName
 			},
 
@@ -480,22 +494,21 @@
 			inputFocus() {
 				if (this.dateTimeDis && this.isChat == 0) {
 					uni.showToast({
-						title: "非填写时段，请在 18:00-23:59 填写",
+						title: this.journalTimeMsg + "，请在规定时间内填写",
 						icon: 'none'
 					})
 				}
 			},
 			choosePro(e) {
 				const that = this
-				// that.formData.projectName = e.projectName;
-				// that.formData.proId = e.projectId;
 				that.$request("/system/journal/listByProId", "POST", {
 					proId: e.projectId
 				}, {
 					"content-type": "application/x-www-form-urlencoded",
 					"cookie": uni.getStorageSync('setCookie')
 				}).then(resProId => {
-					if (resProId == 'login' || (resProId.code == 500 && resProId.msg.includes("Authentication"))) {
+					if (resProId == 'login' || (resProId.code == 500 && resProId.msg.includes(
+							"Authentication"))) {
 						setTimeout(function() {
 							uni.showToast({
 								title: '登录已失效！',
@@ -523,9 +536,11 @@
 										if (resProId.rows[0].proId == 0) {
 											that.formData.projectName = '无项目'
 										} else {
-											that.formData.projectName = resProId.rows[0].projectName
+											that.formData.projectName = resProId.rows[0]
+												.projectName
 										}
-										that.formData.workDetail = resProId.rows[0].workDetail
+										that.formData.workDetail = resProId.rows[0]
+											.workDetail
 										that.formData.proId = resProId.rows[0].projectId;
 										that.formData.id = resProId.rows[0].id
 										that.$refs.showProRight.close();
@@ -537,6 +552,7 @@
 						} else {
 							that.formData.projectName = e.projectName;
 							that.formData.proId = e.projectId;
+							that.formData.projectType = e.projectType;
 							that.$refs.showProRight.close();
 						}
 					}
@@ -545,7 +561,48 @@
 
 			searchPro() {
 				this.getProList()
-			}
+			},
+			getJournalTime() {
+				var _this = this;
+				this.$request("/system/journal/getJournalTime", "POST", {}, {
+					"content-type": "application/x-www-form-urlencoded",
+					"cookie": uni.getStorageSync('setCookie')
+				}).then(res => {
+					_this.journalTimeList = res.data;
+					var str = "";
+					for (var i in res.data) {
+						str = res.data[i].configValue;
+						_this.journalTimeMsg = res.data[0].remark;
+					}
+					var st = "";
+					for (var j in str.split(',')) {
+						st += str.split(",")[j] + ",";
+					}
+					var s = st.substring(0, st.lastIndexOf(","));
+					_this.startTime = s.split(",")[0].replace(/-/gi, '/');
+					_this.enTime = s.split(",")[1].replace(/-/gi, '/');
+					_this.dateTimeDis = _this.checkAuditTime(s.split(",")[0].replace(/-/gi, '/'), s.split(",")[1].replace(/-/gi, '/'));
+					uni.hideLoading();
+				})
+			},
+			checkAuditTime(startTime, endTime) {
+				console.log(startTime + "=====-----------" + endTime);
+				// 获取当前时间
+				const date = new Date();
+				// 获取当前时间的年月日
+				const dataStr = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} `
+				// 获取开始时间、结束时间、现在时间的时间戳
+				let startDate = new Date(startTime).getTime();
+				let endDate = new Date(endTime).getTime();
+				let nowDate = date.getTime();
+				//开始时间不大于结束时间
+				const s = startDate < endDate;
+				if (nowDate > startDate && nowDate < endDate) {
+					return s ? false : true
+				} else {
+					return s ? true : false
+				}
+			},
 		}
 	}
 </script>

@@ -87,16 +87,17 @@
 		onLoad(options) {
 			// 判断是否登陆过
 			if (!uni.getStorageSync("loginSuccess")) {
-				this.loginCode()
+				this.loginCode();
 			}
-		},
-		onLaunch() {
-			this.autoUpdate();
 		},
 
 		onShow() {},
 
-		mounted() {},
+		mounted() {
+			if(getApp().globalData.getTime == 1){
+				this.getNoticeList();
+			}
+		},
 
 		methods: {
 			// 登录获取code换取openId
@@ -149,11 +150,6 @@
 											position: 'bottom',
 											title: '登录成功'
 										});
-										// } else {
-										// 	uni.redirectTo({
-										// 		url: "../../pages/login/index"
-										// 	})
-										// }
 									}
 								})
 								uni.setStorage({
@@ -221,31 +217,28 @@
 					})
 				}
 			},
-			autoUpdate() {
-				const updateManager = uni.getUpdateManager() // 小程序版本更新管理器
-				updateManager.onCheckForUpdate(res => { // 检测新版本后的回调
-					if (res.hasUpdate) { // 如果有新版本提醒并进行强制升级
-						uni.showModal({
-							content: '版本已更新，是否重启应用？',
-							showCancel: false,
-							confirmText: '确定',
-							success: res => {
-								if (res.confirm) {
-									updateManager.onUpdateReady(res => { // 新版本下载完成的回调
-										updateManager.applyUpdate() // 强制当前小程序应用上新版本并重启
-									})
+			getNoticeList() {
+				this.$request("/system/journal/selectNoticeForMax", "POST", {
 
-									updateManager.onUpdateFailed(res => { // 新版本下载失败的回调
-										// 新版本下载失败，提示用户删除后通过冷启动重新打开
-										uni.showModal({
-											content: '下载失败，请删除当前小程序后重新打开',
-											showCancel: false,
-											confirmText: '知道了'
-										})
-									})
-								}
-							}
-						})
+				}, {
+					"content-type": "application/x-www-form-urlencoded",
+					"cookie": uni.getStorageSync('setCookie')
+				}).then(res => {
+					var str = "";
+					if (res.data.length > 0) {
+						for (var i in res.data) {
+							str = res.data[i].noticeContent;
+						}
+						var msg = (str).replace(/<\/?[^>]*>/g, ''); //去除HTML Tag
+						msg = msg.replace(/[|]*\n/, ''); //去除行尾空格
+						var s = msg.replace(/&nbsp;/gi, ''); //去掉nbsp
+						uni.showModal({
+							title: "消息提醒",
+							duration: 5000,
+							icon: "none",
+							content: s
+						});
+						getApp().globalData.getTime = 2;
 					}
 				})
 			}
