@@ -155,17 +155,24 @@ button[disabled][type=primary] {
 	background-color: #E5E5E5;
 	height: 100vh;
 }
-.pop{
-	 width: 750rpx;height:100rpx;background-color: #FFFFFF;
-	 display: flex;
-	 padding: 20rpx;
-	 box-sizing: border-box;
+.pop {
+	width: 750rpx;
+	height: 100rpx;
+	background-color: #FFFFFF;
+	display: flex;
+	padding: 20rpx;
+	box-sizing: border-box;
 }
-.pop button{
-	font-size: 24rpx;height: 60rpx;margin-left: 10rpx;width:120rpx;
+.pop button {
+	font-size: 24rpx;
+	height: 60rpx;
+	margin-left: 10rpx;
+	width: 120rpx;
 }
-.pop input{
-	width: 600rpx;height: 60rpx;border: 1rpx solid #999999;
+.pop input {
+	width: 600rpx;
+	height: 60rpx;
+	border: 1rpx solid #999999;
 	padding: 0 10rpx;
 	box-sizing: border-box;
 }

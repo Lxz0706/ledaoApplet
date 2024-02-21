@@ -24,7 +24,9 @@
     "pages/ocr/index",
     "pages/setup/index",
     "pages/valueMap/index",
-    "pages/valuation/index"
+    "pages/valuation/index",
+    "common/journalInfo/journalForWorkDetail",
+    "pages/show3D/index"
   ],
   "subPackages": [],
   "window": {
@@ -59,6 +61,7 @@
       }
     ]
   },
+  "__usePrivacyCheck__": true,
   "permission": {
     "scope.userLocation": {
       "desc": "您的位置信息将用于小程序位置接口的效果展示"

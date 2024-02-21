@@ -78,6 +78,10 @@
 					{
 						modularName: '估值计算',
 						modularIcon: '/static/icon/valuation'
+					},
+					{
+						modularName: '3D图片展示',
+						modularIcon:'/static/icon/icon_LR3D'
 					}
 				],
 				openId: ''
@@ -191,6 +195,13 @@
 				} else if (e === 3) {
 					uni.redirectTo({
 						url: '/pages/valuation/index',
+						fail(error) {
+							console.log(error)
+						}
+					})
+				}else if(e === 4){
+					uni.redirectTo({
+						url: '/pages/show3D/index',
 						fail(error) {
 							console.log(error)
 						}

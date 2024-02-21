@@ -45,9 +45,9 @@
 		mounted() {
 			this.getOpenId()
 		},
-		
+
 		onShow() {
-		    wx.hideHomeButton();
+			wx.hideHomeButton();
 		},
 
 		methods: {
@@ -56,15 +56,15 @@
 				const _this = this
 				uni.getStorage({
 					key: 'getOpenids',
-						success: function (res) {
-							_this.openId = res.data
-						}
+					success: function(res) {
+						_this.openId = res.data
+					}
 				})
 				uni.getStorage({
 					key: 'getUnionId',
-						success: function (res) {
-							_this.unionId = res.data
-						}
+					success: function(res) {
+						_this.unionId = res.data
+					}
 				})
 			},
 
@@ -95,58 +95,60 @@
 				setTimeout(function() {
 					_this.isRotate = false
 				}, 2000)
-				this.$requestSession("/weChatLoginUp","POST",{
+				this.$requestSession("/weChatLoginUp", "POST", {
 					username: _this.adminData,
 					password: _this.passData,
 					rememberMe: true
 				}).then(res => {
-					uni.setStorageSync('loginSuccess',true)
+					console.log('res:======', res);
+					uni.setStorageSync('loginSuccess', true)
 					uni.showLoading({
 						title: '登录中'
 					});
 					uni.removeStorageSync('setCookie')
-					var cookie =res.header['Set-Cookie']
+					var cookie = res.header['Set-Cookie'];
+					console.log('cookie:========', cookie);
 					// 字符串分割成数组
 					var cookieArray = cookie.split(/,(?=[^,]*=)/)
 					// 分号拼接数组
 					var newCookie = cookieArray.join(';')
 					// 存储拼接后的cookie
 					try {
-					  uni.setStorageSync('setCookie', newCookie)
+						uni.setStorageSync('setCookie', newCookie)
 					} catch (error) {
-					  log.error('setStorageSync cookie fail')
+						log.error('setStorageSync cookie fail')
 					}
 					// uni.setStorageSync('setCookie',res.header["Set-Cookie"])
-					this.$request("/saveOpenid","POST",{
+					this.$request("/saveOpenid", "POST", {
 						openId: _this.openId,
 						unionId: _this.unionId
-					},{
+					}, {
 						"content-type": "application/x-www-form-urlencoded",
 						'cookie': uni.getStorageSync("setCookie")
 					})
-					if(res.data.code === 0) {
-							_this.userName = res.data.data.roles
-							uni.setStorageSync("loginName",res.data.data.loginName)
-							uni.setStorageSync("userName",res.data.data.userName)
-							uni.setStorageSync("isDailyRemind",res.data.data.isDailyRemind)
-							_this.userName.map((item)=> {
-								if(item.roleKey == "documentAdmin") {
-									uni.setStorageSync('documentAdmin',true)
-								} else {
-									uni.setStorageSync('documentAdmin',false)
+					if (res.data.code === 0) {
+						_this.userName = res.data.data.roles
+						uni.setStorageSync("loginName", res.data.data.loginName)
+						uni.setStorageSync("userName", res.data.data.userName)
+						uni.setStorageSync("isDailyRemind", res.data.data.isDailyRemind)
+						_this.userName.map((item) => {
+							if (item.roleKey == "documentAdmin") {
+								uni.setStorageSync('documentAdmin', true)
+							} else {
+								uni.setStorageSync('documentAdmin', false)
+							}
+						})
+						uni.hideLoading();
+						setTimeout(function() {
+							uni.switchTab({
+								url: "../home/index",
+								success: function() {
+									let page = getCurrentPages().pop()
+									if (!page) return
+									page.onLoad()
 								}
 							})
-							uni.hideLoading();
-							setTimeout(function() {
-								uni.switchTab({
-									url: "../home/index",
-									success:function(){
-										let page = getCurrentPages().pop()
-										if(!page) return
-										page.onLoad()
-									}
-								})
-							},1000)
+						}, 1000)
 					} else {
 						_this.passData = ""
 						uni.showToast({

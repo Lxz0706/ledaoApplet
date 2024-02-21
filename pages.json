@@ -151,6 +151,11 @@
 			"style": {
 				"navigationBarTitleText": "日志查询"
 			}
+		}, {
+			"path": "pages/show3D/index",
+			"style": {
+				"navigationBarTitleText": "3D展示"
+			}
 		}
 	],
 	"globalStyle": {

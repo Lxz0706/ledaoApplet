@@ -32,7 +32,6 @@
 .uni-stat__select {
   display: flex;
   align-items: center;
-  cursor: pointer;
   width: 100%;
   flex: 1;
   box-sizing: border-box;
@@ -181,5 +180,6 @@
   bottom: 0;
   right: 0;
   left: 0;
+  z-index: 2;
 }
 

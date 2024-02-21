@@ -51,7 +51,7 @@
 	 * time          2021-9-26 6:16:13 ?F10: PM?
 	 * description   
 	 */
-
+	import * as THREE from 'node_modules/three/src/Three.js'
 
 	export default {
 		name: 'journalDepart',
@@ -66,12 +66,13 @@
 				creator: '',
 				projectName: '',
 				date: currentDate,
-				deptIdStr: ''
+				deptIdStr: '',
+				get_wx_access_token: ''
 			}
 		},
 
 		mounted() {
-			this.getDepartList()
+			this.getDepartList();
 		},
 
 		computed: {
